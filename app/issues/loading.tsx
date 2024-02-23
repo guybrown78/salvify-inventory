@@ -1,7 +1,6 @@
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import React from 'react'
 import IssueToolbar from './IssueToolbar'
 
 const LoadingIssuesPage = () => {
