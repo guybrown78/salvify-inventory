@@ -1,12 +1,20 @@
 'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React from 'react'
-import classNames from 'classnames';
-import { AiFillBug } from 'react-icons/ai';
-import { useSession } from 'next-auth/react';
-import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes';
+import { Skeleton } from "@/app/components";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
+import { AiFillBug } from "react-icons/ai";
+import classnames from "classnames";
+import { useSession } from "next-auth/react";
+import {
+  Avatar,
+  Box,
+  Container,
+  DropdownMenu,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
 
 const NavBar = () => {
 	return (
@@ -37,7 +45,7 @@ const NavLinks = () => {
       {links.map((link) => (
         <li key={link.href}>
           <Link
-            className={classNames({
+            className={classnames({
               "nav-link": true,
               "!text-zinc-600": link.href === currentPath,
             })}
@@ -56,13 +64,13 @@ const AuthStatus = () => {
 
 	const { status, data: session } = useSession();
 
-	if (status === "loading") return (<p>loading...</p>);
+	if (status === "loading") return <Skeleton width="3rem" />;
 
 	if(status === 'unauthenticated'){
 		return (<Link className="nav-link" href="/api/auth/signin">Login</Link>)
 	}
 
-	return 	(
+	return (
 		<Box>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
@@ -88,6 +96,7 @@ const AuthStatus = () => {
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</Box>
-	)
-}
+	);
+};
+
 export default NavBar
