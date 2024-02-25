@@ -19,8 +19,8 @@ body {
 	background-color: rgb(var(--background-rgb))
 }
 
-@layer utilities{
+/* @layer utilities{
 	.nav-links{
 		@apply text-zinc-300 hover:text-zinc-600 transition-colors;
 	}
-}
+} */
