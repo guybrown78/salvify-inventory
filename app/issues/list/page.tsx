@@ -26,7 +26,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
 	const status = statuses.includes(searchParams.status) 
 		? searchParams.status 
 		: undefined;
-		
+
 	const orderBy = columns
 		.map(column => column.value)
 		.includes(searchParams.orderBy)
@@ -47,7 +47,10 @@ const IssuesPage = async ({ searchParams }: Props) => {
 				<Table.Header>
 					<Table.Row>
 						{columns.map((column) => (
-							<TableColumnHeaderCell key={column.value}>
+							<TableColumnHeaderCell 
+								key={column.value} 
+								className={column.className}
+							>
 								<NextLink href={{
 									query: { 
 										...searchParams, 
