@@ -4,6 +4,7 @@ import { IssueStatus } from '@prisma/client';
 import IssueTable, { IssueQuery, columnNames } from './IssueTable';
 import IssueToolbar from './IssueToolbar';
 import { Flex } from '@radix-ui/themes';
+import { Metadata } from 'next';
 
 interface Props {
 	seatchParams: IssueQuery
@@ -50,5 +51,10 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
 export const dynamic = 'force-dynamic';
 // export const revalidate = 0;
+
+export const metadata: Metadata = {
+	title: 'Salvify Medical Inventory - Issues',
+	description: 'View all Inventory issues'
+}
 
 export default IssuesPage

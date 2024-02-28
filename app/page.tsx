@@ -5,6 +5,7 @@ import IssueSummary from './IssueSummary'
 import prisma from '@/prisma/client'
 import IssueChart from './IssueChart'
 import { Flex, Grid } from '@radix-ui/themes'
+import { Metadata } from 'next'
 
 export default async function Home() {
 
@@ -21,4 +22,9 @@ export default async function Home() {
 			<LatestIssues />
 		</Grid>
   )
+}
+
+export const metadata: Metadata = {
+	title: 'Salvify Medical Inventory - Dashboard',
+	description: 'Analysis on all Items, Instances and Holdings'
 }
