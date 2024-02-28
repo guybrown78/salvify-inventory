@@ -29,7 +29,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 			<Select.Root 
 				defaultValue={issue.assignedToUserId || ""}
 				onValueChange={assignIssue}>
-				<Select.Trigger placeholder='Assign...' />
+				<Select.Trigger />
 				<Select.Content>
 					<Select.Group>
 						<Select.Label>Suggestions</Select.Label>
@@ -48,7 +48,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 	)
 }
 
-const useUsers = () => useQuery<Users[]>({
+const useUsers = () => useQuery<User[]>({
 	queryKey:['users'],
 	queryFn: () => axios.get<User[]>('/api/users').then(res => res.data),
 	staleTime: 60 * 1000,

@@ -7,7 +7,7 @@ import { Flex } from '@radix-ui/themes';
 import { Metadata } from 'next';
 
 interface Props {
-	seatchParams: IssueQuery
+	searchParams: IssueQuery
 }
 
 const IssuesPage = async ({ searchParams }: Props) => {
@@ -50,7 +50,6 @@ const IssuesPage = async ({ searchParams }: Props) => {
 }
 
 export const dynamic = 'force-dynamic';
-// export const revalidate = 0;
 
 export const metadata: Metadata = {
 	title: 'Salvify Medical Inventory - Issues',

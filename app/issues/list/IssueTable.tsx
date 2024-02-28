@@ -5,16 +5,16 @@ import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
 import NextLink from 'next/link';
 
 export interface IssueQuery {
-	status: IssueStatus, 
-	orderBy: keyof Issue,
-	page: string
+	status: IssueStatus;
+	orderBy: keyof Issue;
+	page: string;
 }
 interface Props {
 	searchParams: IssueQuery,
 	issues: Issue[]
 }
 
-const IssueTable = ({ searchParams, issues }:Props) => {
+const IssueTable = ({ searchParams, issues }: Props) => {
 
 	return (
 		<Table.Root variant='surface'>
