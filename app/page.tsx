@@ -24,6 +24,8 @@ export default async function Home() {
   )
 }
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
 	title: 'Salvify Medical Inventory - Dashboard',
 	description: 'Analysis on all Items, Instances and Holdings'
