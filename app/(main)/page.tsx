@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { Pagination } from '@/app/components'
-import LatestIssues from './LatestIssues'
-import IssueSummary from './IssueSummary'
+import { Pagination } from '@/app/_components'
+import LatestIssues from '../_components/dashboard/LatestIssues'
+import IssueSummary from '../_components/dashboard/IssueSummary'
 import prisma from '@/prisma/client'
-import IssueChart from './IssueChart'
+import IssueChart from '../_components/dashboard/IssueChart'
 import { getServerSession } from 'next-auth';
 import authOptions from '@/app/auth/authOptions';
 import { Flex, Grid } from '@radix-ui/themes'

@@ -1,4 +1,4 @@
-import { Pagination } from '@/app/components';
+import { Pagination } from '@/app/_components';
 import prisma from '@/prisma/client';
 import { IssueStatus } from '@prisma/client';
 import IssueTable, { IssueQuery, columnNames } from './IssueTable';

@@ -1,6 +1,6 @@
 'use client'
 
-import { FieldErrorMessage, Spinner } from '@/app/components';
+import { FieldErrorMessage, Spinner } from '@/app/_components';
 import { issueSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Issue } from '@prisma/client';

@@ -1,6 +1,6 @@
 "use client"
 
-import { FieldErrorMessage, Spinner } from '@/app/components';
+import { FieldErrorMessage, Spinner } from '@/app/_components';
 import { Button, Callout, TextField } from '@radix-ui/themes';
 import React, { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
@@ -50,7 +50,7 @@ const Login = ({ credentialsError }: Props) => {
 	});
 
 	return (
-		<div className='max-w-lg'>
+		<div className='max-w-lg mx-auto'>
 			{error && <Callout.Root color="red" className='mb-5'>
 					<Callout.Text>{error}</Callout.Text>
 				</Callout.Root>}

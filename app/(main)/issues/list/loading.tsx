@@ -1,5 +1,5 @@
 import { Table, TableCell, TableColumnHeaderCell, Flex } from '@radix-ui/themes'
-import { Skeleton } from '@/app/components'
+import { Skeleton } from '@/app/_components'
 import IssueToolbar from './IssueToolbar'
 
 const LoadingIssuesPage = () => {
