@@ -11,11 +11,11 @@ const Main = ({ children }: PropsWithChildren) => {
 			<SideDrawer />
 
 			{/* Static sidebar for desktop */}
-			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-60 xl:w-72 lg:flex-col">
+			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-56 xl:w-72 lg:flex-col">
 				<SideBar />
 			</div>
 
-			<div className="lg:pl-60 xl:pl-72">
+			<div className="lg:pl-56 xl:pl-72">
 			
 				<Header />
 				<main className="py-10">
