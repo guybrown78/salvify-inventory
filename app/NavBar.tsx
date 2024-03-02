@@ -74,19 +74,21 @@ const AuthStatus = () => {
 		<Box>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
-					<Avatar
+					{/* <Avatar
 						src={session!.user!.image!}
 						fallback="?"
 						size="2"
 						radius="full"
 						className="cursor-pointer"
-						referrerPolicy="no-referrer"
-					/>
+						// referrerPolicy="no-referrer"
+					/>  */}
+					{/* <button>Click Me</button> */}
+					<Text size="2" className="cursor-pointer">{session!.user!.name}</Text>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
-					<DropdownMenu.Label>
+					{/* <DropdownMenu.Label>
 						<Text size="2">{session!.user!.name}</Text>
-					</DropdownMenu.Label>
+					</DropdownMenu.Label> */}
 					<DropdownMenu.Label>
 						<Text size="2">{session!.user!.email}</Text>
 					</DropdownMenu.Label>
