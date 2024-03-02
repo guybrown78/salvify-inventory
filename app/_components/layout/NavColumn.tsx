@@ -14,9 +14,12 @@ import {
 	HiOutlineTicket
 } from "react-icons/hi2";
 
+import { MdShelves } from "react-icons/md";
+
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HiOutlineHome },
   { name: 'Issues', href: '/issues/list', icon: HiOutlineTicket },
+	{ name: 'Stock', href: '/stock/list', icon: MdShelves },
   // { name: 'Projects', href: '#', icon: HiOutlineFolder, current: false },
   // { name: 'Calendar', href: '#', icon: HiCalendar, current: false },
   // { name: 'Documents', href: '#', icon: HiOutlineDocumentDuplicate, current: false },

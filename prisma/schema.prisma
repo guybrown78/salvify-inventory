@@ -77,3 +77,71 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Item {
+  id              String        @id @default(cuid())
+  title           String        @db.VarChar(255)
+  type            ItemTypes?
+  category        ItemCategory?
+  grouping        ItemGrouping?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  information     String?       @db.Text
+  instructionsURL String?
+}
+
+enum ItemTypes {
+  NONE
+  UNKNOWN
+  TABLET
+  INJECTION
+  SPRAY
+  LIQUID
+  SUPPOSITORY
+  CAPSULE
+  AMPOULE
+  CREAM
+  GEL
+  TOPICAL
+  BUCCAL
+  PREFILLED_SYRINGE
+  SYRINGE
+  DRESSING
+  DROPS
+  PESSARY
+  INHALER
+}
+
+enum ItemCategory {
+  NONE
+  UNKNOWN
+  DRUG
+  DRESSING
+  DISPOSABLE
+  BEDDING
+  SPLINT
+  STRETCHER
+  HARDWARE
+}
+
+enum ItemGrouping {
+  NONE
+  UNKNOWN
+  CARDIOVASCULAR
+  GASTROINTESTINAL
+  ANALGESICSANTISPASMODICS
+  NERVOUS
+  ALLERGYANAPHYLAXSIS
+  RESPIRATORY
+  ANTIINFECTION
+  REHYDRATION
+  EXTERNAL
+  RESUSCITATION
+  DRESSING
+  INSTRUMENTS
+  MONITORINGE
+  ATHETERISATION
+  GENERAL
+  IMMOBILIZATION
+  ADDITIONAL
+}

@@ -9,7 +9,7 @@ import { Inter } from 'next/font/google'
 import { Container, Theme, ThemePanel } from '@radix-ui/themes'
 
 import AuthProvider from '../auth/Provider';
-import QueryClientProvider from '../QueryClientProvider';
+import QueryClientProvider from '../_providers/QueryClientProvider';
 import classNames from 'classnames';
 import Main from '@/app/_components/layout/Main';
 import { LayoutProvider } from '@/app/_providers/LayoutProvider'
