@@ -51,7 +51,7 @@ const StockTable = ({ items }: Props) => {
 
 const columns:{ 
 	label:string, 
-	value: keyof item,
+	value: keyof Item,
 	className?:string
 }[] = [
 	{ label: 'Stock Item', value: 'title'},
@@ -62,5 +62,4 @@ const columns:{
 ]
 
 export const columnNames = columns.map(column => column.value);
-
 export default StockTable
