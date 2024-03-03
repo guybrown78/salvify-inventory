@@ -79,15 +79,18 @@ model VerificationToken {
 }
 
 model Item {
-  id              String        @id @default(cuid())
+  id               Int         @id @default(autoincrement())
   title           String        @db.VarChar(255)
   type            ItemTypes?
   category        ItemCategory?
   grouping        ItemGrouping?
+  requiredCount   Int?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   information     String?       @db.Text
   instructionsURL String?
+  bnfURL          String?
+  emcPilURL       String?
 }
 
 enum ItemTypes {
