@@ -1,5 +1,5 @@
-import { itemStatusBadge, Link } from '@/app/_components';
-import { item, itemStatus, Item } from '@prisma/client';
+import { Link } from '@/app/_components';
+import { Item } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
 import NextLink from 'next/link';

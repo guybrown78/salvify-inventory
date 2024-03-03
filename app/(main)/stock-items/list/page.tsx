@@ -1,7 +1,6 @@
 import { NoDataMessage } from '@/app/_components'
 import prisma from '@/prisma/client'
-import { Container, Flex, Text } from '@radix-ui/themes'
-import React from 'react'
+import { Flex } from '@radix-ui/themes'
 import StockTable from './StockTable'
 
 const StockItemsPage = async () => {
