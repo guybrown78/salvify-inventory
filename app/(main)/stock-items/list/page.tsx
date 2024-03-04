@@ -7,8 +7,7 @@ const StockItemsPage = async () => {
 
 	const items = await prisma.item?.findMany({ orderBy: { title: 'asc'} })
 	
-	console.log("items", items)
-	if(!items)
+	if(!items || !items.length)
 		return (
 			<NoDataMessage>
 				There are currently no stock items in the system
