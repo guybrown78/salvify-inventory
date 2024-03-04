@@ -10,9 +10,12 @@ const StockItemsPage = async () => {
 	
 	if(!items || !items.length)
 		return (
-			<NoDataMessage>
-				There are currently no stock items in the system
-			</NoDataMessage>
+			<Flex direction="column" gap="3">
+				<StockToolbar />
+				<NoDataMessage>
+					There are currently no stock items in the system
+				</NoDataMessage>
+			</Flex>
 		);
 
 	const itemsCount = await prisma.item?.count()
