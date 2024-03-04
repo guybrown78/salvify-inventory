@@ -3,6 +3,7 @@ import prisma from '@/prisma/client';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import StockItemHeader from './StockItemHeader';
 
 interface Props {
 	params: { id: string }
@@ -23,7 +24,9 @@ const StockItemPage = async ({ params }: Props) => {
 		notFound();
 
 	return (
-		<div>{ item.title }</div>
+		<div>
+			<StockItemHeader item={item} />
+		</div>
 	)
 }
 
