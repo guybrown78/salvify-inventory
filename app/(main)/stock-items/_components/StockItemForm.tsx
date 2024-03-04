@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { FieldErrorMessage, Spinner } from '@/app/_components';
-import { Button, Callout, Flex, Text, TextField } from '@radix-ui/themes';
+import { Button, Callout, Flex, Select, Text, TextField } from '@radix-ui/themes';
 import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,12 @@ import { Item } from '@prisma/client';
 import { itemSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { itemTypesMap } from '@/prisma/enums'
+
+
+const itemTypeList = Object.entries(itemTypesMap).map(([value, { label }]) => ({ label, value }));
+
+
 
 type ItemFormData = z.infer<typeof itemSchema>
 
@@ -29,7 +35,9 @@ const StockItemForm = ({ item }: Props) => {
 	const [error, setError] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
+
 	const onSubmit = handleSubmit(async (data) => {
+		console.log(data)
 		try{
 			setIsSubmitting(true);
 			if(item){
@@ -58,6 +66,33 @@ const StockItemForm = ({ item }: Props) => {
 					<TextField.Input defaultValue={item?.title} placeholder='Title' {...register('title')} />
 				</TextField.Root>
 				<FieldErrorMessage>{errors.title?.message}</FieldErrorMessage>
+
+				<Flex>
+					<Controller
+						control={control}
+						name="type"
+						defaultValue={item?.type || "NONE"}
+						render={({ field }) => {
+							return (
+								<Select.Root 
+									onValueChange={field.onChange} 
+									{...field}
+								>
+									<Select.Trigger />
+									<Select.Content>
+										<Select.Group>
+											<Select.Label>Type</Select.Label>
+											{
+												itemTypeList?.map(type => <Select.Item key={`type_${type.value}`} value={type.value}>{type.label}</Select.Item>)
+											}
+										</Select.Group>
+									</Select.Content>
+								</Select.Root>
+					)}} />
+
+				</Flex>
+
+
 				<Controller 
 					name="information"
 					control={control}
@@ -88,5 +123,9 @@ const StockItemForm = ({ item }: Props) => {
 		</div>
 	)
 }
+
+
+
+
 
 export default StockItemForm
