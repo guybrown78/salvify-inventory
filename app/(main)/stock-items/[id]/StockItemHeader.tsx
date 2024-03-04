@@ -1,23 +1,28 @@
 import { Item } from '@prisma/client'
-import { Flex, Text } from '@radix-ui/themes'
+import { Pencil2Icon } from '@radix-ui/react-icons'
+import { Flex, Text, Heading, Button, IconButton } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 
 
 interface Props {
-	item?: Item
+	item: Item
 }
 
 const StockItemHeader = ({ item }: Props) => {
 	return (
-		<div className="bg-slate-50 shadow -mx-2 md:-mx-8 -my-10">
+		<div className="bg-slate-50 shadow -mx-3 md:-mx-8 -my-10">
 			<div className="px-4 sm:px-6 lg:px-8">
 				<Flex justify="between" py="6">
 					<Flex direction="column">
-						<Text as='h1' size="5" weight="bold">{ item.title }</Text>
+						<Heading as='h1' size="5" weight="bold">{ item.title }</Heading>
 					</Flex>
 					<Flex gap="3" align="center" justify="end">
-						<Link href={`/stock-items/edit/${item.id}`}>Edit</Link>
+						<Link href={`/stock-items/edit/${item.id}`}>
+							<IconButton variant="ghost">
+								<Pencil2Icon width="18" height="18" />
+							</IconButton>
+						</Link>
 					</Flex>
 				</Flex>
 		

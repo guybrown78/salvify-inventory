@@ -1,7 +1,7 @@
 
 
 
-const itemTypesValues = [
+const itemTypesValues:[string, ...string[]] = [
   "NONE",
   "UNKNOWN",
   "TABLET",
@@ -23,7 +23,7 @@ const itemTypesValues = [
   "INHALER",
 ]
 
-const itemCategoryValues = [
+const itemCategoryValues:[string, ...string[]] = [
   "NONE",
   "UNKNOWN",
   "DRUG",
@@ -35,7 +35,7 @@ const itemCategoryValues = [
   "HARDWARE",
 ]
 
-const itemGroupingValues = [
+const itemGroupingValues:[string, ...string[]] = [
   "NONE",
   "UNKNOWN",
   "CARDIOVASCULAR",

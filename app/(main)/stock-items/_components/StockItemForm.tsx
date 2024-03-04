@@ -11,6 +11,7 @@ import SimpleMDE from 'react-simplemde-editor';
 import { Item } from '@prisma/client';
 import { itemSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 type ItemFormData = z.infer<typeof itemSchema>
 
