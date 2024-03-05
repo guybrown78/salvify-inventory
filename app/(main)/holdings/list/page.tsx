@@ -27,4 +27,6 @@ const HoldingListPage = async () => {
 	)
 }
 
+export const dynamic = 'force-dynamic';
+
 export default HoldingListPage
