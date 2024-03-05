@@ -5,6 +5,7 @@ import { holdingSchema } from '@/app/validationSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Holding } from '@prisma/client'
 import { Button, Callout, TextField } from '@radix-ui/themes'
+import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -27,6 +28,19 @@ const HoldingForm = ({ holding }: Props) => {
 
 	const onSubmit = handleSubmit(async (data) => {
 		console.log(data)
+		try{
+			setIsSubmitting(true);
+			if(holding){
+				await axios.patch('/api/holdings/' + holding.id, data);
+			}else{
+				await axios.post('/api/holdings', data)
+			}
+			router.push('/holdings/list');
+			router.refresh();
+		} catch (error) {
+			setIsSubmitting(false);
+			setError('An unexpected error occured');
+		}
 	})
 
 	return(
