@@ -99,3 +99,17 @@ export const patchItemSchema = z.object({
 		.string()
 		.optional(),
 })
+
+export const holdingSchema = z.object({
+	title: z
+		.string()
+		.min(1, "Title is required")
+		.max(255),
+	field: z
+		.string()
+		.max(255)
+		.optional(),
+	isMainHolding: z
+		.boolean()
+		.optional(),
+})

@@ -33,7 +33,5 @@ export async function POST(request: NextRequest) {
 		}
 	})
 
-	console.log(newItem)
-
 	return NextResponse.json(newItem, { status: 201 });
 }

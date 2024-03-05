@@ -79,7 +79,7 @@ model VerificationToken {
 }
 
 model Item {
-  id               Int         @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   title           String        @db.VarChar(255)
   type            ItemTypes?
   category        ItemCategory?
@@ -143,8 +143,24 @@ enum ItemGrouping {
   DRESSING
   INSTRUMENTS
   MONITORING
-	INJECTION_CATHETERIZATION
+  INJECTION_CATHETERIZATION
   GENERAL
   IMMOBILIZATION
   ADDITIONAL
+}
+
+model Holding {
+  id            Int         @id @default(autoincrement())
+  title         String      @db.VarChar(255)
+  field         String?      @db.VarChar(255)
+  isMainHolding Boolean     @default(false)
+  type          HoldingType @default(GENERAL)
+}
+
+enum HoldingType {
+  EVENT
+  FLEET
+  FACILITY
+  STORE
+  GENERAL
 }

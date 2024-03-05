@@ -31,7 +31,7 @@ const StockTable = ({ items }: Props) => {
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{items .map(item => (
+					{items.map(item => (
 						<Table.Row key={item.id}>
 							<TableCell>
 								<Link href={`/stock-items/${item.id}`}>
