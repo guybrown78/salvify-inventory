@@ -1,31 +1,19 @@
 'use client'
 
-import React, { useState, forwardRef } from 'react';
 import { FieldErrorMessage, Spinner } from '@/app/_components';
-import { Button, Callout, Flex, Select, Text, TextField } from '@radix-ui/themes';
-import { Controller, useForm } from 'react-hook-form';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import "easymde/dist/easymde.min.css";
-import SimpleMDE from 'react-simplemde-editor';
-import { Item, ItemTypes } from '@prisma/client';
 import { itemSchema } from '@/app/validationSchema';
+import { itemTypeList, itemCategoryList, itemGroupingList } from '@/prisma/enums';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Item } from '@prisma/client';
+import { Button, Callout, Flex, Text, TextField } from '@radix-ui/themes';
+import axios from 'axios';
+import "easymde/dist/easymde.min.css";
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import SimpleMDE from 'react-simplemde-editor';
 import { z } from 'zod';
-import { itemTypesMap, itemCategoryMap, itemGroupingMap } from '@/prisma/enums'
-
-type ItemMapValue = { label: string; color: 'gray' | 'red' | 'violet' | 'green' };
-
-const convertMapToList = (map: Record<string, ItemMapValue>): { label: string; value: string }[] => {
-  return Object.entries(map).map(([value, { label }]) => ({ label, value }));
-};
-
-// const convertMapToList = (map:any) => Object.entries(map).map(([value, { label }]) => ({ label, value }));
-
-const itemTypeList:{label:string, value:string}[] = convertMapToList(itemTypesMap);
-const itemCategoryList:{label:string, value:string}[] = convertMapToList(itemCategoryMap);
-const itemGroupingList:{label:string, value:string}[] = convertMapToList(itemGroupingMap);
-
+import StockItemSelect from './StockItemSelect';
 
 type ItemFormData = z.infer<typeof itemSchema>
 
@@ -81,20 +69,11 @@ const StockItemForm = ({ item }: Props) => {
 						defaultValue={item?.type || "NONE"}
 						render={({ field }) => {
 							return (
-								<Select.Root 
-									onValueChange={field.onChange} 
-									{...field}
-								>
-									<Select.Trigger />
-									<Select.Content>
-										<Select.Group>
-											<Select.Label>Type</Select.Label>
-											{
-												itemTypeList?.map(type => <Select.Item key={`type_${type.value}`} value={type.value}>{type.label}</Select.Item>)
-											}
-										</Select.Group>
-									</Select.Content>
-								</Select.Root>
+								<StockItemSelect 
+									field={field}
+									label="type"
+									list={itemTypeList}
+								/>
 					)}} />
 
 					<Controller
@@ -103,20 +82,11 @@ const StockItemForm = ({ item }: Props) => {
 						defaultValue={item?.category || "NONE"}
 						render={({ field }) => {
 							return (
-								<Select.Root 
-									onValueChange={field.onChange} 
-									{...field}
-								>
-									<Select.Trigger />
-									<Select.Content>
-										<Select.Group>
-											<Select.Label>Category</Select.Label>
-											{
-												itemCategoryList?.map(category => <Select.Item key={`cat_${category.value}`} value={category.value}>{category.label}</Select.Item>)
-											}
-										</Select.Group>
-									</Select.Content>
-								</Select.Root>
+								<StockItemSelect 
+									field={field}
+									label="Category"
+									list={itemCategoryList}
+								/>
 					)}} />
 
 					<Controller
@@ -125,20 +95,11 @@ const StockItemForm = ({ item }: Props) => {
 						defaultValue={item?.grouping || "NONE"}
 						render={({ field }) => {
 							return (
-								<Select.Root 
-									onValueChange={field.onChange} 
-									{...field}
-								>
-									<Select.Trigger />
-									<Select.Content>
-										<Select.Group>
-											<Select.Label>Grouping</Select.Label>
-											{
-												itemGroupingList?.map(grouping => <Select.Item key={`grouping_${grouping.value}`} value={grouping.value}>{grouping.label}</Select.Item>)
-											}
-										</Select.Group>
-									</Select.Content>
-								</Select.Root>
+								<StockItemSelect 
+									field={field}
+									label="Grouping"
+									list={itemGroupingList}
+								/>
 					)}} />
 				</Flex>
 
