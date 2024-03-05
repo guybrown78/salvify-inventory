@@ -1,4 +1,5 @@
 import { Link } from '@/app/_components';
+import { StockItemTypeBadge, StockItemCategoryBadge, StockItemGroupingBadge } from '@/app/_components/';
 import { Item } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
@@ -37,9 +38,15 @@ const StockTable = ({ items }: Props) => {
 									{item.title}
 								</Link>	
 							</TableCell>
-							<TableCell className='hidden md:table-cell'>{item.type}</TableCell>
-							<TableCell className='hidden md:table-cell'>{item.category}</TableCell>
-							<TableCell className='hidden md:table-cell'>{item.grouping}</TableCell>
+							<TableCell className='hidden md:table-cell'>
+								<StockItemTypeBadge itemType={item.type} />
+							</TableCell>
+							<TableCell className='hidden md:table-cell'>
+								<StockItemCategoryBadge itemCategory={item.category} />
+							</TableCell>
+							<TableCell className='hidden md:table-cell'>
+								<StockItemGroupingBadge itemGrouping={item.grouping} />
+							</TableCell>
 							<TableCell className='hidden md:table-cell'>{item.requiredCount}</TableCell>
 						</Table.Row>
 					))}

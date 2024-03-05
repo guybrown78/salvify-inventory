@@ -8,15 +8,23 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import "easymde/dist/easymde.min.css";
 import SimpleMDE from 'react-simplemde-editor';
-import { Item } from '@prisma/client';
+import { Item, ItemTypes } from '@prisma/client';
 import { itemSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { itemTypesMap } from '@/prisma/enums'
+import { itemTypesMap, itemCategoryMap, itemGroupingMap } from '@/prisma/enums'
 
+type ItemMapValue = { label: string; color: 'gray' | 'red' | 'violet' | 'green' };
 
-const itemTypeList = Object.entries(itemTypesMap).map(([value, { label }]) => ({ label, value }));
+const convertMapToList = (map: Record<string, ItemMapValue>): { label: string; value: string }[] => {
+  return Object.entries(map).map(([value, { label }]) => ({ label, value }));
+};
 
+// const convertMapToList = (map:any) => Object.entries(map).map(([value, { label }]) => ({ label, value }));
+
+const itemTypeList:{label:string, value:string}[] = convertMapToList(itemTypesMap);
+const itemCategoryList:{label:string, value:string}[] = convertMapToList(itemCategoryMap);
+const itemGroupingList:{label:string, value:string}[] = convertMapToList(itemGroupingMap);
 
 
 type ItemFormData = z.infer<typeof itemSchema>
@@ -37,7 +45,6 @@ const StockItemForm = ({ item }: Props) => {
 
 
 	const onSubmit = handleSubmit(async (data) => {
-		console.log(data)
 		try{
 			setIsSubmitting(true);
 			if(item){
@@ -67,7 +74,7 @@ const StockItemForm = ({ item }: Props) => {
 				</TextField.Root>
 				<FieldErrorMessage>{errors.title?.message}</FieldErrorMessage>
 
-				<Flex>
+				<Flex gap="5">
 					<Controller
 						control={control}
 						name="type"
@@ -90,6 +97,49 @@ const StockItemForm = ({ item }: Props) => {
 								</Select.Root>
 					)}} />
 
+					<Controller
+						control={control}
+						name="category"
+						defaultValue={item?.category || "NONE"}
+						render={({ field }) => {
+							return (
+								<Select.Root 
+									onValueChange={field.onChange} 
+									{...field}
+								>
+									<Select.Trigger />
+									<Select.Content>
+										<Select.Group>
+											<Select.Label>Category</Select.Label>
+											{
+												itemCategoryList?.map(category => <Select.Item key={`cat_${category.value}`} value={category.value}>{category.label}</Select.Item>)
+											}
+										</Select.Group>
+									</Select.Content>
+								</Select.Root>
+					)}} />
+
+					<Controller
+						control={control}
+						name="grouping"
+						defaultValue={item?.grouping || "NONE"}
+						render={({ field }) => {
+							return (
+								<Select.Root 
+									onValueChange={field.onChange} 
+									{...field}
+								>
+									<Select.Trigger />
+									<Select.Content>
+										<Select.Group>
+											<Select.Label>Grouping</Select.Label>
+											{
+												itemGroupingList?.map(grouping => <Select.Item key={`grouping_${grouping.value}`} value={grouping.value}>{grouping.label}</Select.Item>)
+											}
+										</Select.Group>
+									</Select.Content>
+								</Select.Root>
+					)}} />
 				</Flex>
 
 
