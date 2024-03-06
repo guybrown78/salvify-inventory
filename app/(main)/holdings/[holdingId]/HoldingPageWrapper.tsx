@@ -1,15 +1,14 @@
 'use client' 
 
-import React, { useEffect, ReactNode } from 'react'
-import { fetchHolding } from '../[holdingId]/page'
 import { useHoldingContext } from '@/app/_providers/HoldingProvider'
+import { ReactNode, useEffect } from 'react'
+import { HoldingWithLocations } from './holdingQuery'
 import { Holding } from '@prisma/client'
-
 
 export interface Props {
 	children: ReactNode
 	holdingId: number
-	holding: Holding
+	holding: HoldingWithLocations
 }
 
 const HoldingPageWrapper = ({ children, holdingId, holding }: Props) => {
@@ -18,9 +17,8 @@ const HoldingPageWrapper = ({ children, holdingId, holding }: Props) => {
 
 	useEffect(() => {
 		if(!currentHolding || holdingId !== currentHolding.id){
-			updateCurrentHolding(holding);
+			updateCurrentHolding(holding as Holding);
 		}
-
 	}, [holdingId])
 
 	return (

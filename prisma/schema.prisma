@@ -152,9 +152,10 @@ enum ItemGrouping {
 model Holding {
   id            Int         @id @default(autoincrement())
   title         String      @db.VarChar(255)
-  field         String?      @db.VarChar(255)
+  field         String?     @db.VarChar(255)
   isMainHolding Boolean     @default(false)
   type          HoldingType @default(GENERAL)
+  locations     Location[]
 }
 
 enum HoldingType {
@@ -163,4 +164,12 @@ enum HoldingType {
   FACILITY
   STORE
   GENERAL
+}
+
+model Location {
+  id        Int     @id @default(autoincrement())
+  title     String  @db.VarChar(255)
+  field     String? @db.VarChar(255)
+  holdingId Int
+  holding   Holding @relation(fields: [holdingId], references: [id])
 }

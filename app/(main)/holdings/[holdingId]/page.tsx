@@ -1,15 +1,7 @@
-import { cache } from 'react';
-import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
+import { HoldingPageProps, fetchHolding } from './holdingQuery';
 import HoldingHeader from './HoldingHeader';
-
-export interface HoldingPageProps {
-	params: { holdingId: string }
-}
-
-export const fetchHolding = cache((id: number) => prisma.holding.findUnique({
-	where: { id: id }
-}));
+import HoldingPageWrapper from './HoldingPageWrapper';
 
 const HoldingPage = async ({ params }: HoldingPageProps) => {
 
@@ -19,7 +11,9 @@ const HoldingPage = async ({ params }: HoldingPageProps) => {
 		notFound();
 
 	return (
-		<HoldingHeader holding={holding} />
+		<HoldingPageWrapper holding={holding} holdingId={parseInt(params.holdingId)}>
+			<HoldingHeader holding={holding} />
+		</HoldingPageWrapper>
 	)
 }
 

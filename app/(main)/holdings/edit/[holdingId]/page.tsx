@@ -1,8 +1,8 @@
-import dynamic from 'next/dynamic'
-import HoldingFormSkeleton from '../../_components/HoldingFormSkeleton';
 import prisma from '@/prisma/client';
+import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
-import { HoldingPageProps, fetchHolding } from '../../[holdingId]/page';
+import { cache } from 'react';
+import HoldingFormSkeleton from '../../_components/HoldingFormSkeleton';
 
 const HoldingForm = dynamic(
 	() => import('../../_components/HoldingForm'),
@@ -11,6 +11,16 @@ const HoldingForm = dynamic(
 		loading: () => <HoldingFormSkeleton />
 	}
 );
+
+
+interface HoldingPageProps {
+	params: { holdingId: string }
+}
+
+const fetchHolding = cache((id: number) => prisma.holding.findUnique({
+  where: { id: id },
+  include: { locations: true },
+}));
 
 const EditHoldingPage = async ({ params }: HoldingPageProps) => {
 

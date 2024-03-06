@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
 	request: NextRequest, 
-	{ params }: { params: { id: string }}) {
+	{ params }: { params: { holdingId: string }}) {
 
 		const session = await getServerSession(authOptions);
 		if(!session){
@@ -22,7 +22,7 @@ export async function PATCH(
 		const { title, field } = body;
 
 		const holding = await prisma.holding.findUnique({
-			where: { id: parseInt(params.id) }
+			where: { id: parseInt(params.holdingId) }
 		})
 		if(!holding){
 			return NextResponse.json({ error: 'Invalid Holding' }, {status: 404})

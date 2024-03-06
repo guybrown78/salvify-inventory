@@ -1,9 +1,10 @@
 import { Holding } from '@prisma/client'
 import { Flex, Text, Heading, Button, IconButton } from '@radix-ui/themes'
 import React from 'react'
+import { HoldingWithLocations } from './holdingQuery'
 
 interface Props {
-	holding: Holding
+	holding: HoldingWithLocations
 }
 
 const HoldingHeader = ({ holding }: Props) => {
@@ -12,8 +13,12 @@ const HoldingHeader = ({ holding }: Props) => {
 		<div className="px-4 sm:px-6 lg:px-8">
 			<Flex justify="between" py="6">
 				<Flex direction="column">
-					<Heading as='h1' size="5" weight="bold">{ holding.title }</Heading>
-					<Text size="2" color="gray">{ holding.field }</Text>
+					<Heading as='h1' size="5" weight="bold">
+						{ holding.title || "Untitled" }
+					</Heading>
+					<Text size="2" color="gray">
+						{ holding.field || "" }
+					</Text>
 				</Flex>
 			</Flex>
 	

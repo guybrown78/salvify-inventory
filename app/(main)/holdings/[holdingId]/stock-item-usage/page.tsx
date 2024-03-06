@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import HoldingHeader from '../HoldingHeader';
-import { HoldingPageProps, fetchHolding } from '../page';
-import HoldingPageWrapper from '../../_components/HoldingPageWrapper';
+import { HoldingPageProps, fetchHolding } from '../holdingQuery';
+import HoldingPageWrapper from '../HoldingPageWrapper';
 
 const HoldingStockItemUsagePage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))

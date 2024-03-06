@@ -1,7 +1,11 @@
 import { notFound } from 'next/navigation';
 import HoldingHeader from '../HoldingHeader';
-import { HoldingPageProps, fetchHolding } from '../page';
-import HoldingPageWrapper from '../../_components/HoldingPageWrapper';
+import { HoldingPageProps, fetchHolding } from '../holdingQuery';
+import { Button, Flex } from '@radix-ui/themes'
+import HoldingPageWrapper from '../HoldingPageWrapper';
+import { NoDataMessage } from '@/app/_components';
+import LocationsToolbar from './LocationsToolbar';
+import LocationsTable from './LocationsTable';
 
 const HoldingLocationsPage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
@@ -14,7 +18,15 @@ const HoldingLocationsPage = async ({ params }: HoldingPageProps) => {
 			holding={holding} 
 			holdingId={parseInt(params.holdingId)}
 		>
-			HoldingLocationsPage
+			<Flex direction="column" gap="3">
+				<LocationsToolbar holdingId={parseInt(params.holdingId)} />
+				{!holding.locations?.length && (
+					<NoDataMessage>
+						<p>There are currently no locations in this holding.<br />To create a location, click &apos;New Location&apos;.</p>
+					</NoDataMessage>
+				)}
+				{holding.locations.length > 0 && (<LocationsTable holding={holding}/>)}
+			</Flex>
 		</HoldingPageWrapper>
 	)
 }
