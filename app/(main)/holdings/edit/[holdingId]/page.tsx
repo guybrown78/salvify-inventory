@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic'
 import HoldingFormSkeleton from '../../_components/HoldingFormSkeleton';
 import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
+import { HoldingPageProps, fetchHolding } from '../../[holdingId]/page';
 
 const HoldingForm = dynamic(
 	() => import('../../_components/HoldingForm'),
@@ -11,15 +12,9 @@ const HoldingForm = dynamic(
 	}
 );
 
-interface Props {
-	params: { id: string }
-}
+const EditHoldingPage = async ({ params }: HoldingPageProps) => {
 
-const EditHoldingPage = async ({ params }: Props) => {
-
-	const holding = await prisma.holding.findUnique({
-		where: { id: parseInt(params.id) }
-	})
+	const holding = await fetchHolding(parseInt(params.holdingId))
 
 	if(!holding) notFound();
 

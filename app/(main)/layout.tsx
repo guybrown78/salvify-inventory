@@ -13,6 +13,8 @@ import QueryClientProvider from '../_providers/QueryClientProvider';
 import classNames from 'classnames';
 import Main from '@/app/_components/layout/Main';
 import { LayoutProvider } from '@/app/_providers/LayoutProvider'
+import { HoldingProvider } from '@/app/_providers/HoldingProvider'
+import { ReactNode } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,12 +27,14 @@ export const metadata: Metadata = {
 	description: 'Manage your medical inventory pain'
 }
 
+interface LayoutProps {
+	children: ReactNode,
+}
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: LayoutProps) {
+
   return (
     <html lang="en" className="h-fill">
       <body className={classNames('h-full', inter.variable)}>
@@ -38,9 +42,11 @@ export default function RootLayout({
 					<AuthProvider>
 						<Theme accentColor="grass">
 							<LayoutProvider>
+							<HoldingProvider>
 								<Main>
 									{children}
 								</Main>
+								</HoldingProvider>
 							</LayoutProvider>
 						</Theme>
 					</AuthProvider>
