@@ -1,20 +1,12 @@
 'use client'
 
+import { useLayoutContext } from '@/app/_providers/LayoutProvider';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, PropsWithChildren, useState } from 'react';
+import { Fragment } from 'react';
 import {
-	HiBars3,
-	HiCalendar,
-	HiOutlineChartPie,
-	HiOutlineDocumentDuplicate,
-	HiOutlineFolder,
-	HiOutlineHome,
-	HiOutlineUser,
 	HiXMark
 } from "react-icons/hi2";
-import Header from './Header';
 import NavColumn from './NavColumn';
-import { useLayoutContext } from '@/app/_providers/LayoutProvider';
 
 const SideDrawer = () => {
 

@@ -3,7 +3,6 @@ import HoldingHeader from '../HoldingHeader';
 import { HoldingPageProps, fetchHolding } from '../page';
 import HoldingPageWrapper from '../../_components/HoldingPageWrapper';
 
-
 const HoldingDashboardPage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
 

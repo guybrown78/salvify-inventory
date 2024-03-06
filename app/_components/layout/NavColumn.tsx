@@ -1,18 +1,18 @@
 'use client'
 
+import { useHoldingContext } from '@/app/_providers/HoldingProvider';
 import classNames from 'classnames';
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { FaKitMedical } from "react-icons/fa6";
 import {
 	HiOutlineHome,
 	HiOutlineTicket
 } from "react-icons/hi2";
-import { useRouter } from 'next/navigation';
-import { FaKitMedical } from "react-icons/fa6";
 import { MdShelves } from "react-icons/md";
-import { useHoldingContext } from '@/app/_providers/HoldingProvider';
-import { Button, Flex, Box } from '@radix-ui/themes';
-import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import HoldingNavTitle from './HoldingNavTitle';
+import { useLayoutContext } from '@/app/_providers/LayoutProvider';
+
 
 const commonNavigation = [
   { name: 'Dashboard', href: '/', rootHref: null, icon: HiOutlineHome },
@@ -33,14 +33,18 @@ const holdingsNavigation = [
 
 const NavColumn = () => {
 
-	const { isHoldingSelected, currentHolding, updateIsHoldingSelected, updateCurrentHolding } = useHoldingContext()
+	const { isHoldingSelected, currentHolding } = useHoldingContext()
+	const { updateIsSidebarOpen } = useLayoutContext()
 	const currentPath = usePathname();
 	const router = useRouter();
 	
 	const isRouteSelected = (href:string, rootHref: string | null) => {
-		if(isHoldingSelected)
+		if(isHoldingSelected){
 			return currentPath === `/holdings/${currentHolding?.id}${href}`
-    return currentPath === href || currentPath.startsWith(rootHref || "");
+		}
+    return rootHref 
+			? currentPath === href || currentPath.startsWith(rootHref)
+			: currentPath === href;
   };
 	
 	const navigation = isHoldingSelected ? holdingsNavigation : commonNavigation;
@@ -49,18 +53,8 @@ const NavColumn = () => {
 	return (
 		<nav className="flex flex-1 flex-col">
 		{isHoldingSelected && (
-			<div className='mb=2'>
-				<Button variant="solid" highContrast className="w-full" onClick={() =>
-				{
-					updateIsHoldingSelected(false);
-					updateCurrentHolding(null);
-					router.push('/holdings/list')
-				}}>
-					<Flex gap="3" align="center" width="100%">
-						<ArrowLeftIcon width="16" height="16" />
-						{currentHolding?.title}
-					</Flex>
-				</Button>
+			<div className='h-6'>
+				<HoldingNavTitle />
 			</div>
 		)}
 		<ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -70,27 +64,30 @@ const NavColumn = () => {
 						<li key={item.name}>
 							<Link
 								href={isHoldingSelected ? `/holdings/${currentHolding?.id}${item.href}` : item.href}
-								shallow={true}
-								passHref
-								className={classNames(
-									isRouteSelected(item.href, item.rootHref)
-										? 'bg-gray-50 text-green-600'
-										: 'text-gray-700 hover:text-green-600 hover:bg-gray-50',
-									'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-								)}
 							>
-								{item.icon && (
-									<item.icon
-										className={classNames(
-										isRouteSelected(item.href, item.rootHref) 
-												? 'text-green-600' 
-												: 'text-gray-400 group-hover:text-green-600',
-											'h-6 w-6 shrink-0'
-										)}
-										aria-hidden="true"
-									/>
-								)}
-								{item.name}
+								<div 
+									className={classNames(
+										isRouteSelected(item.href, item.rootHref)
+											? 'bg-gray-50 text-green-600'
+											: 'text-gray-700 hover:text-green-600 hover:bg-gray-50',
+										'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+									)}
+									onClick={() => { updateIsSidebarOpen(false) }}
+								>
+									{item.icon && (
+										<item.icon
+											className={classNames(
+											isRouteSelected(item.href, item.rootHref) 
+													? 'text-green-600' 
+													: 'text-gray-400 group-hover:text-green-600',
+												'h-6 w-6 shrink-0'
+											)}
+											aria-hidden="true"
+										/>
+									)}
+									{item.name}
+								</div>
+								
 							</Link>
 						</li>
 					))}

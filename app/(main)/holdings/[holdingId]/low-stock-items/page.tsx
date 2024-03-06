@@ -1,8 +1,21 @@
-import React from 'react'
+import { notFound } from 'next/navigation';
+import HoldingHeader from '../HoldingHeader';
+import { HoldingPageProps, fetchHolding } from '../page';
+import HoldingPageWrapper from '../../_components/HoldingPageWrapper';
 
-const HoldingLowStockItemsPage = () => {
+const HoldingLowStockItemsPage = async ({ params }: HoldingPageProps) => {
+	const holding = await fetchHolding(parseInt(params.holdingId))
+
+	if(!holding)
+		notFound();
+	
 	return (
-		<div>HoldingLowStockItemsPage</div>
+		<HoldingPageWrapper 
+			holding={holding} 
+			holdingId={parseInt(params.holdingId)}
+		>
+			<div>HoldingLowStockItemsPage</div>
+		</HoldingPageWrapper>
 	)
 }
 
