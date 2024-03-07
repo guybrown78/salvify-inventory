@@ -132,3 +132,15 @@ export const locationSchema = z.object({
 		.max(255)
 		.optional(),
 })
+
+export const patchLocationSchema = z.object({
+	title: z
+		.string()
+		.min(1, "Title is required")
+		.max(255)
+		.optional(),
+	field: z
+		.string()
+		.max(255)
+		.optional(),
+})

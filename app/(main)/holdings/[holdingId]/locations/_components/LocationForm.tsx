@@ -33,9 +33,7 @@ const LocationForm = ({ holdingId, location }: Props) => {
 		try{
 			setIsSubmitting(true);
 			if(location){
-				console.log(holdingId)
-				console.log(data)
-				// await axios.patch('/api/holdings/' + holding.id, data);
+				await axios.patch(`/api/holdings/${holdingId}/locations/${location.id}`, data);
 			}else{
 				await axios.post(`/api/holdings/${holdingId}/locations`, data)
 			}
