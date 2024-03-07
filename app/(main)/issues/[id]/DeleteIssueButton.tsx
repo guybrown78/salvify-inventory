@@ -1,10 +1,8 @@
 'use client'
 
 import { Spinner } from '@/app/_components';
-import { Pencil2Icon } from '@radix-ui/react-icons';
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 import axios from 'axios';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

@@ -54,7 +54,10 @@ const LocationsTable = ({ holding }: Props) => {
 
 							<TableCell align='right' justify="end" width="55px">
 								<Flex direction="column" justify="center"  height="100%">
-									<DeletLocationButton />
+									<DeletLocationButton 
+										location={location} 
+										holdingId={holding.id} 
+									/>
 								</Flex>
 							</TableCell>
 
