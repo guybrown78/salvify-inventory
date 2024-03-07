@@ -19,12 +19,14 @@ const DeletLocationButton = ({ location, holdingId }: Props) => {
 	const [ isDeleting, setIsDeleting ] = useState(false);
 
 	const deleteLocation = async () => {
-		setIsDeleting(true)
-		console.log(location.id, holdingId)
-		setTimeout(() => {
+		try {
+			setIsDeleting(true);
+			await axios.delete(`/api/holdings/${holdingId}/locations/${location.id}`)
+			router.refresh();
+		} catch (error){
 			setIsDeleting(false);
 			setError(true);
-		}, 1500)
+		}
 	}
 
 	return (
