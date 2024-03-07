@@ -1,7 +1,7 @@
 import { Box } from '@radix-ui/themes'
 import { Skeleton } from '@/app/_components'
 
-const FormSkeleton = () => {
+const LocationFormSkeleton = () => {
 	return (
 		<Box className='max-w-xl'>
 			<Skeleton height="2rem"/>
@@ -9,4 +9,4 @@ const FormSkeleton = () => {
 	)
 }
 
-export default FormSkeleton
+export default LocationFormSkeleton

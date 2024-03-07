@@ -1,14 +1,14 @@
 import dynamic from 'next/dynamic'
-import FormSkeleton from '../../../_components/FormSkeleton';
+import LocationFormSkeleton from '../_components/LocationFormSkeleton';
 import { HoldingPageProps, fetchHolding } from '../../holdingQuery';
 import HoldingPageWrapper from '../../HoldingPageWrapper';
 import { notFound } from 'next/navigation';
 
 const LocationForm = dynamic(
-	() => import('../../../_components/LocationForm'),
+	() => import('../_components/LocationForm'),
 	{
 		ssr: false,
-		loading: () => <FormSkeleton />
+		loading: () => <LocationFormSkeleton />
 	}
 );
 

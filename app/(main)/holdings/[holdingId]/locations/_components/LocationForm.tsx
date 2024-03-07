@@ -30,11 +30,11 @@ const LocationForm = ({ holdingId, location }: Props) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const onSubmit = handleSubmit(async (data) => {
-		console.log(holdingId)
-		console.log(data)
 		try{
 			setIsSubmitting(true);
 			if(location){
+				console.log(holdingId)
+				console.log(data)
 				// await axios.patch('/api/holdings/' + holding.id, data);
 			}else{
 				await axios.post(`/api/holdings/${holdingId}/locations`, data)
