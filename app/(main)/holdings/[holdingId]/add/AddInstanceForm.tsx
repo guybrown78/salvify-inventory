@@ -1,10 +1,12 @@
 'use client'
 
-import { FieldErrorMessage } from '@/app/_components';
+import { FieldErrorMessage, Spinner } from '@/app/_components';
 import { addInstanceSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Item, Location } from '@prisma/client';
 import { Box, Button, Flex, Grid, Heading, Text, TextField } from '@radix-ui/themes';
+import axios from 'axios';
+import { useRouter } from 'next/navigation'
 import classNames from 'classnames';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,6 +20,8 @@ interface Props{
 }
 const AddInstanceForm = ({ items, locations }: Props) => {
 
+	const router = useRouter();
+
 	const { register, control, handleSubmit, formState: {errors} } = useForm<AddInstanceFormData>({ resolver: zodResolver(addInstanceSchema)})
 
 	
@@ -26,8 +30,20 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
 	const onSubmit = handleSubmit(async (data) => {
-		console.log("submit")
-		console.log(data)
+		try{
+			setIsSubmitting(true);
+			await axios.post('/api/instance', data)
+			// if(location){
+			// 	await axios.patch(`/api/holdings/${holdingId}/locations/${location.id}`, data);
+			// }else{
+			// 	await axios.post(`/api/holdings/${holdingId}/locations`, data)
+			// }
+			// router.push(`/holdings/${holdingId}/locations`);
+			router.refresh();
+		} catch (error) {
+			setIsSubmitting(false);
+			setError('An unexpected error occured');
+		}
 	})
 
 	const onSelectedItem = (itemId:number) => {
@@ -110,7 +126,11 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 
 					</Grid>				
 			
-					<Button type="submit">Add Incident</Button>
+					<Button type="submit" disabled={isSubmitting}>
+						
+						{ isSubmitting ? 'Adding Incident' : 'Add Incident' }{' '}
+						{isSubmitting && <Spinner />}
+					</Button>
 				</div>	
 				
 			</Flex>

@@ -145,6 +145,7 @@ export const patchLocationSchema = z.object({
 		.optional(),
 })
 
+
 export const addInstanceSchema = z.object({
 	itemId: z
 		.string()
