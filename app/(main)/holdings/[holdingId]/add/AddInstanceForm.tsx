@@ -17,8 +17,10 @@ type AddInstanceFormData = z.infer<typeof addInstanceSchema>
 interface Props{
 	items: Item[]
 	locations: Location[]
+	onSelectItem: (selectedItem: Item | null) => void;
+	onInstanceAdded: () => void;
 }
-const AddInstanceForm = ({ items, locations }: Props) => {
+const AddInstanceForm = ({ items, locations, onSelectItem, onInstanceAdded }: Props) => {
 
 	const router = useRouter();
 
@@ -32,14 +34,10 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 	const onSubmit = handleSubmit(async (data) => {
 		try{
 			setIsSubmitting(true);
-			await axios.post('/api/instance', data)
-			// if(location){
-			// 	await axios.patch(`/api/holdings/${holdingId}/locations/${location.id}`, data);
-			// }else{
-			// 	await axios.post(`/api/holdings/${holdingId}/locations`, data)
-			// }
-			// router.push(`/holdings/${holdingId}/locations`);
+			await axios.post('/api/instances', data)
 			router.refresh();
+			onInstanceAdded();
+			setIsSubmitting(false);
 		} catch (error) {
 			setIsSubmitting(false);
 			setError('An unexpected error occured');
@@ -49,6 +47,7 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 	const onSelectedItem = (itemId:number) => {
 		const item = items.filter(item => item.id === itemId)[0]
 		setSelectedItem(item || null)
+		onSelectItem(item);
 	}
 
 	return (
@@ -58,7 +57,7 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 		>
 			<Flex direction="column" gap="8">
 				<Box>
-					<Text>Item the instance is from</Text>
+					<Text size="2">Item the instance is from</Text>
 					<select
 						className="block w-full rounded-md border-0 py-2 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-grass-600 sm:text-md sm:leading-6"
 						{...register('itemId')}
@@ -85,7 +84,7 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 						<Text>This information will be added as an instance to the instances list for <strong>{selectedItem?.title}</strong></Text>
 					</Box>
 					<Box>
-						<Text>Location</Text>
+						<Text size="2">Location</Text>
 						<select
 							className="block w-full rounded-md border-0 py-2 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-green-600 sm:text-md sm:leading-6"
 							{...register('locationId')}
@@ -101,7 +100,7 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 					<Grid columns={{ initial: "1", sm: "3"}} gap="5" >
 
 					<Box>
-						<Text>Instance Expiry Date</Text>
+						<Text size="2">Instance Expiry Date</Text>
 						<TextField.Root>
 							<TextField.Input type="date" {...register('expiryDate')}/>
 						</TextField.Root>
@@ -109,7 +108,7 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 					</Box>
 
 					<Box>
-						<Text>Quantity</Text>
+						<Text size="2">Quantity</Text>
 						<TextField.Root>
 							<TextField.Input type="number" {...register('quantity')}/>
 						</TextField.Root>
@@ -117,7 +116,7 @@ const AddInstanceForm = ({ items, locations }: Props) => {
 					</Box>
 
 					<Box>
-						<Text>Batch</Text>
+						<Text size="2">Batch</Text>
 						<TextField.Root>
 							<TextField.Input type="text" min={0} {...register('batch')}/>
 						</TextField.Root>

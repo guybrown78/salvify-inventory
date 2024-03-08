@@ -1,3 +1,4 @@
+
 import { notFound } from 'next/navigation';
 import HoldingHeader from '../HoldingHeader';
 import { HoldingPageProps, fetchHolding } from '../holdingQuery';
@@ -6,6 +7,7 @@ import { NoDataMessage } from '@/app/_components';
 import { Heading, Text, Box, Flex } from '@radix-ui/themes';
 import AddInstanceForm from './AddInstanceForm';
 import prisma from '@/prisma/client'
+import InstanceItems from './InstanceItems';
 
 const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
@@ -35,12 +37,14 @@ const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {
 			<Flex direction="column" gap="3">
 				<Box className="max-w-xl">
 					<Heading mb="3">Add items instances</Heading>
-					<Text>Here you can select items from recent orders or items that are in the stock list. Once you find an item you can add new instances.</Text>
-				</Box>
-				<Box className="max-w-2xl">
-					<AddInstanceForm items={items} locations={holding.locations} />
+					<Text>Here you can select items that are in the stock list. Once you find an item you can add new instances.</Text>
 				</Box>
 				
+				<InstanceItems 
+					holdingId={parseInt(params.holdingId)}
+					items={items} 
+					locations={holding.locations} 
+				/>
 			</Flex>
 			
 			
