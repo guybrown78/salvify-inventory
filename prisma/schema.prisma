@@ -91,6 +91,7 @@ model Item {
   instructionsURL String?
   bnfURL          String?
   emcPilURL       String?
+  instances       Instance[]
 }
 
 enum ItemTypes {
@@ -154,6 +155,8 @@ model Holding {
   title         String      @db.VarChar(255)
   field         String?     @db.VarChar(255)
   isMainHolding Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
   type          HoldingType @default(GENERAL)
   locations     Location[]
 }
@@ -167,9 +170,25 @@ enum HoldingType {
 }
 
 model Location {
-  id        Int     @id @default(autoincrement())
-  title     String  @db.VarChar(255)
-  field     String? @db.VarChar(255)
+  id        Int        @id @default(autoincrement())
+  title     String     @db.VarChar(255)
+  field     String?    @db.VarChar(255)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
   holdingId Int
-  holding   Holding @relation(fields: [holdingId], references: [id])
+  holding   Holding    @relation(fields: [holdingId], references: [id])
+  instances Instance[]
+}
+
+model Instance {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  expiryDate DateTime?
+  quantity   Int       @default(0)
+  batch      String?   @db.VarChar(255)
+  itemId     Int
+  item       Item      @relation(fields: [itemId], references: [id])
+  locationId Int
+  location   Location  @relation(fields: [locationId], references: [id])
 }

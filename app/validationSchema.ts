@@ -144,3 +144,18 @@ export const patchLocationSchema = z.object({
 		.max(255)
 		.optional(),
 })
+
+export const addInstanceSchema = z.object({
+	itemId: z
+		.string()
+		.min(1, "Item is required"),
+	locationId: z
+		.string()
+		.min(1, "Location is required"),
+	expiryDate: z
+		.string(),
+	quantity: z
+		.string()
+		.min(1, "Quantity is required"),
+	batch: z.string().optional(),
+})

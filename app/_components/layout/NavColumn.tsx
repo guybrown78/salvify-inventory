@@ -12,6 +12,7 @@ import {
 import { MdShelves } from "react-icons/md";
 import HoldingNavTitle from './HoldingNavTitle';
 import { useLayoutContext } from '@/app/_providers/LayoutProvider';
+import { Holding } from '@prisma/client';
 
 
 const commonNavigation = [
@@ -22,7 +23,7 @@ const commonNavigation = [
 ]
 
 const holdingsNavigation = [
-  { name: 'Dashboard', href: '/dashboard', rootHref: null, icon: null },
+  { name: 'Dashboard', href: '/dashboard', rootHref: null, icon: null,  },
   { name: 'Locations', href: '/locations', rootHref: null, icon: null },
   { name: 'Stock', href: '/stock', rootHref: null, icon: null },
   { name: 'Stock Item Usage', href: '/stock-item-usage', rootHref: null, icon: null },
@@ -31,6 +32,18 @@ const holdingsNavigation = [
   { name: 'Expiring Items', href: '/expiring-items', rootHref: null, icon: null },
 ];
 
+const getHoldingNav = (holding:Holding) => {
+	const arr = [...holdingsNavigation]
+	if(holding.type === 'STORE'){
+		arr.splice(4, 0, {
+			name: 'Add Instances', 
+			href: '/add', 
+			rootHref: null, 
+			icon: null
+		});
+	}
+	return arr
+}
 const NavColumn = () => {
 
 	const { isHoldingSelected, currentHolding } = useHoldingContext()
@@ -47,7 +60,7 @@ const NavColumn = () => {
 			: currentPath === href;
   };
 	
-	const navigation = isHoldingSelected ? holdingsNavigation : commonNavigation;
+	const navigation = isHoldingSelected ? getHoldingNav(currentHolding!) : commonNavigation;
 
 
 	return (
