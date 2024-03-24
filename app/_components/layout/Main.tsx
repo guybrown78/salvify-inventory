@@ -16,7 +16,9 @@ const Main = ({ children }:PropsWithChildren) => {
 
 			{/* Static sidebar for desktop */}
 			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-56 xl:w-72 lg:flex-col">
-				<SideBar/>
+				<SideBar>
+					<NavColumn />
+				</SideBar>
 			</div>
 
 			<div className="lg:pl-56 xl:pl-72">

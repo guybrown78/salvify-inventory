@@ -2,7 +2,6 @@ import { PropsWithChildren, ReactNode } from 'react';
 import Header from './Header';
 import SideDrawer from './SideDrawer';
 import SideBar from './SideBar';
-import HoldingsSideBar from './HoldingsSideBar';
 import HoldingsNavColumn from './HoldingsNavColumn';
 
 const HoldingsMain = ({ children }:PropsWithChildren) => {
@@ -14,7 +13,10 @@ const HoldingsMain = ({ children }:PropsWithChildren) => {
 
 			{/* Static sidebar for desktop */}
 			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-56 xl:w-72 lg:flex-col">
-				<HoldingsSideBar />
+
+				<SideBar>
+					<HoldingsNavColumn />
+				</SideBar>
 			</div>
 
 			<div className="lg:pl-56 xl:pl-72">
