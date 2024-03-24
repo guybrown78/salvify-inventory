@@ -20,13 +20,7 @@ model Issue {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   assignedToUserId String?     @db.VarChar(255)
-  assignedToUser   User?       @relation(fields: [assignedToUserId], references: [id])
-}
-
-enum IssueStatus {
-  OPEN
-  IN_PROGRESS
-  CLOSE
+  assignedToUser   User?       @relation(name: "IssueToUser", fields: [assignedToUserId], references: [id])
 }
 
 model Account {
@@ -42,8 +36,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(name: "AccountToUser", fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
 }
@@ -53,21 +46,23 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(name: "SessionToUser", fields: [userId], references: [id])
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String           @id @default(cuid())
   firstname      String?
   surname        String?
   name           String?
-  email          String?   @unique
+  email          String?          @unique
   emailVerified  DateTime?
   hashedPassword String?
   image          String?
-  accounts       Account[]
-  sessions       Session[]
-  assignedIssues Issue[]
+  accounts       Account[]        @relation(name: "AccountToUser")
+  sessions       Session[]        @relation(name: "SessionToUser")
+  assignedIssues Issue[]          @relation(name: "IssueToUser")
+  removeInstance RemoveInstance[] @relation(name: "UserToRemoveInstance")
+  instancesAdded Instance[]       @relation(name: "UserToInstance")
 }
 
 model VerificationToken {
@@ -91,7 +86,83 @@ model Item {
   instructionsURL String?
   bnfURL          String?
   emcPilURL       String?
-  instances       Instance[]
+  instances       Instance[]    @relation(name: "InstanceToItem")
+  holdingitem     HoldingItem[] @relation(name: "ItemToHoldingItem")
+}
+
+model Holding {
+  id              Int              @id @default(autoincrement())
+  title           String           @db.VarChar(255)
+  field           String?          @db.VarChar(255)
+  isMainHolding   Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+  type            HoldingType      @default(GENERAL)
+  locations       Location[]       @relation(name: "HoldingToLocation")
+  holdingitem     HoldingItem[]    @relation(name: "HoldingToHoldingItem")
+  removedInstance RemoveInstance[] @relation(name: "HoldingToRemoveInstance")
+}
+
+model Location {
+  id              Int              @id @default(autoincrement())
+  title           String           @db.VarChar(255)
+  field           String?          @db.VarChar(255)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+  holdingId       Int
+  holding         Holding          @relation(name: "HoldingToLocation", fields: [holdingId], references: [id])
+  instances       Instance[]       @relation(name: "InstanceToLocation")
+  removedInstance RemoveInstance[] @relation(name: "LocationToRemoveInstance")
+}
+
+model Instance {
+  id              Int              @id @default(autoincrement())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  expiryDate      DateTime?
+  quantity        Int              @default(0)
+  batch           String?          @db.VarChar(255)
+  itemId          Int
+  item            Item             @relation(name: "InstanceToItem", fields: [itemId], references: [id])
+  locationId      Int
+  location        Location         @relation(name: "InstanceToLocation", fields: [locationId], references: [id])
+  removedInstance RemoveInstance[] @relation(name: "InstanceToRemoveInstance")
+  addedBy         User?            @relation(name: "UserToInstance", fields: [addedById], references: [id])
+  addedById       String?
+}
+
+model HoldingItem {
+  id               Int     @id @default(autoincrement())
+  requiredMinCount Int
+  item             Item    @relation(name: "ItemToHoldingItem", fields: [itemId], references: [id])
+  holding          Holding @relation(name: "HoldingToHoldingItem", fields: [holdingId], references: [id])
+  itemId           Int
+  holdingId        Int
+}
+
+model RemoveInstance {
+  id          Int                  @id @default(autoincrement())
+  prf         String?
+  instance    Instance             @relation(name: "InstanceToRemoveInstance", fields: [instanceId], references: [id])
+  instanceId  Int                  @unique
+  holding     Holding              @relation(name: "HoldingToRemoveInstance", fields: [holdingId], references: [id])
+  holdingId   Int                  @unique
+  location    Location?            @relation(name: "LocationToRemoveInstance", fields: [locationId], references: [id])
+  locationId  Int?                 @unique
+  createdAt   DateTime?            @default(now())
+  updatedAt   DateTime?            @updatedAt
+  quantity    Int
+  removedAt   DateTime             @default(now())
+  reason      RemoveInstanceReason
+  otherReason String?              @db.VarChar(255)
+  removedBy   User                 @relation(name: "UserToRemoveInstance", fields: [removedById], references: [id])
+  removedById String               @unique
+}
+
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSE
 }
 
 enum ItemTypes {
@@ -150,17 +221,6 @@ enum ItemGrouping {
   ADDITIONAL
 }
 
-model Holding {
-  id            Int         @id @default(autoincrement())
-  title         String      @db.VarChar(255)
-  field         String?     @db.VarChar(255)
-  isMainHolding Boolean     @default(false)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt
-  type          HoldingType @default(GENERAL)
-  locations     Location[]
-}
-
 enum HoldingType {
   EVENT
   FLEET
@@ -169,26 +229,13 @@ enum HoldingType {
   GENERAL
 }
 
-model Location {
-  id        Int        @id @default(autoincrement())
-  title     String     @db.VarChar(255)
-  field     String?    @db.VarChar(255)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now()) @updatedAt
-  holdingId Int
-  holding   Holding    @relation(fields: [holdingId], references: [id])
-  instances Instance[]
-}
-
-model Instance {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  expiryDate DateTime?
-  quantity   Int       @default(0)
-  batch      String?   @db.VarChar(255)
-  itemId     Int
-  item       Item      @relation(fields: [itemId], references: [id])
-  locationId Int
-  location   Location  @relation(fields: [locationId], references: [id])
+enum RemoveInstanceReason {
+  USED
+  DAMAGED
+  LOST
+  STOLEN
+  EXPIRED
+  RECALLED
+  REMOVED
+  OTHER
 }
