@@ -1,16 +1,20 @@
-import { ItemCategory, ItemGrouping, ItemTypes } from "@prisma/client"
+import { ItemCategory, ItemGrouping, ItemTypes, RemoveInstanceReason } from "@prisma/client"
 
-export interface BadgeMapType {
+export interface SelectMapType {
 	label:string, 
+}
+export interface BadgeMapType extends SelectMapType {
 	color: 'gray' | 'gold' | 'bronze' | 'brown' | 
 		'yellow' | 'amber' | 'orange' | 'tomato' | 'red' | 'ruby' | 'crimson' | 'pink' | 'plum' | 'purple' | 'violet' | 'iris' | 'indigo' | 'blue' | 'cyan' | 'teal' | 'jade' | 'green' | 'grass' | 'lime' | 'mint' | 'sky'
 }
 
-export const convertMapToList = (map: Record<string, BadgeMapType>): { label: string; value: string }[] => {
+
+
+export const convertMapToList = (map: Record<string, SelectMapType | BadgeMapType>): { label: string; value: string }[] => {
   return Object.entries(map).map(([value, { label }]) => ({ label, value }));
 };
 
-export const convertEnumValuesToArray = (map: Record<string, BadgeMapType>): [string, ...string[]] => {
+export const convertEnumValuesToArray = (map: Record<string, SelectMapType |BadgeMapType>): [string, ...string[]] => {
   return Object.keys(map) as [string, ...string[]];
 };
 
@@ -88,8 +92,27 @@ const itemTypesValues:[string, ...string[]] = convertEnumValuesToArray(itemTypes
 const itemCategoryValues:[string, ...string[]] = convertEnumValuesToArray(itemCategoryMap);
 const itemGroupingValues:[string, ...string[]] = convertEnumValuesToArray(itemGroupingMap);
 
+
+
+const removeInstanceReasonMap: Record<
+	RemoveInstanceReason, 
+	SelectMapType
+	> = {
+		USED: { label: 'Item(s) used for treatment' },
+		DAMAGED: { label: 'Item(s) are damaged' },
+		LOST: { label: 'Item(s) have been lost' },
+		STOLEN: { label: 'Item(s) have been stollen' },
+		EXPIRED: { label: 'Item(s) have expired' },
+		RECALLED: { label: 'Item(s) have been recalled by the manufacturer' },
+		REMOVED: { label: 'Item(s) have been removed/recalled by admin' },
+		OTHER: { label: 'Other reason' },
+	}
+const removeInstanceReasonList:{label:string, value:string}[] = convertMapToList(removeInstanceReasonMap);
+const removeInstanceReasonValues:[string, ...string[]] = convertEnumValuesToArray(removeInstanceReasonMap);
+
 export { 
 	itemTypesValues, itemTypesMap, itemTypeList,
 	itemCategoryValues, itemCategoryMap, itemCategoryList,
-	itemGroupingValues, itemGroupingMap, itemGroupingList
+	itemGroupingValues, itemGroupingMap, itemGroupingList,
+	removeInstanceReasonValues, removeInstanceReasonMap, removeInstanceReasonList
 }
