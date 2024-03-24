@@ -4,6 +4,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Box } from '@radix-ui/themes';
+import Link from 'next/link';
 
 const HoldingNavTitle = () => {
 
@@ -16,20 +17,22 @@ const HoldingNavTitle = () => {
 		return null;
 
 	return (
-		<button 
-			onClick={() => {
-				updateIsHoldingSelected(false);
-				updateCurrentHolding(null);
-				updateIsSidebarOpen(false);
-				router.push('/holdings/list')
-			}}
-			className='absolute left-0 right-0 top-16 h-8 text-slate-50 py-1 px-6 bg-slate-800 text-sm'
-		>
+		// <button 
+		// 	onClick={() => {
+		// 		updateIsHoldingSelected(false);
+		// 		updateCurrentHolding(null);
+		// 		updateIsSidebarOpen(false);
+		// 		router.push('/holdings/list')
+		// 	}}
+		// 	className='absolute left-0 right-0 top-16 h-8 text-slate-50 py-1 px-6 bg-slate-800 text-sm'
+		// >
+		<Link href="/holdings/list" className='absolute left-0 right-0 top-16 h-8 text-slate-50 py-1 px-6 bg-slate-800 text-sm'>
 			<Flex gap="3" align="center" width="100%">
 				<ArrowLeftIcon width="16" height="16" />
 				{currentHolding?.title}
 			</Flex>
-		</button>
+		</Link>
+		// </button>
 	)
 }
 

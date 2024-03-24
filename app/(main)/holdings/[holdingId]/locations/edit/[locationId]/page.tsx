@@ -3,6 +3,7 @@ import LocationFormSkeleton from '../../_components/LocationFormSkeleton';
 import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { fetchHolding } from '../../../holdingQuery';
 
 const LocationForm = dynamic(
 	() => import('../../_components/LocationForm'),
@@ -22,6 +23,9 @@ const fetchLocation = cache((id: number) => prisma.location.findUnique({
 }));
 
 const EditLocationPage = async ({ params }: LocationPageProps) => {
+	const holding = await fetchHolding(parseInt(params.holdingId))
+
+	if(!holding) notFound();
 
 	const location = await fetchLocation(parseInt(params.locationId))
 
@@ -32,7 +36,7 @@ const EditLocationPage = async ({ params }: LocationPageProps) => {
 		<LocationForm 
 			location={location}
 			holdingId={parseInt(params.holdingId)} 
-		/>
+		/>			
 	)
 }
 

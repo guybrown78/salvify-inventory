@@ -11,7 +11,7 @@ import { Container, Theme, ThemePanel } from '@radix-ui/themes'
 import AuthProvider from '../auth/Provider';
 import QueryClientProvider from '../_providers/QueryClientProvider';
 import classNames from 'classnames';
-import Main from '@/app/_components/layout/Main';
+
 import { LayoutProvider } from '@/app/_providers/LayoutProvider'
 import { HoldingProvider } from '@/app/_providers/HoldingProvider'
 import { ReactNode } from 'react';
@@ -43,9 +43,9 @@ export default function RootLayout({
 						<Theme accentColor="grass">
 							<LayoutProvider>
 							<HoldingProvider>
-								<Main>
+
 									{children}
-								</Main>
+
 								</HoldingProvider>
 							</LayoutProvider>
 						</Theme>

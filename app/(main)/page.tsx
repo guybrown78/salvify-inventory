@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import authOptions from '@/app/auth/authOptions';
 import { Flex, Grid } from '@radix-ui/themes'
 import { Metadata } from 'next'
+import Main from '../_components/layout/Main'
 
 export default async function Home() {
 
@@ -18,7 +19,7 @@ export default async function Home() {
 	const closed = await prisma.issue.count({ where: { status: 'CLOSE'}});
 
   return (
-		<>
+		<Main>
 			<h1>Hello {session && <span>{session.user!.name}</span>}</h1>
 			<Grid columns={{ initial: "1", md: "2"}} gap="5">
 				<Flex direction="column" gap="5">
@@ -27,7 +28,7 @@ export default async function Home() {
 				</Flex>
 				<LatestIssues />
 			</Grid>
-		</>
+		</Main>
 		
   )
 }

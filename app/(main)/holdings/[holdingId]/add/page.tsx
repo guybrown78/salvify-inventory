@@ -2,7 +2,6 @@
 import { notFound } from 'next/navigation';
 import HoldingHeader from '../HoldingHeader';
 import { HoldingPageProps, fetchHolding } from '../holdingQuery';
-import HoldingPageWrapper from '../HoldingPageWrapper';
 import { NoDataMessage } from '@/app/_components';
 import { Heading, Text, Box, Flex } from '@radix-ui/themes';
 import AddInstanceForm from './AddInstanceForm';
@@ -17,23 +16,15 @@ const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {
 
 	if(holding.type !== "STORE"){
 		return(
-		<HoldingPageWrapper 
-			holding={holding} 
-			holdingId={parseInt(params.holdingId)}
-		>
 			<NoDataMessage>
 				<p>Sorry, you can&apos;t add instances in this holding. To add instances into the sytem, please go through your main holding</p>
 			</NoDataMessage>	
-		</HoldingPageWrapper>
 	)}
 
 	const items = await prisma.item.findMany();
 
 	return (
-		<HoldingPageWrapper 
-			holding={holding} 
-			holdingId={parseInt(params.holdingId)}
-		>
+		
 			<Flex direction="column" gap="3">
 				<Box className="max-w-xl">
 					<Heading mb="3">Add items instances</Heading>
@@ -47,9 +38,6 @@ const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {
 				/>
 			</Flex>
 			
-			
-		</HoldingPageWrapper>
-		
 	)
 }
 

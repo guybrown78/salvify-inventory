@@ -4,6 +4,7 @@ import HoldingsToolbar from './HoldingsToolbar'
 import HoldingsTable from './HoldingsTable'
 import prisma from '@/prisma/client'
 import { NoDataMessage } from '@/app/_components'
+import Main from '@/app/_components/layout/Main'
 
 const HoldingListPage = async () => {
 
@@ -11,19 +12,23 @@ const HoldingListPage = async () => {
 
 	if(!holdings || !holdings.length)
 		return (
-			<Flex direction="column" gap="3">
-				<HoldingsToolbar />
-				<NoDataMessage>
-					There are currently no holdings in the system
-				</NoDataMessage>
-			</Flex>
+			<Main>
+				<Flex direction="column" gap="3">
+					<HoldingsToolbar />
+					<NoDataMessage>
+						There are currently no holdings in the system
+					</NoDataMessage>
+				</Flex>
+			</Main>
 	);
 
 	return (
-		<Flex direction="column" gap="3">
-			<HoldingsToolbar />
-			<HoldingsTable holdings={holdings} />
-		</Flex>
+		<Main>
+			<Flex direction="column" gap="3">
+				<HoldingsToolbar />
+				<HoldingsTable holdings={holdings} />
+			</Flex>
+		</Main>
 	)
 }
 

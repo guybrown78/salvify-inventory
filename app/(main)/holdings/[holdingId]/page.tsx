@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { HoldingPageProps, fetchHolding } from './holdingQuery';
 import HoldingHeader from './HoldingHeader';
-import HoldingPageWrapper from './HoldingPageWrapper';
 
 const HoldingPage = async ({ params }: HoldingPageProps) => {
 
@@ -11,9 +10,7 @@ const HoldingPage = async ({ params }: HoldingPageProps) => {
 		notFound();
 
 	return (
-		<HoldingPageWrapper holding={holding} holdingId={parseInt(params.holdingId)}>
-			<HoldingHeader holding={holding} />
-		</HoldingPageWrapper>
+		<HoldingHeader holding={holding} />
 	)
 }
 

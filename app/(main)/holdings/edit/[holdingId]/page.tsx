@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import HoldingFormSkeleton from '../../_components/HoldingFormSkeleton';
+import Main from '@/app/_components/layout/Main';
 
 const HoldingForm = dynamic(
 	() => import('../../_components/HoldingForm'),
@@ -29,7 +30,9 @@ const EditHoldingPage = async ({ params }: HoldingPageProps) => {
 	if(!holding) notFound();
 
 	return (
-		<HoldingForm holding={holding} />
+		<Main>
+			<HoldingForm holding={holding} />
+		</Main>
 	)
 }
 

@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic'
 import LocationFormSkeleton from '../_components/LocationFormSkeleton';
 import { HoldingPageProps, fetchHolding } from '../../holdingQuery';
-import HoldingPageWrapper from '../../HoldingPageWrapper';
 import { notFound } from 'next/navigation';
 
 const LocationForm = dynamic(
@@ -19,13 +18,8 @@ const NewLocationPage = async ({ params }: HoldingPageProps) => {
 		notFound();
 
 	return (
-		<HoldingPageWrapper 
-			holding={holding} 
-			holdingId={parseInt(params.holdingId)}
-		>
-			<LocationForm holdingId={parseInt(params.holdingId)} />
-		</HoldingPageWrapper>
-		
+		<LocationForm holdingId={parseInt(params.holdingId)} />
+
 	)
 }
 

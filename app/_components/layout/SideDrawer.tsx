@@ -2,13 +2,15 @@
 
 import { useLayoutContext } from '@/app/_providers/LayoutProvider';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, PropsWithChildren } from 'react';
 import {
 	HiXMark
 } from "react-icons/hi2";
 import NavColumn from './NavColumn';
+import HoldingsNavColumn from './HoldingsNavColumn';
 
-const SideDrawer = () => {
+
+const SideDrawer = ({ children }:PropsWithChildren) => {
 
 	const { isSidebarOpen, updateIsSidebarOpen } = useLayoutContext();
 
@@ -66,7 +68,8 @@ const SideDrawer = () => {
                 
                     </div>
                 
-										<NavColumn />
+										{ children }
+										
 		
                   </div>
                 </Dialog.Panel>
