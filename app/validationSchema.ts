@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { itemTypesValues, itemCategoryValues, itemGroupingValues } from '@/prisma/enums'
+import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues } from '@/prisma/enums'
 import { z } from "zod";
 
 export const issueSchema = z.object({
@@ -159,4 +159,18 @@ export const addInstanceSchema = z.object({
 		.string()
 		.min(1, "Quantity is required"),
 	batch: z.string().optional(),
+})
+
+const removeReasons = z.enum(removeInstanceReasonValues)
+export const removeInstanceSchema = z.object({
+	quantity: z
+    .number()
+    .min(1, { message: "Quantity must be at least 1" })
+    .refine((val) => !isNaN(val), { message: "Quantity must be a number" }),
+	prf: z.string().max(255).optional(),
+	otherReason: z.string().max(255).optional(),
+  reason: removeReasons,
+	removedAt: z
+		.string()
+		.min(1, "Removed date is required")
 })

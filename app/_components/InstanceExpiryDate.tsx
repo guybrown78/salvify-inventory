@@ -12,9 +12,8 @@ const InstanceExpiryDate = ({ expiryDate, showCountdown, size, asBadge }: Props)
 	if(!expiryDate){
 		return null
 	}
-	
+	const dateFormat = "MM-DD-YYYY";
 	const expDate = moment(expiryDate);
-
 	if(asBadge){
 		const now = moment()
 		const days:number = expDate.endOf('day').diff(now, 'days');
