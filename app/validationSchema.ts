@@ -168,7 +168,10 @@ export const removeInstanceSchema = z.object({
     .min(1, { message: "Quantity must be at least 1" })
     .refine((val) => !isNaN(val), { message: "Quantity must be a number" }),
 	prf: z.string().max(255).optional(),
-	otherReason: z.string().max(255).optional(),
+	otherReason: z
+		.string()
+		.max(255)
+		.optional(),
   reason: removeReasons,
 	removedAt: z
 		.string()

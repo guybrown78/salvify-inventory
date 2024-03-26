@@ -144,11 +144,11 @@ model RemoveInstance {
   id          Int                  @id @default(autoincrement())
   prf         String?
   instance    Instance             @relation(name: "InstanceToRemoveInstance", fields: [instanceId], references: [id])
-  instanceId  Int                  @unique
+  instanceId  Int                  
   holding     Holding              @relation(name: "HoldingToRemoveInstance", fields: [holdingId], references: [id])
-  holdingId   Int                  @unique
+  holdingId   Int                  
   location    Location?            @relation(name: "LocationToRemoveInstance", fields: [locationId], references: [id])
-  locationId  Int?                 @unique
+  locationId  Int?                	
   createdAt   DateTime?            @default(now())
   updatedAt   DateTime?            @updatedAt
   quantity    Int
@@ -156,7 +156,7 @@ model RemoveInstance {
   reason      RemoveInstanceReason
   otherReason String?              @db.VarChar(255)
   removedBy   User                 @relation(name: "UserToRemoveInstance", fields: [removedById], references: [id])
-  removedById String               @unique
+  removedById String               
 }
 
 enum IssueStatus {

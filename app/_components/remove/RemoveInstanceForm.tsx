@@ -6,13 +6,15 @@ import { Controller, useForm } from 'react-hook-form';
 import { removeInstanceReasonList } from '@/prisma/enums';
 import { InstancesWithLocation } from '@/app/_types/types';
 import InstanceExpiryDate from '../InstanceExpiryDate';
-import { Item, RemoveInstanceReason } from '@prisma/client';
+import { RemoveInstanceReason } from '@prisma/client';
 import { z } from 'zod';
+import axios from 'axios';
 import { removeInstanceSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import classNames from 'classnames';
+
 
 type RemoveInstanceData = z.infer<typeof removeInstanceSchema>
 
@@ -27,13 +29,16 @@ interface AdditionalErrors{
 interface Props{
 	onFormComplete: () => void;
 	instance:InstancesWithLocation,
-	item:Item
+	itemId:number,
+	holdingId:number
 }
-const RemoveInstanceForm = ({ onFormComplete, instance }:Props) => {
+const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId }:Props) => {
 	const router = useRouter();
 	const { register, control, watch, handleSubmit, formState: {errors} } = useForm<RemoveInstanceData>({
 		resolver: zodResolver(removeInstanceSchema)
 	});
+
+	
 
 	const reasonValue = watch('reason');
 
@@ -42,7 +47,6 @@ const RemoveInstanceForm = ({ onFormComplete, instance }:Props) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [customDate, setCustomDate] = useState(false)
 
-	const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
 	const today = moment();
 
@@ -81,11 +85,16 @@ const RemoveInstanceForm = ({ onFormComplete, instance }:Props) => {
 			return
 		}
 		// 
-		setIsSubmitting(true);
-		wait().then(() => {
+		try{
+			setIsSubmitting(true);
+			await axios.post(`/api/holdings/${holdingId}/items/${itemId}/instances/${instance.id}/remove?locationId=${instance.location.id}`, data);
 			setIsSubmitting(false);
 			onFormComplete();
-		});
+		} catch (error){
+			setIsSubmitting(false);
+			setError('An unexpected error occured')
+		}
+		
 	});
 
 	const toDateInputValue = () => {

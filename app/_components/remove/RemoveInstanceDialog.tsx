@@ -7,6 +7,8 @@ import { InstancesWithLocation } from '@/app/_types/types';
 import { Item } from '@prisma/client';
 import RemoveInstanceForm from './RemoveInstanceForm';
 import toast, { Toaster } from 'react-hot-toast'
+import { useHoldingContext } from '@/app/_providers/HoldingProvider';
+
 interface Props{
 	instance:InstancesWithLocation,
 	item:Item
@@ -14,7 +16,11 @@ interface Props{
 const RemoveInstanceDialog = ({ instance, item }:Props) => {
 
 	const [open, setOpen] = useState(false);
+	const {currentHolding} = useHoldingContext()
 
+	if(!currentHolding){
+		return null
+	}
 	return (
 		<>
 			<Dialog.Root open={open} onOpenChange={setOpen}>
@@ -31,7 +37,8 @@ const RemoveInstanceDialog = ({ instance, item }:Props) => {
 								setOpen(false);
 							}}
 							instance={instance}
-							item={item}
+							itemId={item.id}
+							holdingId={currentHolding.id}
 						/>
 					</Dialog.Description>
 
