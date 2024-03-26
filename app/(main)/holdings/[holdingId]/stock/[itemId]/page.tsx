@@ -58,6 +58,8 @@ const StockItemPage = async ({ params }: Props) => {
 }
 
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }:Props){
 
 	const holding = await fetchHolding(parseInt(params.holdingId))
