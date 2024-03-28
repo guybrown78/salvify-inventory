@@ -1,6 +1,7 @@
 import { NoDataMessage } from '@/app/_components';
 import InstanceExpiryDate from '@/app/_components/InstanceExpiryDate';
 import RemoveInstanceDialog from '@/app/_components/remove/RemoveInstanceDialog';
+import SwapInstanceDialog from '@/app/_components/swap/SwapInstanceDialog';
 import { ItemWithInstances } from '@/app/_types/types';
 import { Instance, Item, Location } from '@prisma/client';
 import { Flex, Table, TableCell, TableColumnHeaderCell, Text } from '@radix-ui/themes';
@@ -67,7 +68,12 @@ const StockInstanceTable = ({ item }:Props) => {
 								/>
 							</TableCell>
 
-							<TableCell className='hidden md:table-cell'>Swap</TableCell>
+							<TableCell className='hidden md:table-cell'>
+								<SwapInstanceDialog 
+									instance={instance} 
+									item={item}
+								/>
+							</TableCell>
 
 							<TableCell className='hidden md:table-cell'>
 								<RemoveInstanceDialog 

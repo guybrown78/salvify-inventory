@@ -13,7 +13,7 @@ import { MdShelves } from "react-icons/md";
 
 const commonNavigation = [
   { name: 'Dashboard', href: '/', rootHref: null, icon: HiOutlineHome },
-  { name: 'Issues', href: '/issues/list', rootHref:'/issues', icon: HiOutlineTicket },
+  // { name: 'Issues', href: '/issues/list', rootHref:'/issues', icon: HiOutlineTicket },
 	{ name: 'Stock', href: '/stock-items/list', rootHref:'/stock-items', icon: MdShelves },
 	{ name: 'Holdings', href: '/holdings/list', rootHref:'/holdings', icon: FaKitMedical },
 ]

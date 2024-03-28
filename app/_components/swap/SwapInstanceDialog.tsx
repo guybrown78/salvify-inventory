@@ -5,16 +5,17 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 import React, { useState } from 'react'
 import { InstancesWithLocation } from '@/app/_types/types';
 import { Item } from '@prisma/client';
-import RemoveInstanceForm from './RemoveInstanceForm';
 import toast, { Toaster } from 'react-hot-toast'
 import { useHoldingContext } from '@/app/_providers/HoldingProvider';
 import { useRouter } from 'next/navigation';
+import SwapInstanceForm from './SwapInstanceForm';
 
 interface Props{
 	instance:InstancesWithLocation,
 	item:Item
 }
-const RemoveInstanceDialog = ({ instance, item }:Props) => {
+
+const SwapInstanceDialog = ({ instance, item }:Props) => {
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const {currentHolding} = useHoldingContext()
@@ -22,19 +23,20 @@ const RemoveInstanceDialog = ({ instance, item }:Props) => {
 	if(!currentHolding){
 		return null
 	}
+
 	return (
 		<>
 			<Dialog.Root open={open} onOpenChange={setOpen}>
 				<Dialog.Trigger>
-					<button className='flex h-full items-center cursor-pointer text-green-600'>Deduct from stock</button>
+					<button className='flex h-full items-center cursor-pointer text-green-600'>Swap</button>
 				</Dialog.Trigger>
 				<Dialog.Content className="relative">
 					<Dialog.Title>{item.title}</Dialog.Title>
 		
 					<Dialog.Description as='div'>
-						<RemoveInstanceForm 
+						<SwapInstanceForm 
 							onFormComplete={() => {
-								toast.success(`Items have been removed`)
+								toast.success(`Items have been swaped`)
 								setOpen(false);
 								router.refresh();
 							}}
@@ -54,8 +56,7 @@ const RemoveInstanceDialog = ({ instance, item }:Props) => {
 
 			<Toaster />
 		</>
-
 	)
 }
 
-export default RemoveInstanceDialog
+export default SwapInstanceDialog

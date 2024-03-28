@@ -1,19 +1,19 @@
 'use client'
-import React, { useState, useEffect } from 'react'
 import { FieldErrorMessage, Spinner } from '@/app/_components';
-import { Button, Callout, Flex, Select, Text, TextField, Em } from '@radix-ui/themes';
-import { Controller, useForm } from 'react-hook-form';
-import { removeInstanceReasonList } from '@/prisma/enums';
 import { InstancesWithLocation } from '@/app/_types/types';
-import InstanceExpiryDate from '../InstanceExpiryDate';
-import { RemoveInstanceReason } from '@prisma/client';
-import { z } from 'zod';
-import axios from 'axios';
 import { removeInstanceSchema } from '@/app/validationSchema';
+import { removeInstanceReasonList } from '@/prisma/enums';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import moment from 'moment';
+import { RemoveInstanceReason } from '@prisma/client';
+import { Button, Flex, Select, Text, TextField } from '@radix-ui/themes';
+import axios from 'axios';
 import classNames from 'classnames';
+import moment from 'moment';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import InstanceLocationExpiryHeader from '../instance/InstanceLocationExpiryHeader';
 
 
 type RemoveInstanceData = z.infer<typeof removeInstanceSchema>
@@ -112,18 +112,11 @@ const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId }:Prop
 
 				<Flex direction='column' gap="5">
 
-					<Flex justify="between">
-						<Flex gap="1" align="end">
-							<Text>Location:</Text>
-							<Text size="4" weight="bold">{instance.location.title}</Text>
-						</Flex>
-						<InstanceExpiryDate 
-							expiryDate={String(instance.expiryDate)} 
-							size="sm" 
-							asBadge
-						/>
-					</Flex>
-
+					<InstanceLocationExpiryHeader 
+						locationTitle={instance.location.title}
+						expiryDate={String(instance.expiryDate)} 
+					/>
+					
 					<Flex direction='column' gap="1">
 						<Text>Reason for deduction</Text>
 						<Controller 
