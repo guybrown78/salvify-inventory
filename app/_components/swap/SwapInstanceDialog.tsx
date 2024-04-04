@@ -3,7 +3,7 @@
 import { Dialog } from '@radix-ui/themes'
 import { Cross2Icon } from '@radix-ui/react-icons';
 import React, { useState } from 'react'
-import { InstancesWithLocation } from '@/app/_types/types';
+import { HoldingWithLocations, InstancesWithLocation } from '@/app/_types/types';
 import { Item } from '@prisma/client';
 import toast, { Toaster } from 'react-hot-toast'
 import { useHoldingContext } from '@/app/_providers/HoldingProvider';
@@ -15,10 +15,13 @@ interface Props{
 	item:Item
 }
 
+
 const SwapInstanceDialog = ({ instance, item }:Props) => {
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const {currentHolding} = useHoldingContext()
+	 // Type assertion
+	 const currentHoldingWithLocations = currentHolding as HoldingWithLocations;
 
 	if(!currentHolding){
 		return null
@@ -41,8 +44,8 @@ const SwapInstanceDialog = ({ instance, item }:Props) => {
 								router.refresh();
 							}}
 							instance={instance}
-							itemId={item.id}
-							holdingId={currentHolding.id}
+							item={item}
+							currentHolding={currentHoldingWithLocations}
 						/>
 					</Dialog.Description>
 

@@ -177,3 +177,9 @@ export const removeInstanceSchema = z.object({
 		.string()
 		.min(1, "Removed date is required")
 })
+
+export const swapInstanceSchema = z.object({
+	locationId: z
+		.string()
+		.min(1, "Location is required")
+})
