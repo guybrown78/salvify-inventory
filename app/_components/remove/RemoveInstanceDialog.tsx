@@ -34,7 +34,12 @@ const RemoveInstanceDialog = ({ instance, item }:Props) => {
 					<Dialog.Description as='div'>
 						<RemoveInstanceForm 
 							onFormComplete={() => {
-								toast.success(`Items have been removed`)
+								console.log("Just checcking........................")
+								toast.success(`Items have been removed`, {
+									id:'removeStockToast',
+									duration:3500,
+									position: "bottom-right",
+								})
 								setOpen(false);
 								router.refresh();
 							}}

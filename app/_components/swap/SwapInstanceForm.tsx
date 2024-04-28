@@ -5,6 +5,7 @@ import { swapInstanceSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Item, Location } from '@prisma/client';
 import { Button, Flex, Select, Text, TextField } from '@radix-ui/themes';
+import axios from 'axios';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -30,7 +31,7 @@ const SwapInstanceForm = ({ onFormComplete, instance, item, currentHolding }:Pro
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	
 	const [selectedHolding, setSelectedHolding] = useState<HoldingWithLocations | null>(currentHolding);
-	const [locations, setLocations] = useState<Location[]>(currentHolding.locations);
+	const [locations, setLocations] = useState<Location[]>([ ...currentHolding.locations ]);
 	const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
 	register("holdingId", { value: currentHolding.id });
 
@@ -41,14 +42,15 @@ const SwapInstanceForm = ({ onFormComplete, instance, item, currentHolding }:Pro
 	// }
 
 	const onSubmit = handleSubmit(async (data) => {
-		// 
-		console.log(data);	
-		setIsSubmitting(true);
-		// convert location to number
-		wait().then(() => {
+		try{
+			setIsSubmitting(true);
+			await axios.patch(`/api/holdings/${data.holdingId}/items/${item.id}/instances/${instance.id}/swap`, data);
 			setIsSubmitting(false);
-			// onFormComplete();
-		});	
+			onFormComplete();
+		} catch (error){
+			setIsSubmitting(false);
+			setError('An unexpected error occured')
+		}
 	});
 
 	const setHoldingId = (id: number) => {
@@ -60,23 +62,36 @@ const SwapInstanceForm = ({ onFormComplete, instance, item, currentHolding }:Pro
 		}
 	}
 
-	useEffect(() => {
-    watch((value, { name, type }) => {
-			if(name === 'locationId'){
-				setLocationId()
-			}
-		});
-	}, [watch]);
 
+	const watchLocationChange = () => {
+		watch((value, { name, type }) => {
+			if (name === 'locationId') {
+				setLocationId(); // Call the function to update selected location
+			}
+		})
+	};
+
+	useEffect(() => {
+		watchLocationChange();
+	}, [locations])
 
 	const setLocationId = () => {
 		const values = getValues()
 		if(!values)
 			return null;
 		const parsedValue: number = parseInt(values.locationId);
-		const location = locations.find(location => location.id === parsedValue);
-		setSelectedLocation(location || null);
+		if(!parsedValue){
+			setSelectedLocation(null);
+			return null
+		}else{
+			if(selectedLocation && selectedLocation.id === parsedValue){
+				return null
+			}
+			const location = locations.find(location => location.id === parsedValue);
+			setSelectedLocation(location || null);
+		}
 	}
+
 	return (
 		<div className='max-w-xl'>
 			<form 
@@ -96,10 +111,12 @@ const SwapInstanceForm = ({ onFormComplete, instance, item, currentHolding }:Pro
 						updateSelectedHolding={(holding:HoldingWithLocations | null) => {
 							setSelectedHolding(holding)
 							if(holding){
+						
 								setHoldingId(holding.id);
-								setLocations(holding.locations);
+								setLocations([...holding.locations]);
 								// 
 								const matchingLocations = holding.locations.filter(location => location.id === selectedLocation?.id)
+								
 								if(selectedLocation && matchingLocations.length <= 0){
 									setSelectedLocation(null)
 								}

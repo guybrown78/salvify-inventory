@@ -21,6 +21,8 @@ model Issue {
   updatedAt        DateTime    @updatedAt
   assignedToUserId String?     @db.VarChar(255)
   assignedToUser   User?       @relation(name: "IssueToUser", fields: [assignedToUserId], references: [id])
+
+  @@index([assignedToUserId])
 }
 
 model Account {
@@ -39,6 +41,7 @@ model Account {
   user              User    @relation(name: "AccountToUser", fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -47,6 +50,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(name: "SessionToUser", fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model User {
@@ -113,22 +118,29 @@ model Location {
   holding         Holding          @relation(name: "HoldingToLocation", fields: [holdingId], references: [id])
   instances       Instance[]       @relation(name: "InstanceToLocation")
   removedInstance RemoveInstance[] @relation(name: "LocationToRemoveInstance")
+
+  @@index([holdingId])
 }
 
 model Instance {
-  id              Int              @id @default(autoincrement())
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  expiryDate      DateTime?
-  quantity        Int              @default(0)
-  batch           String?          @db.VarChar(255)
-  itemId          Int
-  item            Item             @relation(name: "InstanceToItem", fields: [itemId], references: [id])
-  locationId      Int
-  location        Location         @relation(name: "InstanceToLocation", fields: [locationId], references: [id])
-  removedInstance RemoveInstance[] @relation(name: "InstanceToRemoveInstance")
-  addedBy         User?            @relation(name: "UserToInstance", fields: [addedById], references: [id])
-  addedById       String?
+  id                 Int              @id @default(autoincrement())
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  expiryDate         DateTime?
+  quantity           Int              @default(0)
+  batch              String?          @db.VarChar(255)
+  previousInstanceId Int? // New field for previous instance ID
+  itemId             Int
+  item               Item             @relation(name: "InstanceToItem", fields: [itemId], references: [id])
+  locationId         Int
+  location           Location         @relation(name: "InstanceToLocation", fields: [locationId], references: [id])
+  removedInstance    RemoveInstance[] @relation(name: "InstanceToRemoveInstance")
+  addedBy            User?            @relation(name: "UserToInstance", fields: [addedById], references: [id])
+  addedById          String?
+
+  @@index([addedById])
+  @@index([itemId])
+  @@index([locationId])
 }
 
 model HoldingItem {
@@ -138,17 +150,20 @@ model HoldingItem {
   holding          Holding @relation(name: "HoldingToHoldingItem", fields: [holdingId], references: [id])
   itemId           Int
   holdingId        Int
+
+  @@index([itemId])
+  @@index([holdingId])
 }
 
 model RemoveInstance {
   id          Int                  @id @default(autoincrement())
   prf         String?
   instance    Instance             @relation(name: "InstanceToRemoveInstance", fields: [instanceId], references: [id])
-  instanceId  Int                  
+  instanceId  Int
   holding     Holding              @relation(name: "HoldingToRemoveInstance", fields: [holdingId], references: [id])
-  holdingId   Int                  
+  holdingId   Int
   location    Location?            @relation(name: "LocationToRemoveInstance", fields: [locationId], references: [id])
-  locationId  Int?                	
+  locationId  Int?
   createdAt   DateTime?            @default(now())
   updatedAt   DateTime?            @updatedAt
   quantity    Int
@@ -156,7 +171,12 @@ model RemoveInstance {
   reason      RemoveInstanceReason
   otherReason String?              @db.VarChar(255)
   removedBy   User                 @relation(name: "UserToRemoveInstance", fields: [removedById], references: [id])
-  removedById String               
+  removedById String
+
+  @@index([instanceId])
+  @@index([holdingId])
+  @@index([locationId])
+  @@index([removedById])
 }
 
 enum IssueStatus {

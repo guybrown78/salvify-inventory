@@ -39,7 +39,13 @@ const SwapInstanceDialog = ({ instance, item }:Props) => {
 					<Dialog.Description as='div'>
 						<SwapInstanceForm 
 							onFormComplete={() => {
-								toast.success(`Items have been swaped`)
+								toast.success(`Items have been swaped`,
+									{
+										id:"swapInstanceToast",
+										duration:3500,
+										position: "bottom-right",
+									}
+								)
 								setOpen(false);
 								router.refresh();
 							}}
