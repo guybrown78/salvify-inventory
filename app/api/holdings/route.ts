@@ -33,8 +33,22 @@ export async function POST(request: NextRequest) {
 		data.type = HoldingType.STORE;
 	}
 
-	console.log(data)
 	const newHolding = await prisma.holding.create({ data })
 
 	return NextResponse.json(newHolding, { status: 201 });
+}
+
+
+export async function GET(request: NextRequest){
+
+	const session = await getServerSession(authOptions);
+	if(!session){
+		return NextResponse.json({}, {status: 401});
+	}
+
+	const holdings = await prisma.holding?.findMany({ 
+		orderBy: { title: 'asc'},
+		include: { locations: true },
+	});
+	return NextResponse.json(holdings)
 }

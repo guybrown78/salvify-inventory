@@ -8,7 +8,10 @@ import Main from '@/app/_components/layout/Main'
 
 const HoldingListPage = async () => {
 
-	const holdings = await prisma.holding?.findMany({ orderBy: { title: 'asc'} });
+	const holdings = await prisma.holding?.findMany({ 
+		orderBy: { title: 'asc'},
+		include: { locations: true } 
+	});
 
 	if(!holdings || !holdings.length)
 		return (

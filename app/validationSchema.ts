@@ -179,7 +179,14 @@ export const removeInstanceSchema = z.object({
 })
 
 export const swapInstanceSchema = z.object({
+	holdingId: z
+		.number()
+		.min(1, "Holding is required"),
 	locationId: z
 		.string()
-		.min(1, "Location is required")
+		.min(1, "Location is required"),
+	quantity: z
+    .number()
+    .min(1, { message: "Quantity must be at least 1" })
+    .refine((val) => !isNaN(val), { message: "Quantity must be a number" }),
 })
