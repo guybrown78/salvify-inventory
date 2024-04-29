@@ -4,25 +4,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import authOptions from "@/app/auth/authOptions";
 import { useSearchParams } from 'next/navigation'
-
-// Helper function to convert date input value to Prisma DateTime
-const convertDateToPrismaDateTime = (dateInputValue:string) => {
-  // Parse the date input value
-  const parsedDate = new Date(dateInputValue);
-
-  // Check if the parsed date is valid
-  if (isNaN(parsedDate.getTime())) {
-    // Handle invalid date input value (optional)
-    console.error('Invalid date input value:', dateInputValue);
-    return null; // or throw an error, return a default value, etc.
-  }
-
-  // Construct a new DateTime object with a specific time (e.g., 12:00:00)
-  const prismaDateTime = new Date(parsedDate.toISOString().split('T')[0] + 'T12:00:00.000Z');
-
-  return prismaDateTime;
-};
-
+import { convertDateToISO8601 } from '@/app/_utils/date';
 
 
 export async function POST(
@@ -128,7 +110,7 @@ export async function POST(
 
 	// check date
 	let prismaDateTime;
-	prismaDateTime = await convertDateToPrismaDateTime(body.removedAt);
+	prismaDateTime = await convertDateToISO8601(body.removedAt);
 	if(body.removedAt !== "" && !prismaDateTime){
 		return NextResponse.json({ error: 'Invalid RemovedAt Date' }, {status: 404})
 	}
