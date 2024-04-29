@@ -20,9 +20,10 @@ const fetchItem = cache((itemId: number, holdingId: number) => prisma.item.findU
 	include: {
     instances: {
       where: {
-        location: {
-          holdingId: holdingId,
-        },
+				AND: [
+          { location: { holdingId: holdingId } },
+          { quantity: { gt: 0 } }
+        ]
       },
 			include: {
 				location: true,

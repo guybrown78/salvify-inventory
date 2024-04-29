@@ -1,7 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
+	import authOptions from "@/app/auth/authOptions";
 
 export async function GET(
 	request: NextRequest,
@@ -32,10 +32,11 @@ export async function GET(
 
 	const instances = await prisma.instance.findMany({
 		where: {
-			itemId: parseInt(params.itemId),
-			location: {
-				holdingId: parseInt(params.holdingId),
-			},
+			AND: [
+				{ itemId: parseInt(params.itemId) },
+				{ location: { holdingId: parseInt(params.holdingId) } },
+				{ quantity: { gt: 0 } }
+			]
 		},
 		include: {
 			location: true,

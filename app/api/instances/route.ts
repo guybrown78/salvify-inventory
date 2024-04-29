@@ -39,7 +39,6 @@ export async function POST(request: NextRequest) {
 	if(body.expiryDate !== "" && !prismaDateTime){
 		return NextResponse.json({ error: 'Invalid Date' }, {status: 404})
 	}
-	console.log(prismaDateTime)
 
 	const newInstance = await prisma.instance.create({ data: {
 		itemId: item.id,

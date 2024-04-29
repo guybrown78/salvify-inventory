@@ -68,6 +68,21 @@ model User {
   assignedIssues Issue[]          @relation(name: "IssueToUser")
   removeInstance RemoveInstance[] @relation(name: "UserToRemoveInstance")
   instancesAdded Instance[]       @relation(name: "UserToInstance")
+  client         Client?          @relation(name: "UserToClient", fields: [clientId], references: [id])
+  clientId       Int?
+
+  @@index([clientId])
+}
+
+model Client {
+  id              Int              @id @default(autoincrement())
+  name            String
+  users           User[]           @relation(name: "UserToClient")
+  holdings        Holding[]        @relation(name: "HoldingToClient")
+  items           Item[]           @relation(name: "ItemToClient")
+  instances       Instance[]       @relation(name: "InstanceToClient")
+  locations       Location[]       @relation(name: "LocationToClient")
+  removeInstances RemoveInstance[] @relation(name: "RemoveInstanceToClient")
 }
 
 model VerificationToken {
@@ -93,6 +108,10 @@ model Item {
   emcPilURL       String?
   instances       Instance[]    @relation(name: "InstanceToItem")
   holdingitem     HoldingItem[] @relation(name: "ItemToHoldingItem")
+  client          Client        @relation(name: "ItemToClient", fields: [clientId], references: [id])
+  clientId        Int           @default(0)
+
+  @@index([clientId])
 }
 
 model Holding {
@@ -106,6 +125,10 @@ model Holding {
   locations       Location[]       @relation(name: "HoldingToLocation")
   holdingitem     HoldingItem[]    @relation(name: "HoldingToHoldingItem")
   removedInstance RemoveInstance[] @relation(name: "HoldingToRemoveInstance")
+  client          Client           @relation(name: "HoldingToClient", fields: [clientId], references: [id])
+  clientId        Int              @default(0)
+
+  @@index([clientId])
 }
 
 model Location {
@@ -118,7 +141,10 @@ model Location {
   holding         Holding          @relation(name: "HoldingToLocation", fields: [holdingId], references: [id])
   instances       Instance[]       @relation(name: "InstanceToLocation")
   removedInstance RemoveInstance[] @relation(name: "LocationToRemoveInstance")
+  client          Client           @relation(name: "LocationToClient", fields: [clientId], references: [id])
+  clientId        Int              @default(0)
 
+  @@index([clientId])
   @@index([holdingId])
 }
 
@@ -137,7 +163,10 @@ model Instance {
   removedInstance    RemoveInstance[] @relation(name: "InstanceToRemoveInstance")
   addedBy            User?            @relation(name: "UserToInstance", fields: [addedById], references: [id])
   addedById          String?
+  client             Client           @relation(name: "InstanceToClient", fields: [clientId], references: [id])
+  clientId           Int              @default(0)
 
+  @@index([clientId])
   @@index([addedById])
   @@index([itemId])
   @@index([locationId])
@@ -172,7 +201,10 @@ model RemoveInstance {
   otherReason String?              @db.VarChar(255)
   removedBy   User                 @relation(name: "UserToRemoveInstance", fields: [removedById], references: [id])
   removedById String
+  client      Client               @relation(name: "RemoveInstanceToClient", fields: [clientId], references: [id])
+  clientId    Int                  @default(0)
 
+  @@index([clientId])
   @@index([instanceId])
   @@index([holdingId])
   @@index([locationId])
