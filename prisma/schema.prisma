@@ -63,6 +63,7 @@ model User {
   emailVerified  DateTime?
   hashedPassword String?
   image          String?
+  role           UserRole         @default(USER)
   accounts       Account[]        @relation(name: "AccountToUser")
   sessions       Session[]        @relation(name: "SessionToUser")
   assignedIssues Issue[]          @relation(name: "IssueToUser")
@@ -73,6 +74,7 @@ model User {
 
   @@index([clientId])
 }
+
 
 model Client {
   id              Int              @id @default(autoincrement())
@@ -290,4 +292,10 @@ enum RemoveInstanceReason {
   RECALLED
   REMOVED
   OTHER
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPERADMIN
 }
