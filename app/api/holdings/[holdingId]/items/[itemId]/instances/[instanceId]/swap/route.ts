@@ -1,3 +1,4 @@
+import { getSessionUser } from "@/app/_utils/getSessionUser";
 import authOptions from "@/app/auth/authOptions";
 import { swapInstanceSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
@@ -18,18 +19,26 @@ export async function PATCH(
 				return NextResponse.json({}, { status: 401 });
 			}
 	
-			const userEmail = session?.user?.email;
-			if (!userEmail) {
-				return NextResponse.json({ error: 'User email not found' }, { status: 404 });
-			}
+			// const userEmail = session?.user?.email;
+			// if (!userEmail) {
+			// 	return NextResponse.json({ error: 'User email not found' }, { status: 404 });
+			// }
 	
-			const user = await prisma.user.findUnique({
-				where: { email: userEmail }
-			});
-			if (!user) {
-				return NextResponse.json({ error: 'Invalid User' }, { status: 404 })
-			}
+			// const user = await prisma.user.findUnique({
+			// 	where: { email: userEmail }
+			// });
+			// if (!user) {
+			// 	return NextResponse.json({ error: 'Invalid User' }, { status: 404 })
+			// }
 	
+			const sessionUser = await getSessionUser();
+			if(!sessionUser){
+				return NextResponse.json("Cannot find session user", {status: 400});
+			}
+			if(!sessionUser.clientId){
+				return NextResponse.json("Cannot find session user client", {status: 400});
+			}
+
 			const body = await request.json();
 			const validation = swapInstanceSchema.safeParse(body)
 			if (!validation.success) {
@@ -88,7 +97,8 @@ export async function PATCH(
 					quantity: body.quantity,
 					expiryDate: instance.expiryDate,
 					batch: instance.batch,
-					addedById: user.id,
+					clientId: sessionUser!.clientId!,
+					addedById: sessionUser!.id,
 					previousInstanceId: instanceId
 				}
 			})).id;

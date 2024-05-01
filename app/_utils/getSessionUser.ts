@@ -16,6 +16,7 @@ export async function getSessionUser():Promise<SessionUser | null> {
 			return null;
 		}
 		const sessionUser:SessionUser = {
+			id: user.id,
 			firstname: user.firstname ?? null,
 			surname: user.surname ?? null,
 			name: user.name!,

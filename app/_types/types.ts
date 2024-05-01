@@ -17,6 +17,7 @@ export interface HoldingWithLocations extends Holding
 
 export interface SessionUser
  {
+	id: string,
 	firstname: string | null
 	surname: string | null
 	name: string

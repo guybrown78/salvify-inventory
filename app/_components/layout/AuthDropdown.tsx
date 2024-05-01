@@ -28,10 +28,8 @@ const AuthDropdown = () => {
 		return (<Link className="nav-link" href="/api/auth/signin">Login</Link>)
 	}
 
-	
-
-	console.log(session!)
-	console.log(sessionUser)
+	// console.log(session!)
+	// console.log(sessionUser)
 	
 	return (
 		<Box>

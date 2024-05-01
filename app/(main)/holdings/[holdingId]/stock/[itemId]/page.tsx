@@ -15,12 +15,13 @@ interface Props{
 	}
 }
 
-const fetchItem = cache((itemId: number, holdingId: number) => prisma.item.findUnique({
+const fetchItem = cache((itemId: number, holdingId: number, clientId: number) => prisma.item.findUnique({
 	where: { id: itemId },
 	include: {
     instances: {
       where: {
 				AND: [
+					{ clientId: clientId },
           { location: { holdingId: holdingId } },
           { quantity: { gt: 0 } }
         ]
@@ -38,7 +39,7 @@ const StockItemPage = async ({ params }: Props) => {
 	if(!holding)
 		notFound();
 
-	const item = await fetchItem(parseInt(params.itemId), holding.id);
+	const item = await fetchItem(parseInt(params.itemId), holding.id, holding.clientId);
 	
 	if(!item)
 		notFound();
@@ -64,7 +65,7 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }:Props){
 
 	const holding = await fetchHolding(parseInt(params.holdingId))
-	const item = await fetchItem(parseInt(params.itemId), holding!.id);
+	const item = await fetchItem(parseInt(params.itemId), holding!.id, holding!.clientId);
 
 	return {
 		title: item?.title,

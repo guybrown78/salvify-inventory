@@ -26,7 +26,7 @@ const HoldingPageWrapper = ({ children, holdingId, holding }: Props) => {
 
 	// Check Current Holding and clientId!
 	const { sessionUser } = useSessionUserContext()
-	console.log(sessionUser?.clientId, currentHolding?.clientId, sessionUser?.clientId === currentHolding?.clientId)
+
 	if(sessionUser?.clientId !== currentHolding?.clientId){
 		return (
 			<>

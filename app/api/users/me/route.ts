@@ -22,6 +22,7 @@ export async function GET(request: NextRequest){
 		return NextResponse.json({ error: 'Invalid User' }, { status: 404 })
 	}
 	const sessionUser:SessionUser = {
+		id: user.id,
 		firstname: user.firstname ?? null,
 		surname: user.surname ?? null,
 		name: user.name!,
