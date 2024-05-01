@@ -1,3 +1,4 @@
+import { getSessionUser } from "@/app/_utils/getSessionUser";
 import authOptions from "@/app/auth/authOptions";
 import { locationSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
@@ -13,6 +14,14 @@ export async function POST(
 	const session = await getServerSession(authOptions);
 	if(!session){
 		return NextResponse.json({}, {status: 401});
+	}
+
+	const sessionUser = await getSessionUser();
+	if(!sessionUser){
+		return NextResponse.json("Cannot find session user", {status: 400});
+	}
+	if(!sessionUser.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
 	const body = await request.json();
@@ -33,6 +42,9 @@ export async function POST(
 		data:{
 			title: body.title,
 			field: body.field,
+			client:{
+				connect: { id:sessionUser!.clientId! }
+			},
 			holding:{
 				connect: { id:holding.id }
 			},

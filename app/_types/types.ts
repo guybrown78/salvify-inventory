@@ -22,6 +22,6 @@ export interface SessionUser
 	name: string
 	email: string
 	image?: string | null
-	role: UserRole | null
-	clientId: number | null
+	role: UserRole
+	clientId: number
 }

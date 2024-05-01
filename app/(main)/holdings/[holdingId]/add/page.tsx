@@ -21,7 +21,10 @@ const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {
 			</NoDataMessage>	
 	)}
 
-	const items = await prisma.item.findMany();
+	// get items in the client
+	const items = await prisma.item.findMany({
+		where: { clientId: holding.clientId }, 
+	});
 
 	return (
 		

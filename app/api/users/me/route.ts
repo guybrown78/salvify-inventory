@@ -28,7 +28,7 @@ export async function GET(request: NextRequest){
 		email: user.email!,
 		image: user.image ?? null,
 		role: user.role!,
-		clientId: user.clientId ?? null
+		clientId: user.clientId!
 	}
 	return NextResponse.json(sessionUser);
 

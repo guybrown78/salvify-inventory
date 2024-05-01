@@ -6,9 +6,27 @@ import prisma from '@/prisma/client'
 import { NoDataMessage } from '@/app/_components'
 import Main from '@/app/_components/layout/Main'
 
+import { getSessionUser } from '@/app/_utils/getSessionUser'
+
+
 const HoldingListPage = async () => {
 
+	const sessionUser = await getSessionUser();
+
+	// Check if sessionUser is null or undefined
+  if (!sessionUser) {
+    // Handle the case where sessionUser is not available
+    return (
+      <Flex direction="column" gap="3">
+        <NoDataMessage>
+          Session user data is not available
+        </NoDataMessage>
+      </Flex>
+    );
+  }
+
 	const holdings = await prisma.holding?.findMany({ 
+		where: { clientId: sessionUser!.clientId! }, 
 		orderBy: { title: 'asc'},
 		include: { locations: true } 
 	});

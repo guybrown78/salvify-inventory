@@ -1,4 +1,5 @@
 import authOptions from "@/app/auth/authOptions";
+import { getSessionUser } from "@/app/_utils/getSessionUser";
 import { holdingSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
 import { HoldingType } from "@prisma/client";
@@ -11,7 +12,14 @@ export async function POST(request: NextRequest) {
 	if(!session){
 		return NextResponse.json({}, {status: 401});
 	}
-	
+	const sessionUser = await getSessionUser();
+	if(!sessionUser){
+		return NextResponse.json("Cannot find session user", {status: 400});
+	}
+	if(!sessionUser.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
+	}
+
 	const body = await request.json();
 	const validation = holdingSchema.safeParse(body);
 	if(!validation.success){
@@ -23,9 +31,11 @@ export async function POST(request: NextRequest) {
 		field?: string;
 		isMainHolding?: boolean;
 		type?: HoldingType;
+		clientId:number
 	} = { 
 		title: body.title, 
-		field: body.field 
+		field: body.field,
+		clientId:sessionUser!.clientId!
 	}
 
 	if(body.isMainHolding){
@@ -45,8 +55,16 @@ export async function GET(request: NextRequest){
 	if(!session){
 		return NextResponse.json({}, {status: 401});
 	}
+	const sessionUser = await getSessionUser();
+	if(!sessionUser){
+		return NextResponse.json("Cannot find session user", {status: 400});
+	}
+	if(!sessionUser.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
+	}
 
 	const holdings = await prisma.holding?.findMany({ 
+		where: { clientId: sessionUser!.clientId! }, 
 		orderBy: { title: 'asc'},
 		include: { locations: true },
 	});

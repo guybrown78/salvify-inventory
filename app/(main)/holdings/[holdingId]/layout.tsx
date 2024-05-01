@@ -16,6 +16,7 @@ const HoldingsLayout = async ({ params, children }:Props) => {
 	if(!holding)
 		notFound();
 
+	
 	return (
 		<HoldingPageWrapper 
 			holding={holding} 
