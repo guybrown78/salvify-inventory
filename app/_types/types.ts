@@ -1,4 +1,4 @@
-import { Instance, Item, Location, Holding } from '@prisma/client';
+import { Instance, Item, Location, Holding, UserRole } from '@prisma/client';
 
 export interface InstancesWithLocation extends Instance{
 	location:Location
@@ -13,4 +13,15 @@ export interface ItemWithInstances extends Item{
 export interface HoldingWithLocations extends Holding
  {
   locations: Location[];
+}
+
+export interface SessionUser
+ {
+	firstname: string | null
+	surname: string | null
+	name: string
+	email: string
+	image?: string | null
+	role: UserRole | null
+	clientId: number | null
 }

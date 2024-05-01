@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import { LayoutProvider } from '@/app/_providers/LayoutProvider'
 import { HoldingProvider } from '@/app/_providers/HoldingProvider'
 import { ReactNode } from 'react';
+import { SessionUserProvider } from '../_providers/SessionUserProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,13 +42,15 @@ export default function RootLayout({
 				<QueryClientProvider>
 					<AuthProvider>
 						<Theme accentColor="grass">
+							<SessionUserProvider>
 							<LayoutProvider>
 							<HoldingProvider>
 
 									{children}
 
-								</HoldingProvider>
+							</HoldingProvider>
 							</LayoutProvider>
+							</SessionUserProvider>
 						</Theme>
 					</AuthProvider>
 				</QueryClientProvider>

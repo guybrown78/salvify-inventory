@@ -55,36 +55,37 @@ model Session {
 }
 
 model User {
-  id             String           @id @default(cuid())
-  firstname      String?
-  surname        String?
-  name           String?
-  email          String?          @unique
-  emailVerified  DateTime?
-  hashedPassword String?
-  image          String?
-  role           UserRole         @default(USER)
-  accounts       Account[]        @relation(name: "AccountToUser")
-  sessions       Session[]        @relation(name: "SessionToUser")
-  assignedIssues Issue[]          @relation(name: "IssueToUser")
-  removeInstance RemoveInstance[] @relation(name: "UserToRemoveInstance")
-  instancesAdded Instance[]       @relation(name: "UserToInstance")
-  client         Client?          @relation(name: "UserToClient", fields: [clientId], references: [id])
-  clientId       Int?
+  id              String           @id @default(cuid())
+  firstname       String?
+  surname         String?
+  name            String?
+  email           String?          @unique
+  emailVerified   DateTime?
+  hashedPassword  String?
+  image           String?
+  role            UserRole         @default(USER)
+  accounts        Account[]        @relation(name: "AccountToUser")
+  sessions        Session[]        @relation(name: "SessionToUser")
+  assignedIssues  Issue[]          @relation(name: "IssueToUser")
+  removeInstance  RemoveInstance[] @relation(name: "UserToRemoveInstance")
+  instancesAdded  Instance[]       @relation(name: "UserToInstance")
+  selectedClient  Client?          @relation(name: "SelectedClient", fields: [clientId], references: [id])
+  optionalClients Client[]         @relation(name: "OptionalClients")
+  clientId        Int? // ID of the selected client
 
   @@index([clientId])
 }
 
-
 model Client {
-  id              Int              @id @default(autoincrement())
-  name            String
-  users           User[]           @relation(name: "UserToClient")
-  holdings        Holding[]        @relation(name: "HoldingToClient")
-  items           Item[]           @relation(name: "ItemToClient")
-  instances       Instance[]       @relation(name: "InstanceToClient")
-  locations       Location[]       @relation(name: "LocationToClient")
-  removeInstances RemoveInstance[] @relation(name: "RemoveInstanceToClient")
+  id               Int              @id @default(autoincrement())
+  name             String
+  users            User[]           @relation(name: "SelectedClient")
+  optionalForUsers User[]           @relation(name: "OptionalClients")
+  holdings         Holding[]        @relation(name: "HoldingToClient")
+  items            Item[]           @relation(name: "ItemToClient")
+  instances        Instance[]       @relation(name: "InstanceToClient")
+  locations        Location[]       @relation(name: "LocationToClient")
+  removeInstances  RemoveInstance[] @relation(name: "RemoveInstanceToClient")
 }
 
 model VerificationToken {
