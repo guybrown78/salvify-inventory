@@ -3,7 +3,7 @@ import prisma from '@/prisma/client';
 import { fetchHolding } from '../../holdingQuery'
 import { notFound } from 'next/navigation'
 import { cache } from 'react';
-import StockItemHeader from '@/app/_components/StockItemHeader';
+import StockItemHeader from '@/app/_components/item/StockItemHeader';
 import { Flex, Heading } from '@radix-ui/themes';
 import StockOverview from './StockOverview';
 import StockInstanceTable from './StockInstanceTable';

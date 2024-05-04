@@ -1,7 +1,6 @@
 import { itemCategoryMap } from '@/prisma/enums'
 import { ItemCategory } from '@prisma/client'
 import { Badge } from '@radix-ui/themes'
-import React from 'react'
 
 
 const StockItemCategoryBadge = ({ itemCategory }: { itemCategory: ItemCategory | null }) => {

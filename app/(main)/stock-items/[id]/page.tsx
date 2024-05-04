@@ -3,7 +3,7 @@ import prisma from '@/prisma/client';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
-import StockItemHeader from '@/app/_components/StockItemHeader';
+import StockItemHeader from '@/app/_components/item/StockItemHeader';
 
 interface Props {
 	params: { id: string }
