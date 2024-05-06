@@ -20,7 +20,7 @@ export async function PATCH(
 			return NextResponse.json(validation.error.format(), {status: 400});
 		}
 
-		const { title, information, requiredCount, type, category, grouping } = body;
+		const { title, information, requiredCount, type, category, grouping, emcId } = body;
 		// 
 
 		const item = await prisma.item.findUnique({
@@ -38,7 +38,8 @@ export async function PATCH(
 				requiredCount, 
 				type,
 				category, 
-				grouping
+				grouping, 
+				emcId
 			}
 		});
 

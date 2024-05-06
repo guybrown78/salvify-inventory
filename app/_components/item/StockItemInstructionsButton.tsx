@@ -12,8 +12,8 @@ const StockItemInstructionsButton = ({ instructionsURL, title }:Props) => {
 		return null
 	}
 	return (
-		<Button size="1">
-			Show Item Instructions
+		<Button size="1" asChild={true}>
+			<a href={instructionsURL} target='_blank'>Show Item Instructions</a>
 		</Button>
 	)
 }

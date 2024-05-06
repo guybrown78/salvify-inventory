@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
 			category: body.category,
 			grouping: body.grouping,
 			instructionsURL: body.instructionsURL || null,
- 			bnfURL: body.bnfURL || null,
-  		emcPilURL: body.emcPilURL || null,
+			bnfSlug: body.bnfSlug || null,
+  		emcId: body.emcId || null,
 			clientId:sessionUser!.clientId!
 		}
 	})

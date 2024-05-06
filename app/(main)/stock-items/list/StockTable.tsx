@@ -47,7 +47,7 @@ const StockTable = ({ items }: Props) => {
 							<TableCell className='hidden md:table-cell'>
 								<StockItemGroupingBadge itemGrouping={item.grouping} />
 							</TableCell>
-							<TableCell className='hidden md:table-cell'>{item.requiredCount}</TableCell>
+							{/* <TableCell className='hidden md:table-cell'>{item.requiredCount}</TableCell> */}
 						</Table.Row>
 					))}
 				</Table.Body>
@@ -65,7 +65,7 @@ const columns:{
 	{ label: 'Type', value: 'type', className:'hidden md:table-cell'},
 	{ label: 'Category', value: 'category', className:'hidden md:table-cell'},
 	{ label: 'Grouping', value: 'grouping', className:'hidden md:table-cell'},
-	{ label: 'Required amount', value: 'requiredCount', className:'hidden md:table-cell'}
+	// { label: 'Required amount', value: 'requiredCount', className:'hidden md:table-cell'}
 ]
 
 export const columnNames = columns.map(column => column.value);

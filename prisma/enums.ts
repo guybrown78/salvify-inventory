@@ -75,7 +75,7 @@ const itemGroupingMap: Record<
 		EXTERNAL: { label: 'External', color: 'jade' },
 		RESUSCITATION: { label: 'Resuscitation', color: 'grass' },
 		DRESSING: { label: 'Dressing Suture', color: 'mint' },
-		INSTRUMENTS: { label: 'instruments', color: 'amber' },
+		INSTRUMENTS: { label: 'Instruments', color: 'amber' },
 		MONITORING: { label: 'Monitoring Equipment', color: 'tomato' },
 		INJECTION_CATHETERIZATION: { label: 'Injection Perfusion Puncture Catheterisation', color: 'pink' },
 		GENERAL: { label: 'General Equipment', color: 'purple' },

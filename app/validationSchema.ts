@@ -60,10 +60,10 @@ export const itemSchema = z.object({
 	instructionsURL: z
 		.string()
 		.optional(),
-  bnfURL: z
+	bnfSlug: z
 		.string()
 		.optional(),
-  emcPilURL: z
+  emcId: z
 		.string()
 		.optional(),
 })
@@ -92,10 +92,10 @@ export const patchItemSchema = z.object({
 	instructionsURL: z
 		.string()
 		.optional(),
-  bnfURL: z
+	bnfSlug: z
 		.string()
 		.optional(),
-  emcPilURL: z
+  emcId: z
 		.string()
 		.optional(),
 })

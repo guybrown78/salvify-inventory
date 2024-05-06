@@ -107,8 +107,8 @@ model Item {
   updatedAt       DateTime      @updatedAt
   information     String?       @db.Text
   instructionsURL String?
-  bnfURL          String?
-  emcPilURL       String?
+  bnfSlug         String?
+  emcId           String?
   instances       Instance[]    @relation(name: "InstanceToItem")
   holdingitem     HoldingItem[] @relation(name: "ItemToHoldingItem")
   client          Client        @relation(name: "ItemToClient", fields: [clientId], references: [id])

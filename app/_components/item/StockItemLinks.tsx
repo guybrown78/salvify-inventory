@@ -9,7 +9,7 @@ const StockItemLinks = ({ item }: { item:Item }) => {
 		<Flex py="2" gap="3" align="end" justify="end">
 			<StockItemEMCButton 
 				title={item.title}
-				emcPilURL={item.emcPilURL}
+				emcId={item.emcId}
 			/>
 			<StockItemInstructionsButton 
 				title={item.title}
