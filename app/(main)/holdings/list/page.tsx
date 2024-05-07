@@ -37,7 +37,7 @@ const HoldingListPage = async () => {
 				<Flex direction="column" gap="3">
 					<HoldingsToolbar />
 					<NoDataMessage>
-						There are currently no holdings in the system
+						There are currently no holdings for { sessionUser!.clientName! }.
 					</NoDataMessage>
 				</Flex>
 			</Main>

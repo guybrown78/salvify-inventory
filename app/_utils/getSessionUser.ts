@@ -10,7 +10,8 @@ export async function getSessionUser():Promise<SessionUser | null> {
 			return null;
 		}
 		const user = await prisma.user.findUnique({
-			where: { email: session?.user.email }
+			where: { email: session?.user.email },
+			include: { selectedClient: true }
 		});
 		if(!user){
 			return null;
@@ -23,7 +24,8 @@ export async function getSessionUser():Promise<SessionUser | null> {
 			email: user.email!,
 			image: user.image ?? null,
 			role: user.role!,
-			clientId: user.clientId!
+			clientId: user.clientId!,
+			clientName: user.selectedClient!.name,
 		}
 		return sessionUser
 	} catch (err) {

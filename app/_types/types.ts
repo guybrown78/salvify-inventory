@@ -25,4 +25,5 @@ export interface SessionUser
 	image?: string | null
 	role: UserRole
 	clientId: number
+	clientName?: string | null
 }
