@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react'
 import { Box, Card, Flex, Heading, Text } from '@radix-ui/themes';
 import { NoDataMessage } from '@/app/_components';
-import { ItemWithInstances } from '@/app/_types/types';
+import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
 import InstanceExpiryDate from '@/app/_components/InstanceExpiryDate';
 
 interface Props {
-	item:ItemWithInstances
+	item:ItemWithInstancesHoldingItems
 }
 
 const ItemOverview = ({ item }:Props) => {
@@ -15,9 +15,9 @@ const ItemOverview = ({ item }:Props) => {
 		label: string;
 		value: string | ReactNode;
 	}[] = [
-		{ label: 'Required Stock', value: ""},
 		{ label: 'Total Stock', value: "" },
-		{ label: 'Holding Count', value: "" },
+		{ label: 'Required Stock', value: ""},
+		{ label: 'All Holdings Count', value: "" },
 		{ label: 'Nearest expiry date', value: ""},
 		{ label: 'Furthest expiry date', value: ""},
 	];

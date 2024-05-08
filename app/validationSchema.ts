@@ -190,3 +190,12 @@ export const swapInstanceSchema = z.object({
     .min(1, { message: "Quantity must be at least 1" })
     .refine((val) => !isNaN(val), { message: "Quantity must be a number" }),
 })
+
+
+export const holdingItemSchema = z.object({
+	requiredCount: z
+		.number()
+		.int()
+		.nonnegative()
+		.optional()
+})

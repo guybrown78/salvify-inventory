@@ -9,6 +9,7 @@ import StockItemHeader from '@/app/_components/item/StockItemHeader';
 import { getSessionUser } from '@/app/_utils/getSessionUser'
 import ItemOverview from './ItemOverview';
 import ItemHoldings from './ItemHoldings';
+import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
 
 interface Props {
 	params: { id: string }
@@ -18,7 +19,14 @@ const fetchItem = cache((itemId: number, clientId: number) => prisma.item.findUn
 	where: { 
 		id: itemId,
 		clientId: clientId 
-	}
+	},
+	include: {
+		holdingItems: {
+			where: {
+				clientId: clientId,
+			},
+		},
+	},
 }));
 
 
@@ -38,7 +46,7 @@ const StockItemPage = async ({ params }: Props) => {
     );
   }
 
-	const item = await fetchItem(parseInt(params.id), sessionUser!.clientId!);
+	const item:ItemWithInstancesHoldingItems | null = await fetchItem(parseInt(params.id), sessionUser!.clientId!);
 
 	if(!item)
 		notFound();
@@ -53,14 +61,17 @@ const StockItemPage = async ({ params }: Props) => {
 	)
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }:Props){
 	const sessionUser = await getSessionUser();
-	const item = await fetchItem(parseInt(params.id), sessionUser!.clientId!);
+	const item:ItemWithInstancesHoldingItems | null = await fetchItem(parseInt(params.id), sessionUser!.clientId!);
 
 	return {
-		title: item?.title,
-		description: 'Details of stock item ' + item?.id
+		title: item?.title || "",
+		description: 'Details of stock item ' + item?.id || "-"
 	}
 }
+
 
 export default StockItemPage

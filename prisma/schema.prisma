@@ -86,6 +86,7 @@ model Client {
   instances        Instance[]       @relation(name: "InstanceToClient")
   locations        Location[]       @relation(name: "LocationToClient")
   removeInstances  RemoveInstance[] @relation(name: "RemoveInstanceToClient")
+  holdingItems     HoldingItem[]    @relation(name: "HoldingItemToClient")
 }
 
 model VerificationToken {
@@ -110,7 +111,7 @@ model Item {
   bnfSlug         String?
   emcId           String?
   instances       Instance[]    @relation(name: "InstanceToItem")
-  holdingitem     HoldingItem[] @relation(name: "ItemToHoldingItem")
+  holdingItems     HoldingItem[] @relation(name: "ItemToHoldingItem")
   client          Client        @relation(name: "ItemToClient", fields: [clientId], references: [id])
   clientId        Int           @default(0)
 
@@ -126,7 +127,7 @@ model Holding {
   updatedAt       DateTime         @default(now()) @updatedAt
   type            HoldingType      @default(GENERAL)
   locations       Location[]       @relation(name: "HoldingToLocation")
-  holdingitem     HoldingItem[]    @relation(name: "HoldingToHoldingItem")
+  holdingItems     HoldingItem[]    @relation(name: "HoldingToHoldingItem")
   removedInstance RemoveInstance[] @relation(name: "HoldingToRemoveInstance")
   client          Client           @relation(name: "HoldingToClient", fields: [clientId], references: [id])
   clientId        Int              @default(0)
@@ -176,15 +177,20 @@ model Instance {
 }
 
 model HoldingItem {
-  id               Int     @id @default(autoincrement())
-  requiredMinCount Int
-  item             Item    @relation(name: "ItemToHoldingItem", fields: [itemId], references: [id])
-  holding          Holding @relation(name: "HoldingToHoldingItem", fields: [holdingId], references: [id])
+  id               Int      @id @default(autoincrement())
+  requiredMinCount Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  item             Item     @relation(name: "ItemToHoldingItem", fields: [itemId], references: [id])
+  holding          Holding  @relation(name: "HoldingToHoldingItem", fields: [holdingId], references: [id])
   itemId           Int
   holdingId        Int
+  client           Client   @relation(name: "HoldingItemToClient", fields: [clientId], references: [id])
+  clientId         Int
 
   @@index([itemId])
   @@index([holdingId])
+  @@index([clientId])
 }
 
 model RemoveInstance {
