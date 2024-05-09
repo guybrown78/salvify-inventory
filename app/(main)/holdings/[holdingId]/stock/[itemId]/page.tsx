@@ -30,6 +30,9 @@ const fetchItem = cache((itemId: number, holdingId: number, clientId: number) =>
 				location: true,
 			},
     },
+		holdingItems: {
+      where: { holding: { id: holdingId } }, 
+    },
   },
 }));
 

@@ -7,6 +7,7 @@ import StockLocationTabs from './StockLocationTabs';
 import StockTable from './StockTable'
 import { Issue, Location } from '@prisma/client';
 import prisma from '@/prisma/client';
+import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
 
 
 export interface StockQuery {
@@ -29,21 +30,61 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 	const locationId = searchParams.location 
 		? parseInt(searchParams.location) 
 		: undefined;
-	// const where = { location };
 	
+
+	// const itemsInHoldingAndLocation = await prisma.item.findMany({
+	// 	where: {
+	// 		instances: {
+	// 			some: {
+	// 				location: {
+	// 					holding: {
+	// 						id: holding.id,
+	// 					},
+	// 					id: locationId,
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// 	include: {
+	// 		instances: {
+	// 			where: {
+	// 				location: {
+	// 					holding: {
+	// 						id: holding.id,
+	// 					},
+	// 					id: locationId, 
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// });
+
 
 	const itemsInHoldingAndLocation = await prisma.item.findMany({
 		where: {
-			instances: {
-				some: {
-					location: {
-						holding: {
-							id: holding.id,
+			OR: [
+				{
+					instances: {
+						some: {
+							location: {
+								holding: {
+									id: holding.id,
+								},
+								id: locationId,
+							},
 						},
-						id: locationId,
 					},
 				},
-			},
+				{
+					holdingItems: {
+						some: {
+							holding: {
+								id: holding.id,
+							},
+						},
+					},
+				},
+			],
 		},
 		include: {
 			instances: {
@@ -52,13 +93,19 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 						holding: {
 							id: holding.id,
 						},
-						id: locationId, 
+						id: locationId,
+					},
+				},
+			},
+			holdingItems: { 
+				where: {
+					holding: {
+						id: holding.id,
 					},
 				},
 			},
 		},
 	});
-
 
 	return (
 		<Flex direction="column" gap="3">
@@ -66,7 +113,7 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 				locations={holding.locations as Location[] || []}
 			/>
 			<StockTable 
-				items={itemsInHoldingAndLocation}
+				items={itemsInHoldingAndLocation as ItemWithInstancesHoldingItems[]}
 				holdingId={holding.id}
 			/>
 		</Flex>

@@ -1,12 +1,13 @@
 import { Link, NoDataMessage } from '@/app/_components';
 import { StockItemTypeBadge, StockItemCategoryBadge, StockItemGroupingBadge } from '@/app/_components/';
+import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
 import { Item } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
 import NextLink from 'next/link';
 
 interface Props {
-	items: Item[]
+	items: ItemWithInstancesHoldingItems[]
 	holdingId:number
 }
 
@@ -15,6 +16,7 @@ const StockTable = ({ items, holdingId }: Props) => {
 	if(!items.length)
 		return (<NoDataMessage>There are currently no items in this holding.</NoDataMessage>)
 
+	console.log(items)
 
 	return (
 		<Table.Root variant='surface'>
@@ -53,7 +55,7 @@ const StockTable = ({ items, holdingId }: Props) => {
 							<TableCell className='hidden md:table-cell'>
 								<StockItemGroupingBadge itemGrouping={item.grouping} />
 							</TableCell>
-							<TableCell className='hidden md:table-cell'>{item.requiredCount}</TableCell>
+							<TableCell className='hidden md:table-cell'>{item.holdingItems ? item.holdingItems[0].requiredMinCount : 0}</TableCell>
 						</Table.Row>
 					))}
 					

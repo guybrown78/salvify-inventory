@@ -1,12 +1,12 @@
 import InstanceExpiryDate from '@/app/_components/InstanceExpiryDate';
-import { ItemWithInstances } from '@/app/_types/types';
+import { ItemWithInstances, ItemWithInstancesHoldingItems } from '@/app/_types/types';
 import prisma from '@/prisma/client';
 import { Item } from '@prisma/client';
 import { Box, Card, Flex, Heading, Text } from '@radix-ui/themes';
 import React, { ReactNode } from 'react'
 
 interface Props {
-	item:ItemWithInstances
+	item:ItemWithInstancesHoldingItems
 	holdingId:number
 }
 const StockOverview = async ({ item, holdingId }:Props) => {
@@ -50,7 +50,7 @@ const StockOverview = async ({ item, holdingId }:Props) => {
 		label: string;
 		value: string | ReactNode;
 	}[] = [
-		{ label: 'Required Stock', value: String(item.requiredCount)},
+		{ label: 'Required Stock', value: item.holdingItems ? String(item.holdingItems[0].requiredMinCount) : '-'},
 		{ label: 'Total Stock', value: String(totalQuantity) },
 		{ label: 'Location Count', value: String(locationsCount) },
 		{ label: 'Nearest expiry date', value: <InstanceExpiryDate 
