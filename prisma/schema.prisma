@@ -72,6 +72,7 @@ model User {
   assignedOrders  Order[]          @relation(name: "OrderToUser")
   selectedClient  Client?          @relation(name: "SelectedClient", fields: [clientId], references: [id])
   optionalClients Client[]         @relation(name: "OptionalClients")
+  orderedItems    OrderItem[]      @relation(name: "UserToOrderItem")
   clientId        Int? // ID of the selected client
 
   @@index([clientId])
@@ -225,8 +226,9 @@ model RemoveInstance {
 
 model Order {
   id               Int         @id @default(autoincrement())
-  title            String      @db.VarChar(255)
-  description      String      @db.Text
+  orderNumber      Int
+  title            String?     @db.VarChar(255)
+  notes            String?     @db.Text
   status           OrderStatus @default(OPEN)
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
@@ -241,15 +243,18 @@ model Order {
 }
 
 model OrderItem {
-  id       Int   @id @default(autoincrement())
-  item     Item  @relation(name: "ItemToOrderItem", fields: [itemId], references: [id])
-  itemId   Int
-  quantity Int   @default(0)
-  order    Order @relation(fields: [orderId], references: [id])
-  orderId  Int
+  id        Int     @id @default(autoincrement())
+  item      Item    @relation(name: "ItemToOrderItem", fields: [itemId], references: [id])
+  itemId    Int
+  quantity  Int     @default(0)
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  addedBy   User?   @relation(name: "UserToOrderItem", fields: [addedById], references: [id])
+  addedById String?
 
   @@index([itemId])
   @@index([orderId])
+  @@index([addedById])
 }
 
 enum IssueStatus {
@@ -260,8 +265,10 @@ enum IssueStatus {
 
 enum OrderStatus {
   OPEN
-  IN_PROGRESS
-  CLOSE
+  ORDERED
+  RECEIVED
+  COMPLETE
+  CLOSED
 }
 
 enum ItemTypes {

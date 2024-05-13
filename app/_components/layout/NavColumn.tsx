@@ -7,7 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { FaKitMedical } from "react-icons/fa6";
 import {
 	HiOutlineHome,
-	HiOutlineTicket
+	HiOutlineTicket,
+	HiOutlineShoppingCart
 } from "react-icons/hi2";
 import { MdShelves } from "react-icons/md";
 
@@ -16,6 +17,7 @@ const commonNavigation = [
   // { name: 'Issues', href: '/issues/list', rootHref:'/issues', icon: HiOutlineTicket },
 	{ name: 'Stock', href: '/stock-items/list', rootHref:'/stock-items', icon: MdShelves },
 	{ name: 'Holdings', href: '/holdings/list', rootHref:'/holdings', icon: FaKitMedical },
+	{ name: 'Orders', href: '/orders/list', rootHref:'/orders', icon: HiOutlineShoppingCart },
 ]
 
 const NavColumn = () => {

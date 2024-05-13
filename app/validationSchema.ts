@@ -33,6 +33,39 @@ export const patchIssueSchema = z.object({
 });
 
 
+export const orderSchema = z.object({
+	title: z
+		.string()
+		.min(1, 'Title is required.')
+		.max(255)
+		.optional(),
+	notes: z
+		.string()
+		.min(1, 'Description is required.')
+		.max(65535)
+		.optional()
+});
+
+export const patchOrderSchema = z.object({
+	title: z
+		.string()
+		.min(1, 'Title is required.')
+		.max(255)
+		.optional(),
+	notes: z
+		.string()
+		.min(1, 'Description is required.')
+		.max(65535)
+		.optional(),
+	assignedToUserId: z
+		.string()
+		.min(1, "AssigneToUserId is required.")
+		.max(255)
+		.optional()
+		.nullable(),
+});
+
+
 const ItemTypes = z.enum(itemTypesValues)
 const ItemCategory = z.enum(itemCategoryValues)
 const ItemGrouping = z.enum(itemGroupingValues)
