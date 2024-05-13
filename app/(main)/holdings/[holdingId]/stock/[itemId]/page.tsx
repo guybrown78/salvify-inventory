@@ -7,6 +7,7 @@ import StockItemHeader from '@/app/_components/item/StockItemHeader';
 import { Flex, Heading } from '@radix-ui/themes';
 import StockOverview from './StockOverview';
 import StockInstanceTable from './StockInstanceTable';
+import { StockHoldingItemOverview } from './StockHoldingItemOverview';
 
 interface Props{
 	params: { 
@@ -51,7 +52,7 @@ const StockItemPage = async ({ params }: Props) => {
 		<Flex direction="column" gap="5">
 			<StockItemHeader item={item} showEdit={false} />
 			<StockOverview item={item} holdingId={holding.id}/>
-
+			<StockHoldingItemOverview item={item} holdingId={holding.id}/>
 			<Flex direction="column" gap="5">
 				<Heading as="h3" size="3" >Instances ({item.instances.length || 0})</Heading>
 				<StockInstanceTable item={item} />
