@@ -18,10 +18,18 @@ const StockTable = ({ items, holdingId }: Props) => {
 		return (<NoDataMessage>There are currently no items in this holding.</NoDataMessage>)
 
 	console.log(items)
+
 	const calculateTotal = (item:ItemWithInstancesHoldingItems) => {
 		let total = 0;
-		item.instances?.map(intance => total + intance.quantity)
+		item.instances?.forEach(instance => total += instance.quantity) 
 		return total
+	}
+
+	const getMinRequiredCount = (item:ItemWithInstancesHoldingItems) => {
+		if(item.holdingItems && item.holdingItems.length){
+			return item.holdingItems[0].requiredMinCount ?? 0
+		}
+		return "-"
 	}
 	return (
 		<Table.Root variant='surface'>
@@ -60,7 +68,7 @@ const StockTable = ({ items, holdingId }: Props) => {
 								<div className="block md:hidden">
 									<Flex gap="3" mt="3">
 										<LabelValueRow label='Required count'>
-											{item.holdingItems ? item.holdingItems[0].requiredMinCount : 0}
+											{getMinRequiredCount(item)}
 										</LabelValueRow>
 										<LabelValueRow label='Instances count'>
 											{item.instances ? item.instances.length : 0}
@@ -77,7 +85,7 @@ const StockTable = ({ items, holdingId }: Props) => {
 							<TableCell className='hidden md:table-cell'>
 								<StockItemGroupingBadge itemGrouping={item.grouping} />
 							</TableCell>
-							<TableCell className='hidden md:table-cell'>{item.holdingItems ? item.holdingItems[0].requiredMinCount : 0}</TableCell>
+							<TableCell className='hidden md:table-cell'>{getMinRequiredCount(item)}</TableCell>
 							<TableCell className='hidden md:table-cell'>{item.instances ? item.instances.length : 0}</TableCell>
 							<TableCell>{calculateTotal(item)}</TableCell>
 						</Table.Row>

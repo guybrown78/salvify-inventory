@@ -16,8 +16,13 @@ export const StockHoldingItemOverview = ({ item, holdingId }:Props) => {
 		return null;
 	}
 
+
 	let total = 0;
 	item.instances?.forEach(instance => total += instance.quantity) 
+
+	if(holdingItem.requiredMinCount !== null && total >= holdingItem.requiredMinCount && total > 0){
+		return null;
+	}
 
 	return (
 		<Flex>

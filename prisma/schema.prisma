@@ -69,6 +69,7 @@ model User {
   assignedIssues  Issue[]          @relation(name: "IssueToUser")
   removeInstance  RemoveInstance[] @relation(name: "UserToRemoveInstance")
   instancesAdded  Instance[]       @relation(name: "UserToInstance")
+  assignedOrders  Order[]          @relation(name: "OrderToUser")
   selectedClient  Client?          @relation(name: "SelectedClient", fields: [clientId], references: [id])
   optionalClients Client[]         @relation(name: "OptionalClients")
   clientId        Int? // ID of the selected client
@@ -87,6 +88,7 @@ model Client {
   locations        Location[]       @relation(name: "LocationToClient")
   removeInstances  RemoveInstance[] @relation(name: "RemoveInstanceToClient")
   holdingItems     HoldingItem[]    @relation(name: "HoldingItemToClient")
+  orders           Order[]          @relation(name: "OrderToClient")
 }
 
 model VerificationToken {
@@ -111,7 +113,8 @@ model Item {
   bnfSlug         String?
   emcId           String?
   instances       Instance[]    @relation(name: "InstanceToItem")
-  holdingItems     HoldingItem[] @relation(name: "ItemToHoldingItem")
+  holdingItems    HoldingItem[] @relation(name: "ItemToHoldingItem")
+  orderItems      OrderItem[]   @relation(name: "ItemToOrderItem")
   client          Client        @relation(name: "ItemToClient", fields: [clientId], references: [id])
   clientId        Int           @default(0)
 
@@ -127,7 +130,7 @@ model Holding {
   updatedAt       DateTime         @default(now()) @updatedAt
   type            HoldingType      @default(GENERAL)
   locations       Location[]       @relation(name: "HoldingToLocation")
-  holdingItems     HoldingItem[]    @relation(name: "HoldingToHoldingItem")
+  holdingItems    HoldingItem[]    @relation(name: "HoldingToHoldingItem")
   removedInstance RemoveInstance[] @relation(name: "HoldingToRemoveInstance")
   client          Client           @relation(name: "HoldingToClient", fields: [clientId], references: [id])
   clientId        Int              @default(0)
@@ -220,7 +223,42 @@ model RemoveInstance {
   @@index([removedById])
 }
 
+model Order {
+  id               Int         @id @default(autoincrement())
+  title            String      @db.VarChar(255)
+  description      String      @db.Text
+  status           OrderStatus @default(OPEN)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  assignedToUserId String?     @db.VarChar(255)
+  assignedToUser   User?       @relation(name: "OrderToUser", fields: [assignedToUserId], references: [id])
+  client           Client      @relation(name: "OrderToClient", fields: [clientId], references: [id])
+  clientId         Int
+  orderItems       OrderItem[]
+
+  @@index([clientId])
+  @@index([assignedToUserId])
+}
+
+model OrderItem {
+  id       Int   @id @default(autoincrement())
+  item     Item  @relation(name: "ItemToOrderItem", fields: [itemId], references: [id])
+  itemId   Int
+  quantity Int   @default(0)
+  order    Order @relation(fields: [orderId], references: [id])
+  orderId  Int
+
+  @@index([itemId])
+  @@index([orderId])
+}
+
 enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSE
+}
+
+enum OrderStatus {
   OPEN
   IN_PROGRESS
   CLOSE

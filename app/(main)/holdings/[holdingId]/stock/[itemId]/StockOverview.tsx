@@ -46,11 +46,17 @@ const StockOverview = async ({ item, holdingId }:Props) => {
 
 	const totalQuantity = item.instances ? item.instances.reduce((total, instance) => total + instance.quantity, 0) : '';
 
+	const requiredCount = () => {
+		if(item.holdingItems && item.holdingItems.length){
+			return item.holdingItems[0].requiredMinCount ?? 0
+		}
+		return "-"
+	}
 	const containers:{
 		label: string;
 		value: string | ReactNode;
 	}[] = [
-		{ label: 'Required Stock', value: item.holdingItems ? String(item.holdingItems[0].requiredMinCount) : '-'},
+		{ label: 'Required Stock', value: requiredCount() },
 		{ label: 'Total Stock', value: String(totalQuantity) },
 		{ label: 'Location Count', value: String(locationsCount) },
 		{ label: 'Nearest expiry date', value: <InstanceExpiryDate 
