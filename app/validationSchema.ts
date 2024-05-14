@@ -36,12 +36,10 @@ export const patchIssueSchema = z.object({
 export const orderSchema = z.object({
 	title: z
 		.string()
-		.min(1, 'Title is required.')
 		.max(255)
 		.optional(),
 	notes: z
 		.string()
-		.min(1, 'Description is required.')
 		.max(65535)
 		.optional()
 });
@@ -49,12 +47,10 @@ export const orderSchema = z.object({
 export const patchOrderSchema = z.object({
 	title: z
 		.string()
-		.min(1, 'Title is required.')
 		.max(255)
 		.optional(),
 	notes: z
 		.string()
-		.min(1, 'Description is required.')
 		.max(65535)
 		.optional(),
 	assignedToUserId: z

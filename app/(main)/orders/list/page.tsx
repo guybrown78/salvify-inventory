@@ -4,8 +4,15 @@ import prisma from '@/prisma/client'
 import { Flex } from '@radix-ui/themes'
 import { getSessionUser } from '@/app/_utils/getSessionUser'
 import OrderToolbar from './OrderToolbar'
+import OrderTable, { OrderQuery } from './OrderTable'
 
-const OrdersPage = async () => {
+
+interface Props {
+	searchParams: OrderQuery
+}
+
+
+const OrdersPage = async ({ searchParams }: Props) => {
 
 	const sessionUser = await getSessionUser();
 
@@ -38,8 +45,13 @@ const OrdersPage = async () => {
 
 
 	return (
-		<div>OrdersPage</div>
+		<Flex direction="column" gap="3">
+			<OrderToolbar />
+			<OrderTable searchParams={searchParams} orders={orders} />
+		</Flex>
 	)
 }
+
+export const dynamic = 'force-dynamic';
 
 export default OrdersPage
