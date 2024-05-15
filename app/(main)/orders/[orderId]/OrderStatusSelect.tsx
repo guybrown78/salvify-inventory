@@ -12,7 +12,7 @@ import toast, { Toaster } from 'react-hot-toast'
 const OrderStatusSelect = ({ order }: { order: Order }) => {
 
 	const updateOrderStatus = (orderStatus:OrderStatus) => {
-		console.log(">", orderStatus);
+		// console.log(">", orderStatus);
 		axios
 			.patch('/api/orders/' + order.id, { 
 				status: orderStatus 
@@ -22,7 +22,7 @@ const OrderStatusSelect = ({ order }: { order: Order }) => {
 			})
 	}
 
-	console.log(orderStatusList)
+	// console.log(orderStatusList)
 	return (
 		<>
 			<Select.Root 
