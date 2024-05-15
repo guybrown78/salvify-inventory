@@ -1,0 +1,21 @@
+import { OrderStatus } from '@prisma/client';
+import { Pencil2Icon } from '@radix-ui/react-icons';
+import { Button } from '@radix-ui/themes';
+import Link from 'next/link';
+
+
+interface Props {
+	orderId: number,
+	status: OrderStatus
+}
+
+const EditOrderButton = ({ orderId, status }:Props) => {
+	return (
+		<Button>
+			<Pencil2Icon />
+			<Link href={`/orders/edit/${orderId}`}>Edit Order Details</Link>
+		</Button>
+	)
+}
+
+export default EditOrderButton

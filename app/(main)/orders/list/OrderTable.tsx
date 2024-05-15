@@ -4,7 +4,7 @@ import React from 'react'
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
 import NextLink from 'next/link';
-import OrderStatusBadge from '@/app/_components/OrderStatusBadge';
+import OrderStatusBadge from '@/app/_components/order/OrderStatusBadge';
 
 export interface OrderQuery {
 	status: OrderStatus
@@ -45,7 +45,7 @@ const OrderTable = ({ searchParams, orders }: Props) => {
 					<Table.Row key={order.id}>
 						<TableCell>
 							<Link href={`/orders/${order.id}`}>
-								{`$Order #{order.orderNumber}`}
+								{`Order #${order.orderNumber}`}
 							</Link>	
 						</TableCell>
 						<TableCell className='hidden md:table-cell'>

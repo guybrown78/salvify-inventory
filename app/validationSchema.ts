@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues } from '@/prisma/enums'
+import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues, orderStatusValues } from '@/prisma/enums'
 import { z } from "zod";
 
 export const issueSchema = z.object({
@@ -32,34 +32,6 @@ export const patchIssueSchema = z.object({
 		.nullable(),
 });
 
-
-export const orderSchema = z.object({
-	title: z
-		.string()
-		.max(255)
-		.optional(),
-	notes: z
-		.string()
-		.max(65535)
-		.optional()
-});
-
-export const patchOrderSchema = z.object({
-	title: z
-		.string()
-		.max(255)
-		.optional(),
-	notes: z
-		.string()
-		.max(65535)
-		.optional(),
-	assignedToUserId: z
-		.string()
-		.min(1, "AssigneToUserId is required.")
-		.max(255)
-		.optional()
-		.nullable(),
-});
 
 
 const ItemTypes = z.enum(itemTypesValues)
@@ -228,3 +200,35 @@ export const holdingItemSchema = z.object({
 		.nonnegative()
 		.optional()
 })
+
+export const orderSchema = z.object({
+	title: z
+		.string()
+		.max(255)
+		.optional(),
+	notes: z
+		.string()
+		.max(65535)
+		.optional()
+});
+
+
+const OrderStatus = z.enum(orderStatusValues)
+export const patchOrderSchema = z.object({
+	title: z
+		.string()
+		.max(255)
+		.optional(),
+	notes: z
+		.string()
+		.max(65535)
+		.optional(),
+	assignedToUserId: z
+		.string()
+		.min(1, "AssigneToUserId is required.")
+		.max(255)
+		.optional()
+		.nullable(),
+	status: OrderStatus
+		.optional()
+});

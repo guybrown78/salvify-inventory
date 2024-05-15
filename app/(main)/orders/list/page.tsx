@@ -30,7 +30,7 @@ const OrdersPage = async ({ searchParams }: Props) => {
 
   const orders = await prisma.order?.findMany({
     where: { clientId: sessionUser!.clientId! }, 
-    orderBy: { orderNumber: 'asc' },
+    orderBy: { orderNumber: 'desc' },
   });
 
 	if(!orders || !orders.length)

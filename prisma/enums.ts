@@ -1,4 +1,4 @@
-import { ItemCategory, ItemGrouping, ItemTypes, RemoveInstanceReason } from "@prisma/client"
+import { ItemCategory, ItemGrouping, ItemTypes, OrderStatus, RemoveInstanceReason } from "@prisma/client"
 
 export interface SelectMapType {
 	label:string, 
@@ -110,9 +110,25 @@ const removeInstanceReasonMap: Record<
 const removeInstanceReasonList:{label:string, value:string}[] = convertMapToList(removeInstanceReasonMap);
 const removeInstanceReasonValues:[string, ...string[]] = convertEnumValuesToArray(removeInstanceReasonMap);
 
+
+const orderStatusMap: Record<
+	OrderStatus, 
+	BadgeMapType
+	> = {
+		OPEN: { label: 'Open', color: 'orange' },
+		ORDERED: { label: 'Ordered', color: 'plum' },
+		RECEIVED: { label: 'Recieved', color: 'violet' },
+		COMPLETE: { label: 'Complete', color: 'mint' },
+		CLOSED: { label: 'Closed', color: 'tomato' }
+	}
+const orderStatusList:{label:string, value:string}[] = convertMapToList(orderStatusMap);
+const orderStatusValues:[string, ...string[]] = convertEnumValuesToArray(orderStatusMap);
+
+
 export { 
 	itemTypesValues, itemTypesMap, itemTypeList,
 	itemCategoryValues, itemCategoryMap, itemCategoryList,
 	itemGroupingValues, itemGroupingMap, itemGroupingList,
-	removeInstanceReasonValues, removeInstanceReasonMap, removeInstanceReasonList
+	removeInstanceReasonValues, removeInstanceReasonMap, removeInstanceReasonList,
+	orderStatusValues, orderStatusMap, orderStatusList
 }
