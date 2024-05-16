@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client';
-import { Box, Flex, Grid } from '@radix-ui/themes';
+import { Box, Card, Flex, Grid, Text } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import EditOrderButton from './EditOrderButton'
@@ -8,7 +8,7 @@ import { NoDataMessage } from '@/app/_components';
 import DeleteOrderButton from './DeleteOrderButton';
 import AssignUserToOrder from './AssignUserToOrder';
 import OrderDetails from './OrderDetails';
-
+import ReactMarkdown from 'react-markdown';
 interface Props {
 	params: { orderId: string }
 }
@@ -59,7 +59,19 @@ const OrderDetailPage = async ({ params }:Props) => {
 			{sessionUser && (
 			<Box className='md:col-span-3'>
 				<Flex direction='column' gap="3">
-					<AssignUserToOrder order={order} />
+					<Flex direction="column" gap="1">
+						<Text size="2">Order Assigned to</Text>
+						<AssignUserToOrder order={order} />
+					</Flex>
+					
+					<Flex direction="column" gap="1">
+						<Text size="2">Additional Notes</Text>
+						<Card className='prose max-w-full'>
+							<ReactMarkdown>{order.notes || ""}</ReactMarkdown>
+						</Card>
+					</Flex>
+
+
 					<EditOrderButton orderId={order.id} status={order.status} />
 					<DeleteOrderButton orderId={order.id}/>
 				</Flex>

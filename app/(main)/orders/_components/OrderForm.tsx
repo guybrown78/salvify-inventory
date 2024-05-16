@@ -1,6 +1,6 @@
 'use client'
 
-import { FieldErrorMessage, Spinner } from '@/app/_components';
+import { FieldErrorMessage, Spinner } from '@/app/_components';;
 import { orderSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Order } from '@prisma/client';
@@ -28,6 +28,8 @@ const OrderForm = ({ order }:Props) => {
 	const [error, setError] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
+	console.log(order)
+
 	const onSubmit = handleSubmit(async (data) => {
 		try{
 			setIsSubmitting(true);
@@ -36,7 +38,11 @@ const OrderForm = ({ order }:Props) => {
 			}else{
 				await axios.post('/api/orders', data);
 			}
-			router.push('/orders/list');
+			if(order){
+				router.push('/orders/' + order.id);
+			}else{
+				router.push('/orders/list');
+			}
 			router.refresh();
 		} catch (error) {		
 			setIsSubmitting(false);
@@ -77,7 +83,7 @@ const OrderForm = ({ order }:Props) => {
 				<FieldErrorMessage>{errors.notes?.message}</FieldErrorMessage>
 
 				<Button disabled={isSubmitting}>
-					{ order? 'Create Order' : 'Create New Order' }{' '}
+					{ order? 'Update Order' : 'Create New Order' }{' '}
 					{isSubmitting && <Spinner />}
 				</Button>
 

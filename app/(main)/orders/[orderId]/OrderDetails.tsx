@@ -16,7 +16,7 @@ const OrderDetails = ({ order }: { order: Order }) => {
 				<Text>{order.createdAt.toDateString()}</Text> 
 			</Flex>
 			<Card className='prose max-w-full' mt="4">
-				<ReactMarkdown>{order.notes || ""}</ReactMarkdown>
+				{/* <ReactMarkdown>{order.notes || ""}</ReactMarkdown> */}
 			</Card>
 		</>
 	)
