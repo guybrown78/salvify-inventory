@@ -21,7 +21,11 @@ const fetchOrder = cache((orderId: number, clientId: number) => prisma.order
 			clientId: clientId 
 		},
 		include: {
-			orderItems : true
+			orderItems : {
+				include: {
+					item: true
+				}
+			}
 		}
 	})
 );
@@ -79,5 +83,7 @@ const OrderDetailPage = async ({ params }:Props) => {
 		</Grid>
 	)
 }
+
+export const dynamic = 'force-dynamic';
 
 export default OrderDetailPage

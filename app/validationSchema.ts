@@ -232,3 +232,13 @@ export const patchOrderSchema = z.object({
 	status: OrderStatus
 		.optional()
 });
+
+
+export const addOrderItemSchema = z.object({
+	itemId: z
+		.number()
+		.min(1, "Item is required"),
+	quantity: z
+		.string()
+		.min(1, "Quantity is required"),
+})

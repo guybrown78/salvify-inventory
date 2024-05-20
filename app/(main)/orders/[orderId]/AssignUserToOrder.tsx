@@ -1,13 +1,14 @@
 'use client'
 
 import Skeleton from '@/app/_components/Skeleton'
+import { OrderWithItems } from '@/app/_types/types'
 import { Order, User } from '@prisma/client'
 import { Select } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 
-const AssignUserToOrder = ({ order }: { order: Order }) => {
+const AssignUserToOrder = ({ order }: { order: OrderWithItems }) => {
 
 	const { data: users, error, isLoading } = useUsers();
 
@@ -23,7 +24,6 @@ const AssignUserToOrder = ({ order }: { order: Order }) => {
 				toast.error("Changes could not be saved")
 			})
 	}
-
 	return (
 		<>
 			<Select.Root 

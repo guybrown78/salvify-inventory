@@ -9,8 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(
 	request: NextRequest,
 	{ params }: { params: { 
-		holdingId: string,
-		itemId: string
+		orderId: string,
 	}}
 ) {
 
@@ -26,48 +25,48 @@ export async function POST(
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 	
-	const holdingId = parseInt(params.holdingId);
-	const itemId = parseInt(params.itemId);
+	const orderId = parseInt(params.orderId);
+
 	const body = await request.json();
 	const validation = holdingItemSchema.safeParse(body);
 	if(!validation.success){
 		return NextResponse.json(validation.error.format(), {status: 400});
 	}
+	console.log(body, orderId)
 
-
-	// Validate holding 
-	const holding = await prisma.holding.findUnique({ 
-		where: { 
-			id: holdingId,
+	// Validate Order
+	const order = await prisma.order.findUnique({
+		where:{
+			id: orderId,
 			clientId: sessionUser!.clientId!
 		},
-	});
-	if (!holding) {
-		return NextResponse.json({ error: 'Invalid Holding' }, { status: 404 });
+	})
+	if(!order){
+		return NextResponse.json({ error: 'Invalid Order'}, { status: 404 });
 	}
-
+	console.log(order)
 
 	// Validate item 
 	const item = await prisma.item.findUnique({ 
 		where: { 
-			id: itemId,
+			id: body.itemId,
 			clientId: sessionUser!.clientId!
 		},
 	});
 	if (!item) {
 		return NextResponse.json({ error: 'Invalid Item' }, { status: 404 });
 	}
+	console.log(item);
 
-
-	// create new holdingItem
-	const newHoldingItem = await prisma.holdingItem.create({
+	// create new orderItem
+	const newOrderItem = await prisma.orderItem.create({
 		data: {
-			itemId:itemId,
-			holdingId:holdingId,
-			requiredMinCount:body.requiredMinCount,
-			clientId:sessionUser!.clientId!
+			itemId:body.itemId,
+			orderId:orderId,
+			quantity:parseInt(body.quantity),
+			addedById: sessionUser!.id
 		}
 	})
 
-	return NextResponse.json(newHoldingItem, { status: 201 });
+	return NextResponse.json(newOrderItem, { status: 201 });
 }

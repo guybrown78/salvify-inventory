@@ -5,8 +5,12 @@ import { Card, Flex, Heading, Text } from '@radix-ui/themes';
 import ReactMarkdown from 'react-markdown';
 import OrderStatusBadge from '@/app/_components/order/OrderStatusBadge';
 import OrderStatusSelect from './OrderStatusSelect';
+import OrderItems from './OrderItems';
+import { OrderWithItems } from '@/app/_types/types';
 
-const OrderDetails = ({ order }: { order: Order }) => {
+const OrderDetails = ({ order }: { order: OrderWithItems }) => {
+
+
 	return (
 		<>
 			<Heading>{`Order #${order.orderNumber}`}</Heading>
@@ -15,8 +19,8 @@ const OrderDetails = ({ order }: { order: Order }) => {
 				<OrderStatusSelect order={order} />
 				<Text>{order.createdAt.toDateString()}</Text> 
 			</Flex>
-			<Card className='prose max-w-full' mt="4">
-				{/* <ReactMarkdown>{order.notes || ""}</ReactMarkdown> */}
+			<Card className='prose max-w-full' mt="4" variant='ghost'>
+				<OrderItems order={order}/>
 			</Card>
 		</>
 	)

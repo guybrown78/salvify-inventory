@@ -32,7 +32,10 @@ export interface SessionUser
 	clientName?: string | null
 }
 
-
-export interface OrderWithItem extends Order{
-	orderItems?:OrderItem[]
+export interface OrderItemWithItem extends OrderItem{
+	item:Item
 }
+export interface OrderWithItems extends Order{
+	orderItems:OrderItemWithItem[]
+}
+
