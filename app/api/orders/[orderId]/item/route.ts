@@ -32,7 +32,7 @@ export async function POST(
 	if(!validation.success){
 		return NextResponse.json(validation.error.format(), {status: 400});
 	}
-	console.log(body, orderId)
+
 
 	// Validate Order
 	const order = await prisma.order.findUnique({
@@ -44,7 +44,7 @@ export async function POST(
 	if(!order){
 		return NextResponse.json({ error: 'Invalid Order'}, { status: 404 });
 	}
-	console.log(order)
+
 
 	// Validate item 
 	const item = await prisma.item.findUnique({ 
@@ -56,7 +56,6 @@ export async function POST(
 	if (!item) {
 		return NextResponse.json({ error: 'Invalid Item' }, { status: 404 });
 	}
-	console.log(item);
 
 	// create new orderItem
 	const newOrderItem = await prisma.orderItem.create({

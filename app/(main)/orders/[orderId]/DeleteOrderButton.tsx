@@ -3,6 +3,7 @@
 import { Spinner } from '@/app/_components';
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 import axios from 'axios';
+import { TrashIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -30,6 +31,7 @@ const DeleteOrderButton = ({ orderId }: { orderId: number }) => {
 			<AlertDialog.Root>
 				<AlertDialog.Trigger>
 					<Button color='red' disabled={isDeleteing}>
+						<TrashIcon />
 						Delete Order
 						{isDeleteing && <Spinner />}
 					</Button>

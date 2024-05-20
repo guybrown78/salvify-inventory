@@ -1,14 +1,14 @@
 'use client'
 import { Spinner, StockItemCategoryBadge, StockItemGroupingBadge, StockItemTypeBadge } from '@/app/_components';
-import { Item } from '@prisma/client';
-import { Box, Button, Card, Flex, Text, TextField } from '@radix-ui/themes';
-import React, { useState } from 'react'
 import { addOrderItemSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Item } from '@prisma/client';
+import { Box, Button, Card, Flex, Text, TextField } from '@radix-ui/themes';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import axios from 'axios';
-import { useRouter } from 'next/navigation'
 
 type AddOrderItemFormData = z.infer<typeof addOrderItemSchema>
 
@@ -35,11 +35,12 @@ const AddItemToOrder = ({item, orderId, clientId, onItemAdded}:Props) => {
 	}
 
 	setValue("itemId", item.id);
+	setValue("quantity", "0");
 
 	const onSubmit = handleSubmit(async (data) => {
 		try{
 			setIsSubmitting(true);
-			await axios.post(`/api/orders/${orderId}/add-item`, data)
+			await axios.post(`/api/orders/${orderId}/item`, data)
 			router.refresh();
 			onItemAdded();
 			setIsSubmitting(false);
@@ -67,6 +68,7 @@ const AddItemToOrder = ({item, orderId, clientId, onItemAdded}:Props) => {
 							<TextField.Input 
 								type="number" 
 								min={1}
+								defaultValue={0}
 								disabled={isSubmitting}
 								{...register('quantity')}
 							/>
