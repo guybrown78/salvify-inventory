@@ -127,6 +127,7 @@ model Holding {
   title           String           @db.VarChar(255)
   field           String?          @db.VarChar(255)
   isMainHolding   Boolean          @default(false)
+  canAddIncidents Boolean          @default(false)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now()) @updatedAt
   type            HoldingType      @default(GENERAL)
