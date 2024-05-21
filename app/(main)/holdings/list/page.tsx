@@ -7,6 +7,7 @@ import { NoDataMessage, Pagination } from "@/app/_components";
 import Main from '@/app/_components/layout/Main'
 import { Metadata } from "next";
 import { getSessionUser } from '@/app/_utils/getSessionUser'
+import { holdingTypeList, holdingTypeValues } from '@/prisma/enums'
 
 interface Props {
 	searchParams: HoldingQuery;
@@ -28,13 +29,14 @@ const HoldingListPage = async ({ searchParams }: Props) => {
     );
   }
 
-	// const title = orderStatusValues.includes(searchParams.status)
-	// ? searchParams.status
-	// : undefined;
+	const type = holdingTypeValues.includes(searchParams.type)
+	? searchParams.type
+	: undefined;
 	const where = {
+		type,
 		clientId: sessionUser!.clientId!,
 	};
-	
+
 	const page = parseInt(searchParams.page) || 1;
 	const pageSize = 10;
 
@@ -52,7 +54,7 @@ const HoldingListPage = async ({ searchParams }: Props) => {
 				<Flex direction="column" gap="3">
 					<HoldingsToolbar />
 					<NoDataMessage>
-						There are currently no holdings for { sessionUser!.clientName! }.
+						There are currently no holdings for { sessionUser!.clientName! }{ searchParams.type ? ` with type ${searchParams.type}` : "" }.
 					</NoDataMessage>
 				</Flex>
 			</Main>

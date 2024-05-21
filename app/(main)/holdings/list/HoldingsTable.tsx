@@ -1,21 +1,19 @@
-
 import { HoldingType } from "@prisma/client";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import {
 	Button,
 	Flex,
-	IconButton,
 	Table,
 	TableCell,
-	TableColumnHeaderCell,
+	TableColumnHeaderCell
 } from "@radix-ui/themes";
 import NextLink from "next/link";
 
+import LabelValueColumn from "@/app/_components/LabelValueColumn";
 import { HoldingWithLocations } from "@/app/_types/types";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 import DeleteHoldingButton from "./DeleteHoldingButton";
 import HoldingLink from "./HoldingLink";
-import LabelValueColumn from "@/app/_components/LabelValueColumn";
 
 export interface HoldingQuery {
 	type: HoldingType;
@@ -29,7 +27,6 @@ interface Props {
 }
 
 const HoldingsTable = ({ searchParams, holdings }: Props) => {
-
 	return (
 		<Table.Root variant="surface">
 			<Table.Header>
@@ -66,9 +63,13 @@ const HoldingsTable = ({ searchParams, holdings }: Props) => {
 							<HoldingLink holding={holding} />
 							<div className="block md:hidden">
 								<Flex gap="5" mt="3" justify="between">
-									<LabelValueColumn label="Main" >-</LabelValueColumn>
-									<LabelValueColumn label="Type" >{holding.type}</LabelValueColumn>
-									<LabelValueColumn label="Locations" >{holding.locations.length}</LabelValueColumn>
+									<LabelValueColumn label="Main">-</LabelValueColumn>
+									<LabelValueColumn label="Type">
+										{holding.type}
+									</LabelValueColumn>
+									<LabelValueColumn label="Locations">
+										{holding.locations.length}
+									</LabelValueColumn>
 								</Flex>
 								<Flex gap="5" mt="3" justify="end">
 									<NextLink
@@ -76,7 +77,7 @@ const HoldingsTable = ({ searchParams, holdings }: Props) => {
 										className="my-auto"
 									>
 										<Button variant="ghost">
-											<Pencil2Icon/> Edit
+											<Pencil2Icon /> Edit
 										</Button>
 									</NextLink>
 									<DeleteHoldingButton />
@@ -84,22 +85,26 @@ const HoldingsTable = ({ searchParams, holdings }: Props) => {
 							</div>
 						</TableCell>
 
-						<TableCell className='hidden md:table-cell'>-</TableCell>
-						<TableCell className='hidden md:table-cell'>{holding.type}</TableCell>
-						<TableCell className='hidden md:table-cell'>{holding.locations.length}</TableCell>
+						<TableCell className="hidden md:table-cell">-</TableCell>
+						<TableCell className="hidden md:table-cell">
+							{holding.type}
+						</TableCell>
+						<TableCell className="hidden md:table-cell">
+							{holding.locations.length}
+						</TableCell>
 
-						<TableCell className='hidden md:table-cell'>
+						<TableCell className="hidden md:table-cell">
 							<NextLink
 								href={`/holdings/edit/${holding.id}`}
 								className="my-auto"
 							>
 								<Button variant="ghost">
-									<Pencil2Icon/> Edit
+									<Pencil2Icon /> Edit
 								</Button>
 							</NextLink>
 						</TableCell>
 
-						<TableCell className='hidden md:table-cell'>
+						<TableCell className="hidden md:table-cell">
 							<DeleteHoldingButton />
 						</TableCell>
 					</Table.Row>
