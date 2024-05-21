@@ -4,7 +4,7 @@ import { FieldErrorMessage, Spinner } from '@/app/_components';;
 import { orderSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Order } from '@prisma/client';
-import { Button, Callout, TextField } from '@radix-ui/themes';
+import { Button, Callout, Heading, TextField } from '@radix-ui/themes';
 import axios from 'axios';
 import "easymde/dist/easymde.min.css";
 import { useRouter } from 'next/navigation';
@@ -16,10 +16,11 @@ import { z } from 'zod';
 type OrderFormData = z.infer<typeof orderSchema>
 
 interface Props{
+	nextOrderNumber: number
 	order?: Order
 }
 
-const OrderForm = ({ order }:Props) => {
+const OrderForm = ({ nextOrderNumber, order }:Props) => {
 
 	const router = useRouter();
 	const { register, control, handleSubmit, formState: {errors} } = useForm<OrderFormData>({
@@ -27,8 +28,6 @@ const OrderForm = ({ order }:Props) => {
 	});
 	const [error, setError] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	console.log(order)
 
 	const onSubmit = handleSubmit(async (data) => {
 		try{
@@ -61,6 +60,8 @@ const OrderForm = ({ order }:Props) => {
 				className='space-y-3' 
 				onSubmit={onSubmit}>
 				
+				<Heading>{`Order #${nextOrderNumber}`}</Heading>
+
 				<TextField.Root>
 					<TextField.Input 
 						defaultValue={order?.title || ""} 

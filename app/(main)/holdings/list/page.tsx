@@ -1,15 +1,18 @@
 import { Flex } from '@radix-ui/themes'
 import React from 'react'
 import HoldingsToolbar from './HoldingsToolbar'
-import HoldingsTable from './HoldingsTable'
+import HoldingsTable, { HoldingQuery, columnNames } from './HoldingsTable'
 import prisma from '@/prisma/client'
-import { NoDataMessage } from '@/app/_components'
+import { NoDataMessage, Pagination } from "@/app/_components";
 import Main from '@/app/_components/layout/Main'
-
+import { Metadata } from "next";
 import { getSessionUser } from '@/app/_utils/getSessionUser'
 
+interface Props {
+	searchParams: HoldingQuery;
+}
 
-const HoldingListPage = async () => {
+const HoldingListPage = async ({ searchParams }: Props) => {
 
 	const sessionUser = await getSessionUser();
 
@@ -25,11 +28,23 @@ const HoldingListPage = async () => {
     );
   }
 
+	// const title = orderStatusValues.includes(searchParams.status)
+	// ? searchParams.status
+	// : undefined;
+	const where = {
+		clientId: sessionUser!.clientId!,
+	};
+	
+	const page = parseInt(searchParams.page) || 1;
+	const pageSize = 10;
+
 	const holdings = await prisma.holding?.findMany({ 
-		where: { clientId: sessionUser!.clientId! }, 
+		where, 
 		orderBy: { title: 'asc'},
 		include: { locations: true } 
 	});
+
+	const holdingCount = await prisma.holding.count({ where });
 
 	if(!holdings || !holdings.length)
 		return (
@@ -47,7 +62,12 @@ const HoldingListPage = async () => {
 		<Main>
 			<Flex direction="column" gap="3">
 				<HoldingsToolbar />
-				<HoldingsTable holdings={holdings} />
+				<HoldingsTable searchParams={searchParams} holdings={holdings} />
+				<Pagination
+					itemCount={holdingCount}
+					pageSize={pageSize}
+					currentPage={page}
+				/>
 			</Flex>
 		</Main>
 	)
@@ -55,4 +75,8 @@ const HoldingListPage = async () => {
 
 export const dynamic = 'force-dynamic';
 
+export const metadata: Metadata = {
+	title: "Salvify Medical Inventory - Holdings",
+	description: "View all Inventory holdings",
+};
 export default HoldingListPage

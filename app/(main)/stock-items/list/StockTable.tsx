@@ -5,11 +5,17 @@ import { ArrowUpIcon } from '@radix-ui/react-icons';
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
 import NextLink from 'next/link';
 
+export interface ItemQuery {
+	orderBy: keyof Item;
+	page: string;
+}
+
 interface Props {
+	searchParams: ItemQuery;
 	items: Item[]
 }
 
-const StockTable = ({ items }: Props) => {
+const StockTable = ({  searchParams, items }: Props) => {
 	return (
 		<Table.Root variant='surface'>
 			<Table.Header>

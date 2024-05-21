@@ -46,7 +46,7 @@ const EditOrderPage = async ({ params }:Props) => {
 	if(!order) notFound(); 
 
 	return (
-		<OrderForm order={order}/>
+		<OrderForm order={order} nextOrderNumber={order.orderNumber}/>
 	)
 }
 

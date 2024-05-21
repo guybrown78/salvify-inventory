@@ -1,60 +1,130 @@
-'use client'
 
-import { Link } from '@/app/_components';
-import { useHoldingContext } from '@/app/_providers/HoldingProvider';
-import { Holding } from '@prisma/client';
-import { Pencil2Icon } from '@radix-ui/react-icons';
-import { Button, IconButton, Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
+import { HoldingType } from "@prisma/client";
+import { Pencil2Icon } from "@radix-ui/react-icons";
+import {
+	Button,
+	Flex,
+	IconButton,
+	Table,
+	TableCell,
+	TableColumnHeaderCell,
+} from "@radix-ui/themes";
+import NextLink from "next/link";
 
-interface Props {
-	holdings: Holding[]
+import { HoldingWithLocations } from "@/app/_types/types";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
+import DeleteHoldingButton from "./DeleteHoldingButton";
+import HoldingLink from "./HoldingLink";
+import LabelValueColumn from "@/app/_components/LabelValueColumn";
+
+export interface HoldingQuery {
+	type: HoldingType;
+	orderBy: keyof HoldingWithLocations;
+	page: string;
 }
 
-const HoldingsTable = ({ holdings }: Props) => {
+interface Props {
+	searchParams: HoldingQuery;
+	holdings: HoldingWithLocations[];
+}
 
-	const { updateIsHoldingSelected, updateCurrentHolding } = useHoldingContext();
-	const router = useRouter()
+const HoldingsTable = ({ searchParams, holdings }: Props) => {
+
 	return (
-		<Table.Root variant='surface'>
+		<Table.Root variant="surface">
 			<Table.Header>
 				<Table.Row>
-					{/* {columns.map((column) => ( */}
-						<TableColumnHeaderCell>
-							Holding
+					{columns.map((column) => (
+						<TableColumnHeaderCell
+							key={column.value}
+							className={column.className}
+						>
+							{column.value && (
+								<NextLink
+									href={{
+										query: {
+											...searchParams,
+											orderBy: column.value,
+										},
+									}}
+								>
+									{column.label}
+								</NextLink>
+							)}
+							{!column.value && <>{column.label}</>}
+							{column.value === searchParams.orderBy && (
+								<ArrowUpIcon className="inline" />
+							)}
 						</TableColumnHeaderCell>
-					{/* ))} */}
-					<TableColumnHeaderCell>Edit</TableColumnHeaderCell>
+					))}
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{holdings.map(holding => (
+				{holdings.map((holding) => (
 					<Table.Row key={holding.id}>
-							<TableCell>
-								<Button 
-									onClick={() => {
-										updateCurrentHolding(holding);
-										router.push(`/holdings/${holding.id}/dashboard`)
-									}}
-								>
-									{holding.title}
-								</Button>	
-							</TableCell>
+						<TableCell>
+							<HoldingLink holding={holding} />
+							<div className="block md:hidden">
+								<Flex gap="5" mt="3" justify="between">
+									<LabelValueColumn label="Main" >-</LabelValueColumn>
+									<LabelValueColumn label="Type" >{holding.type}</LabelValueColumn>
+									<LabelValueColumn label="Locations" >{holding.locations.length}</LabelValueColumn>
+								</Flex>
+								<Flex gap="5" mt="3" justify="end">
+									<NextLink
+										href={`/holdings/edit/${holding.id}`}
+										className="my-auto"
+									>
+										<Button variant="ghost">
+											<Pencil2Icon/> Edit
+										</Button>
+									</NextLink>
+									<DeleteHoldingButton />
+								</Flex>
+							</div>
+						</TableCell>
 
-							<TableCell>
-								<NextLink href={`/holdings/edit/${holding.id}`}>
-									<IconButton variant="ghost">
-										<Pencil2Icon width="18" height="18" />
-									</IconButton>
-								</NextLink>
-							</TableCell>
+						<TableCell className='hidden md:table-cell'>-</TableCell>
+						<TableCell className='hidden md:table-cell'>{holding.type}</TableCell>
+						<TableCell className='hidden md:table-cell'>{holding.locations.length}</TableCell>
 
+						<TableCell className='hidden md:table-cell'>
+							<NextLink
+								href={`/holdings/edit/${holding.id}`}
+								className="my-auto"
+							>
+								<Button variant="ghost">
+									<Pencil2Icon/> Edit
+								</Button>
+							</NextLink>
+						</TableCell>
+
+						<TableCell className='hidden md:table-cell'>
+							<DeleteHoldingButton />
+						</TableCell>
 					</Table.Row>
 				))}
 			</Table.Body>
 		</Table.Root>
-	)
-}
+	);
+};
 
-export default HoldingsTable
+const columns: {
+	label: string;
+	value: keyof HoldingWithLocations | null;
+	className?: string;
+}[] = [
+	{ label: "Holding", value: "title" },
+	{
+		label: "Is Main",
+		value: "isMainHolding",
+		className: "hidden md:table-cell",
+	},
+	{ label: "Type", value: "type", className: "hidden md:table-cell" },
+	{ label: "Locations", value: null, className: "hidden md:table-cell" },
+	{ label: "", value: null, className: "hidden md:table-cell" },
+	{ label: "", value: null, className: "hidden md:table-cell" },
+];
+
+export const columnNames = columns.map((column) => column.value);
+export default HoldingsTable;
