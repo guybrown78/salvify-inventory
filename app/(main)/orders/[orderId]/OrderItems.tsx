@@ -16,7 +16,7 @@ const OrderItems = async ({ order }: { order: OrderWithItems }) => {
 			<Flex direction="column" gap="3">
 				<Heading size="4">Items</Heading>
 				<OrderItemsSelect
-					orderId={order.id}
+					order={order}
 					clientId={order.clientId}
 					items={items}
 				/>

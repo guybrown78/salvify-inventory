@@ -38,6 +38,7 @@ const OrderItemsSelect = ({ order, items, clientId }:Props) => {
 							<option 
 								key={item.id} 
 								value={item.id}
+								disabled={order.orderItems.some(orderItem => orderItem.itemId === item.id)}
 							>
 								{item.title}
 							</option>
