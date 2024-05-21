@@ -4,6 +4,7 @@ import prisma from "@/prisma/client";
 import { Card, Flex, Heading } from "@radix-ui/themes";
 import OrderItem from "./OrderItem";
 import OrderItemsSelect from "./OrderItemsSelect";
+import { OrderStatus } from "@prisma/client";
 
 const OrderItems = async ({ order }: { order: OrderWithItems }) => {
 	// get items in the client
@@ -15,11 +16,13 @@ const OrderItems = async ({ order }: { order: OrderWithItems }) => {
 		<Flex direction="column" gap="3">
 			<Flex direction="column" gap="3">
 				<Heading size="4">Items</Heading>
-				<OrderItemsSelect
-					order={order}
-					clientId={order.clientId}
-					items={items}
-				/>
+				{ order.status === OrderStatus.OPEN && (
+					<OrderItemsSelect
+						order={order}
+						clientId={order.clientId}
+						items={items}
+					/>
+				)}
 			</Flex>
 
 			{!order.orderItems.length && (

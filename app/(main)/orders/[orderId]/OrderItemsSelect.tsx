@@ -27,7 +27,7 @@ const OrderItemsSelect = ({ order, items, clientId }:Props) => {
 	return (
 		<Flex direction="column" gap="5">
 			<Box>
-				<Text size="2">Item the instance is from</Text>
+				<Text size="2">Add Items to the order</Text>
 				<select
 					className="block w-full rounded-md border-0 py-2 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-grass-600 sm:text-md sm:leading-6"
 					onChange={(e) =>  onSelectedItem(parseInt(e.target.value))}
