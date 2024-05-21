@@ -61,20 +61,29 @@ export async function DELETE(
 			return NextResponse.json("Cannot find session user client", {status: 400});
 		}
 
+		const orderId = parseInt(params.orderId);
+
 		const order = await prisma.order.findUnique({
 			where: { 
-				id: parseInt(params.orderId)				
+				id: orderId				
 			}
 		});
 		if(!order){
 			return NextResponse.json({ error: 'Invalid Order'}, {status: 404});
 		}
 
-		await prisma.order.delete({
-			where: { 
-				id: parseInt(params.orderId) 
-			}
-		})
+		 await prisma.$transaction([
+        prisma.orderItem.deleteMany({
+					where: {
+						orderId: orderId
+					}
+        }),
+        prisma.order.delete({
+					where: { 
+						id: orderId 
+					}
+        })
+    ]);
 
 		return NextResponse.json({})
 }
