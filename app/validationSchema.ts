@@ -242,3 +242,9 @@ export const addOrderItemSchema = z.object({
 		.string()
 		.min(1, "Quantity is required"),
 })
+export const patchOrderItemSchema = z.object({
+	quantity: z
+		.number()
+		.min(1, { message: "Quantity must be at least 1" })
+		.refine((val) => !isNaN(val), { message: "Quantity must be a number" }),
+})

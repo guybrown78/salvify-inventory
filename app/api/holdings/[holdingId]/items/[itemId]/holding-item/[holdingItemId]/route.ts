@@ -14,7 +14,6 @@ export async function PATCH(
 		holdingItemId: string 
 	 }}) {
 
-		console.log("Here")
 		const session = await getServerSession(authOptions);
 		if(!session){
 			return NextResponse.json({}, {status: 401});
@@ -25,7 +24,7 @@ export async function PATCH(
 		if(!validation.success){
 			return NextResponse.json(validation.error.format(), {status: 400});
 		}
-		console.log(body)
+
 		const holdingId = parseInt(params.holdingId);
 		const itemId = parseInt(params.itemId);
 		const holdingItemId = parseInt(params.holdingItemId);

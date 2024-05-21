@@ -1,6 +1,6 @@
 import { getSessionUser } from "@/app/_utils/getSessionUser";
 import authOptions from "@/app/auth/authOptions";
-import { holdingItemSchema } from "@/app/validationSchema";
+import { addOrderItemSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,7 +28,7 @@ export async function POST(
 	const orderId = parseInt(params.orderId);
 
 	const body = await request.json();
-	const validation = holdingItemSchema.safeParse(body);
+	const validation = addOrderItemSchema.safeParse(body);
 	if(!validation.success){
 		return NextResponse.json(validation.error.format(), {status: 400});
 	}

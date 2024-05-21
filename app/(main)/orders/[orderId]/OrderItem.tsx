@@ -1,5 +1,6 @@
 "use client";
 import {
+	FieldErrorMessage,
 	Spinner,
 	StockItemCategoryBadge,
 	StockItemGroupingBadge,
@@ -11,7 +12,10 @@ import { Button, Card, Flex, Text, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
+import debounce from "lodash/debounce";
+// import throttle from "lodash/throttle";
+
 
 interface Props {
 	orderId: number;
@@ -34,9 +38,31 @@ const OrderItem = ({ orderId, orderItem }: Props) => {
 			setError("An unexpected error occured");
 		}
 	};
+
+	const onQuantityChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
+		const quantity:number = parseInt(e.target.value);
+		if(quantity > 0){
+			setError("")
+			console.log("Changed value:", quantity);
+			try {
+				setIsSubmitting(true);
+				await axios.patch(`/api/orders/${orderId}/item/${orderItem.id}`,{quantity});
+				setIsSubmitting(false);
+			} catch (error) {
+				setIsSubmitting(false);
+				setError("Sorry, we could not update the quantity");
+			}
+		}else{
+			setError("Quantity can not be set to 0 or below")
+		}
+  };
+
+	// const throttledOnQuantityChange = throttle(onQuantityChange, 500);
+	const debouncedOnQuantityChange = debounce(onQuantityChange, 500);	
+	
+
 	return (
 		<Card className="max-w-full" mt="4">
-			{/* <form onSubmit={onSubmit}> */}
 			<Flex
 				direction="column"
 				gap="2"
@@ -56,9 +82,11 @@ const OrderItem = ({ orderId, orderItem }: Props) => {
 								type="number"
 								min={1}
 								defaultValue={orderItem.quantity}
+								onChange={debouncedOnQuantityChange}
 								disabled={isSubmitting}
 							/>
 						</TextField.Root>
+						
 					</Flex>
 					<Button
 						variant="ghost"
@@ -72,8 +100,8 @@ const OrderItem = ({ orderId, orderItem }: Props) => {
 						{isDeleting && <Spinner />}
 					</Button>
 				</Flex>
+				<FieldErrorMessage>{error}</FieldErrorMessage>
 			</Flex>
-			{/* </form> */}
 		</Card>
 	);
 };

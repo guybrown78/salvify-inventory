@@ -4,16 +4,17 @@ import { Item } from '@prisma/client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useState } from 'react'
 import AddItemToOrder from './AddItemToOrder'
+import { OrderWithItems } from '@/app/_types/types'
 
 
 interface Props{
 	items: Item[]
-	orderId: number
+	order: OrderWithItems
 	clientId: number
 }
 
 
-const OrderItemsSelect = ({ orderId, items, clientId }:Props) => {
+const OrderItemsSelect = ({ order, items, clientId }:Props) => {
 
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null)
 
@@ -33,14 +34,21 @@ const OrderItemsSelect = ({ orderId, items, clientId }:Props) => {
 				>
 					<option className='text-base-accent' value="">Select an Item</option>
 					{
-						items.map(item => <option key={item.id} value={item.id}>{item.title}</option>)
+						items.map(item => (
+							<option 
+								key={item.id} 
+								value={item.id}
+							>
+								{item.title}
+							</option>
+						))
 					}
 				</select>
 			</Box>
 
 			<AddItemToOrder 
 				item={selectedItem} 
-				orderId={orderId} 
+				orderId={order.id} 
 				clientId={clientId}
 				onItemAdded={() => setSelectedItem(null)}
 			/>
