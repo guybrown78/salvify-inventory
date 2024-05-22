@@ -30,17 +30,20 @@ export async function POST(request: NextRequest) {
 		title: string;
 		field?: string;
 		isMainHolding?: boolean;
-		type?: HoldingType;
-		clientId:number
+		type: HoldingType;
+		canAddIncidents: boolean;
+		clientId:number;
 	} = { 
 		title: body.title, 
 		field: body.field,
+		canAddIncidents: body.canAddIncidents,
+		type: body.type,
 		clientId:sessionUser!.clientId!
 	}
 
 	if(body.isMainHolding){
 		data.isMainHolding = true;
-		data.type = HoldingType.STORE;
+		// data.type = HoldingType.STORE;
 	}
 
 	const newHolding = await prisma.holding.create({ data })

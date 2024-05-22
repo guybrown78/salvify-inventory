@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues, orderStatusValues } from '@/prisma/enums'
+import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues, orderStatusValues, holdingTypeValues } from '@/prisma/enums'
 import { z } from "zod";
 
 export const issueSchema = z.object({
@@ -101,6 +101,8 @@ export const patchItemSchema = z.object({
 		.optional(),
 })
 
+const HoldingTypes = z.enum(holdingTypeValues)
+
 export const holdingSchema = z.object({
 	title: z
 		.string()
@@ -110,6 +112,10 @@ export const holdingSchema = z.object({
 		.string()
 		.max(255)
 		.optional(),
+	canAddIncidents: z
+		.boolean()
+		.optional(),
+	type: HoldingTypes
 })
 export const patchHoldingSchema = z.object({
 	title: z
@@ -121,6 +127,10 @@ export const patchHoldingSchema = z.object({
 		.string()
 		.max(255)
 		.optional(),
+	canAddIncidents: z
+		.boolean()
+		.optional(),
+	type: HoldingTypes
 })
 
 export const locationSchema = z.object({

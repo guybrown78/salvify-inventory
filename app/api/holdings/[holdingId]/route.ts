@@ -19,7 +19,7 @@ export async function PATCH(
 			return NextResponse.json(validation.error.format(), {status: 400});
 		}
 
-		const { title, field } = body;
+		const { title, field, canAddIncidents, type } = body;
 
 		const holding = await prisma.holding.findUnique({
 			where: { id: parseInt(params.holdingId) }
@@ -32,7 +32,9 @@ export async function PATCH(
 			where: { id: holding.id },
 			data: {
 				title,
-				field
+				field,
+				canAddIncidents, 
+				type
 			}
 		})
 
