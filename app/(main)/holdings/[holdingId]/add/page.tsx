@@ -14,10 +14,11 @@ const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {
 	if(!holding)
 		notFound();
 
-	if(holding.type !== "STORE"){
+	if(!holding.canAddIncidents){
 		return(
 			<NoDataMessage>
-				<p>Sorry, you can&apos;t add instances in this holding. To add instances into the sytem, please go through your main holding</p>
+				<p>Sorry, you can&apos;t add instances in this holding.</p> 
+				<p>To add instances into the holding you need to allow &apos;add instances&apos; toggle in the holding admin</p>
 			</NoDataMessage>	
 	)}
 

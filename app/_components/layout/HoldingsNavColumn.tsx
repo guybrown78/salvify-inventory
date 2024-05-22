@@ -39,7 +39,7 @@ const quickLinksNavigation = [
 
 const getHoldingNav = (holding:Holding) => {
 	const arr = [...quickLinksNavigation]
-	if(holding && holding.type === 'STORE'){
+	if(holding && holding.canAddIncidents){
 		arr.splice(1, 0, {
 			name: 'Add Instances', 
 			href: '/add',
