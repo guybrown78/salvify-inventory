@@ -29,8 +29,8 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 
 const Login = ({ credentialsError }: Props) => {
-	console.log("credentialsError",credentialsError)
-	const appName = "Salvify";
+
+	const appName:string = "Salvify";
 	const { register, control, handleSubmit, formState: {errors} } = useForm<LoginFormData>({
 		resolver: zodResolver(loginSchema)
 	});

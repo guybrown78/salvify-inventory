@@ -61,7 +61,7 @@ const OrdersPage = async ({ searchParams }: Props) => {
 			<Flex direction="column" gap="3">
 				<OrderToolbar />
 				<NoDataMessage>
-					There are currently no orders in the system
+					There are currently no orders in the system { searchParams.status ? ` with status ${searchParams.status}` : "" }.
 				</NoDataMessage>
 			</Flex>
 		);
