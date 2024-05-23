@@ -6,9 +6,7 @@ interface Props {
 }
 const SignInPage = ({ searchParams }: Props) => {
 	return (
-		<div>
-			<Login credentialsError={!!searchParams.error}/>
-		</div>
+		<Login credentialsError={!!searchParams.error}/>
 	)
 }
 

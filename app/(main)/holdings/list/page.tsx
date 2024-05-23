@@ -21,11 +21,13 @@ const HoldingListPage = async ({ searchParams }: Props) => {
   if (!sessionUser) {
     // Handle the case where sessionUser is not available
     return (
-      <Flex direction="column" gap="3">
-        <NoDataMessage>
-          Session user data is not available
-        </NoDataMessage>
-      </Flex>
+			<Main>
+				<Flex direction="column" gap="3">
+					<NoDataMessage>
+						Session user data is not available
+					</NoDataMessage>
+				</Flex>
+			</Main>
     );
   }
 
