@@ -46,7 +46,7 @@ const ItemHoldings = async ({ item }:Props) => {
 				<ul className='w-full'>
 					{
 						holdings.map(holding => (
-							<li key={holding.id}>
+							<li key={holding.id} className='mb-5'>
 								<ItemHolding 
 									holding={holding} 
 									item={item}

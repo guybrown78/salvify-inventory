@@ -1,6 +1,6 @@
 import authOptions from '@/app/auth/authOptions';
 import { NoDataMessage } from '@/app/_components'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import prisma from '@/prisma/client';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
@@ -54,8 +54,10 @@ const StockItemPage = async ({ params }: Props) => {
 	return (
 		<Flex direction="column" gap="5">
 			<StockItemHeader item={item} showEdit />
-			<ItemOverview item={item} />
-			<ItemHoldings item={item} />
+			<Flex mt="8" gap="5" direction="column">
+				<ItemOverview item={item} />
+				<ItemHoldings item={item} />
+			</Flex>
 		</Flex>
 		
 	)

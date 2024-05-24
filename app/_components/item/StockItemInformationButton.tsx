@@ -1,8 +1,8 @@
 'use client'
 
 import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { AlertDialog, Button, Flex } from '@radix-ui/themes';
-
+import { AlertDialog, Button, Flex, Box } from '@radix-ui/themes';
+import ReactMarkdown from 'react-markdown';
 interface Props {
 	title: string
 	information: string | null
@@ -26,7 +26,12 @@ const StockItemInformationButton = ({ information, title }:Props) => {
 					{title}
 				</AlertDialog.Title>
 				<AlertDialog.Description>
-					{information}
+					<Box className='prose max-w-full'>
+						<ReactMarkdown>
+							{information}
+						</ReactMarkdown>
+					</Box>
+				
 				</AlertDialog.Description>
 				<Flex className='mt-4' gap="3" justify="end">
 					<AlertDialog.Cancel>

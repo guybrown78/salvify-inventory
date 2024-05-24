@@ -157,7 +157,7 @@ const StockItemForm = ({ item }: Props) => {
 			
 
 				<Flex direction="column" gap="1" mt="4">
-					<Text size="2">Patient Leaflet (PIL) pdf code</Text>
+					<Text size="2">Product Inscructions URL</Text>
 					<TextField.Root>
 						<TextField.Input defaultValue={item?.instructionsURL || ""} placeholder='Instructions URL' {...register('instructionsURL')} />
 					</TextField.Root>
