@@ -51,12 +51,15 @@ const StockItemPage = async ({ params }: Props) => {
 	return (
 		<Flex direction="column" gap="5">
 			<StockItemHeader item={item} showEdit={false} />
-			<StockOverview item={item} holdingId={holding.id}/>
-			<StockHoldingItemOverview item={item} holdingId={holding.id}/>
-			<Flex direction="column" gap="5">
-				<Heading as="h3" size="3" >Instances ({item.instances.length || 0})</Heading>
-				<StockInstanceTable item={item} />
+			<Flex direction="column" gap="5" mt="8"> 
+				<StockOverview item={item} holdingId={holding.id}/>
+				<StockHoldingItemOverview item={item} holdingId={holding.id}/>
+				<Flex direction="column" gap="5">
+					<Heading as="h3" size="3" >Instances ({item.instances.length || 0})</Heading>
+					<StockInstanceTable item={item} />
+				</Flex>
 			</Flex>
+			
 			
 		</Flex>
 		
