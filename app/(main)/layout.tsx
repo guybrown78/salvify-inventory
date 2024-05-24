@@ -25,7 +25,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Salvify Medical Inventory',
-	description: 'Manage your medical inventory pain'
+	description: 'Manage your medical inventory pain',
+	icons: {
+    icon: '/icon.png',
+  },
 }
 
 interface LayoutProps {
