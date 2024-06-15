@@ -1,14 +1,13 @@
-import { notFound } from 'next/navigation';
-import HoldingHeader from '../HoldingHeader';
-import { HoldingPageProps, fetchHolding } from '../holdingQuery';
+import { notFound } from "next/navigation";
+import HoldingHeader from "../HoldingHeader";
+import { HoldingPageProps, fetchHolding } from "../holdingQuery";
 
-import { Flex } from '@radix-ui/themes';
-import StockLocationTabs from './StockLocationTabs';
-import StockTable from './StockTable'
-import { Issue, Location } from '@prisma/client';
-import prisma from '@/prisma/client';
-import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
-
+import { Flex } from "@radix-ui/themes";
+import StockLocationTabs from "./StockLocationTabs";
+import StockTable from "./StockTable";
+import { Issue, Location } from "@prisma/client";
+import prisma from "@/prisma/client";
+import { ItemWithInstancesHoldingItems } from "@/app/_types/types";
 
 export interface StockQuery {
 	location: string;
@@ -16,21 +15,18 @@ export interface StockQuery {
 	page: string;
 }
 
-
-interface Props extends HoldingPageProps{
-	searchParams: StockQuery
+interface Props extends HoldingPageProps {
+	searchParams: StockQuery;
 }
 
 const HoldingStockPage = async ({ params, searchParams }: Props) => {
-	const holding = await fetchHolding(parseInt(params.holdingId))
+	const holding = await fetchHolding(parseInt(params.holdingId));
 
-	if(!holding)
-		notFound();
-	
-	const locationId = searchParams.location 
-		? parseInt(searchParams.location) 
+	if (!holding) notFound();
+
+	const locationId = searchParams.location
+		? parseInt(searchParams.location)
 		: undefined;
-	
 
 	// const itemsInHoldingAndLocation = await prisma.item.findMany({
 	// 	where: {
@@ -52,40 +48,46 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 	// 					holding: {
 	// 						id: holding.id,
 	// 					},
-	// 					id: locationId, 
+	// 					id: locationId,
 	// 				},
 	// 			},
 	// 		},
 	// 	},
 	// });
 
+	const holdingItemQuery: any = {
+		holding: {
+			id: holding.id,
+		},
+	};
 
-	const itemsInHoldingAndLocation = await prisma.item.findMany({
-		where: {
-			OR: [
-				{
-					instances: {
-						some: {
-							location: {
-								holding: {
-									id: holding.id,
-								},
-								id: locationId,
-							},
-						},
-					},
-				},
-				{
-					holdingItems: {
-						some: {
+	const whereClause: any = {
+		OR: [
+			{
+				instances: {
+					some: {
+						location: {
 							holding: {
 								id: holding.id,
 							},
+							id: locationId,
 						},
 					},
 				},
-			],
-		},
+			},
+		],
+	};
+
+	if (locationId === undefined) {
+		whereClause.OR.push({
+			holdingItems: {
+				some: holdingItemQuery,
+			},
+		});
+	}
+
+	const itemsInHoldingAndLocation = await prisma.item.findMany({
+		where: whereClause,
 		include: {
 			instances: {
 				where: {
@@ -97,7 +99,7 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 					},
 				},
 			},
-			holdingItems: { 
+			holdingItems: {
 				where: {
 					holding: {
 						id: holding.id,
@@ -109,15 +111,13 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 
 	return (
 		<Flex direction="column" gap="3">
-			<StockLocationTabs 
-				locations={holding.locations as Location[] || []}
-			/>
-			<StockTable 
+			<StockLocationTabs locations={(holding.locations as Location[]) || []} />
+			<StockTable
 				items={itemsInHoldingAndLocation as ItemWithInstancesHoldingItems[]}
 				holdingId={holding.id}
 			/>
 		</Flex>
-	)
-}
+	);
+};
 
-export default HoldingStockPage
+export default HoldingStockPage;
