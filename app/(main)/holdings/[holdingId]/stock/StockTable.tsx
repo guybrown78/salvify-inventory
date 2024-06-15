@@ -1,7 +1,10 @@
 import { Link, NoDataMessage } from '@/app/_components';
 import { StockItemTypeBadge, StockItemCategoryBadge, StockItemGroupingBadge } from '@/app/_components/';
 import LabelValueRow from '@/app/_components/LabelValueRow';
+import StockItemHoldingReqAmount from '@/app/_components/item/StockItemHoldingReqAmount';
+import StockItemHoldingTotal from '@/app/_components/item/StockItemHoldingTotal';
 import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
+// import { calculateItemInstanceTotal } from '@/app/_utils/itemInstanceTotalCount';
 import { Item } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 import { Flex, Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
@@ -17,20 +20,6 @@ const StockTable = ({ items, holdingId }: Props) => {
 	if(!items.length)
 		return (<NoDataMessage>There are currently no items in this holding.</NoDataMessage>)
 
-	console.log(items)
-
-	const calculateTotal = (item:ItemWithInstancesHoldingItems) => {
-		let total = 0;
-		item.instances?.forEach(instance => total += instance.quantity) 
-		return total
-	}
-
-	const getMinRequiredCount = (item:ItemWithInstancesHoldingItems) => {
-		if(item.holdingItems && item.holdingItems.length){
-			return item.holdingItems[0].requiredMinCount ?? 0
-		}
-		return "-"
-	}
 	return (
 		<Table.Root variant='surface'>
 			<Table.Header>
@@ -68,7 +57,7 @@ const StockTable = ({ items, holdingId }: Props) => {
 								<div className="block md:hidden">
 									<Flex gap="3" mt="3">
 										<LabelValueRow label='Required count'>
-											{getMinRequiredCount(item)}
+											<StockItemHoldingReqAmount item={item} />
 										</LabelValueRow>
 										<LabelValueRow label='Instances count'>
 											{item.instances ? item.instances.length : 0}
@@ -85,9 +74,14 @@ const StockTable = ({ items, holdingId }: Props) => {
 							<TableCell className='hidden md:table-cell'>
 								<StockItemGroupingBadge itemGrouping={item.grouping} />
 							</TableCell>
-							<TableCell className='hidden md:table-cell'>{getMinRequiredCount(item)}</TableCell>
+							<TableCell className='hidden md:table-cell'>
+								<StockItemHoldingReqAmount item={item} />
+							</TableCell>
 							<TableCell className='hidden md:table-cell'>{item.instances ? item.instances.length : 0}</TableCell>
-							<TableCell>{calculateTotal(item)}</TableCell>
+							<TableCell>
+								<StockItemHoldingTotal item={item} />
+								{/* {calculateItemInstanceTotal(item)} */}
+							</TableCell>
 						</Table.Row>
 					))}
 					
