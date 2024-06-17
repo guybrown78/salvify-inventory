@@ -5,7 +5,7 @@ import {
 	Flex,
 	Table,
 	TableCell,
-	TableColumnHeaderCell
+	TableColumnHeaderCell,
 } from "@radix-ui/themes";
 import NextLink from "next/link";
 
@@ -80,7 +80,7 @@ const HoldingsTable = ({ searchParams, holdings }: Props) => {
 											<Pencil2Icon /> Edit
 										</Button>
 									</NextLink>
-									<DeleteHoldingButton />
+									<DeleteHoldingButton holding={holding} />
 								</Flex>
 							</div>
 						</TableCell>
@@ -105,7 +105,7 @@ const HoldingsTable = ({ searchParams, holdings }: Props) => {
 						</TableCell>
 
 						<TableCell className="hidden md:table-cell">
-							<DeleteHoldingButton />
+							<DeleteHoldingButton holding={holding} />
 						</TableCell>
 					</Table.Row>
 				))}

@@ -19,7 +19,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
 			router.push('/issues/list');
 			router.refresh();
 		} catch (error) {
-			setIsDeleteing(true);
+			setIsDeleteing(false);
 			setError(true);
 		}
 	}
