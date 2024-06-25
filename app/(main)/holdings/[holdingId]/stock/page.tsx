@@ -109,6 +109,7 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 		},
 	});
 
+
 	return (
 		<Flex direction="column" gap="3">
 			<StockLocationTabs locations={(holding.locations as Location[]) || []} />
