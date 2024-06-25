@@ -65,7 +65,7 @@ const LocationForm = ({ holdingId, location }: Props) => {
 					<TextField.Root>
 						<TextField.Input 
 							defaultValue={location?.field || ""} 
-							placeholder='Secondary field (optional)' 
+							placeholder='Description field (optional)' 
 							{...register('field')}
 						/>
 					</TextField.Root>

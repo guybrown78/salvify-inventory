@@ -82,11 +82,11 @@ const HoldingForm = ({ holding }: Props) => {
 				</Flex>
 
 				<Flex gap="2" direction="column">
-					<Text size="1">Optional secondary field</Text>
+					<Text size="1">Description field (optional)</Text>
 					<TextField.Root>
 						<TextField.Input
 							defaultValue={holding?.field || ""}
-							placeholder="Secondary field (optional)"
+							placeholder="Description field (optional)"
 							{...register("field")}
 						/>
 					</TextField.Root>

@@ -9,6 +9,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useHoldingContext } from '@/app/_providers/HoldingProvider';
 import { useRouter } from 'next/navigation';
 import SwapInstanceForm from './SwapInstanceForm';
+import classNames from 'classnames';
 
 interface Props{
 	instance:InstancesWithLocation,
@@ -31,7 +32,11 @@ const SwapInstanceDialog = ({ instance, item }:Props) => {
 		<>
 			<Dialog.Root open={open} onOpenChange={setOpen}>
 				<Dialog.Trigger>
-					<button className='flex h-full items-center cursor-pointer text-green-600'>Swap</button>
+					<button 
+							disabled={instance.quantity <= 0} 
+							className={
+								classNames(instance.quantity > 0 ? 'cursor-pointer text-green-600' : 'text-slate-300',
+								'flex h-full items-center')}>Swap</button>
 				</Dialog.Trigger>
 				<Dialog.Content className="relative">
 					<Dialog.Title>{item.title}</Dialog.Title>

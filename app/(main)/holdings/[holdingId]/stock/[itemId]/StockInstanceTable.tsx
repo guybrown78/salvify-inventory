@@ -8,7 +8,7 @@ import { Flex, Table, TableCell, TableColumnHeaderCell, Text } from '@radix-ui/t
 
 
 interface Props{
-	item:ItemWithInstances
+	item:ItemWithInstances,
 }
 const StockInstanceTable = ({ item }:Props) => {
 

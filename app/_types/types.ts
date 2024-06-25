@@ -1,8 +1,9 @@
-import { Instance, Item, Location, Holding, UserRole, HoldingItem, Order, OrderItem } from '@prisma/client';
+import { Instance, Item, Location, Holding, UserRole, HoldingItem, Order, OrderItem, RemoveInstance, User } from '@prisma/client';
 
 export interface InstancesWithLocation extends Instance{
 	location:Location
 }
+
 export interface InstancesWithLocationAndItem extends InstancesWithLocation{
 	item:Item
 }
@@ -39,3 +40,8 @@ export interface OrderWithItems extends Order{
 	orderItems:OrderItemWithItem[]
 }
 
+export interface RemoveInstanceWithItemLocationUser extends RemoveInstance{
+	instance:InstancesWithLocationAndItem,
+	location:Location,
+	removedBy:User
+}

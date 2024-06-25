@@ -9,6 +9,7 @@ import RemoveInstanceForm from './RemoveInstanceForm';
 import toast, { Toaster } from 'react-hot-toast'
 import { useHoldingContext } from '@/app/_providers/HoldingProvider';
 import { useRouter } from 'next/navigation';
+import classNames from 'classnames';
 
 interface Props{
 	instance:InstancesWithLocation,
@@ -26,7 +27,11 @@ const RemoveInstanceDialog = ({ instance, item }:Props) => {
 		<>
 			<Dialog.Root open={open} onOpenChange={setOpen}>
 				<Dialog.Trigger>
-					<button className='flex h-full items-center cursor-pointer text-green-600'>Deduct from stock</button>
+					<button 
+						disabled={instance.quantity <= 0} 
+						className={
+							classNames(instance.quantity > 0 ? 'cursor-pointer text-green-600' : 'text-slate-300',
+							'flex h-full items-center')}>Deduct from stock</button>
 				</Dialog.Trigger>
 				<Dialog.Content className="relative">
 					<Dialog.Title>{item.title}</Dialog.Title>
