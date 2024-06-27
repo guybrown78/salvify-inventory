@@ -29,7 +29,7 @@ const AuthDropdown = () => {
 	}
 
 	// console.log(session!)
-	// console.log(sessionUser)
+	console.log(sessionUser)
 	
 	return (
 		<Box>
@@ -55,6 +55,9 @@ const AuthDropdown = () => {
 					</DropdownMenu.Label> */}
 					<DropdownMenu.Label>
 						<Text size="2">{session!.user!.email}</Text>
+					</DropdownMenu.Label>
+					<DropdownMenu.Label>
+						<Text size="2">{sessionUser!.clientName}</Text>
 					</DropdownMenu.Label>
 					<DropdownMenu.Item>
 						<Link href="/api/auth/signout">Log out</Link>
