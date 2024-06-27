@@ -31,7 +31,6 @@ export interface SessionUser
 	role: UserRole
 	clientId: number
 	clientName?: string | null
-	optionalClientIds?: string[]
 }
 
 export interface OrderItemWithItem extends OrderItem{
