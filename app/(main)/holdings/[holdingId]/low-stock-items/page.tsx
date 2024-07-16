@@ -6,75 +6,14 @@ import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import LowItem from './LowItem';
 import prisma from "@/prisma/client";
+import LowStockItemsService from '@/app/_utils/LowStockItemsService';
 const HoldingLowStockItemsPage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
 
 	if(!holding)
 		notFound();
-	
-	const holdingItemQuery: any = {
-		holding: {
-			id: holding.id,
-		},
-	};
 
-	const whereClause: any = {
-		OR: [
-			{
-				instances: {
-					some: {
-						location: {
-							holding: {
-								id: holding.id,
-							},
-						},
-					},
-				},
-			},
-			{
-				holdingItems: {
-					some: holdingItemQuery,
-				},
-			}
-		],
-	};
-
-	const itemsInHoldingAndLocation:ItemWithInstancesHoldingItems[] = await prisma.item.findMany({
-		where: whereClause,
-		include: {
-			instances: {
-				where: {
-					location: {
-						holding: {
-							id: holding.id,
-						},
-					},
-				},
-				include: {
-					location: true,
-				},
-			},
-			holdingItems: {
-				where: {
-					holding: {
-						id: holding.id,
-					},
-				},
-			},
-		},
-	});
-
-
-
-	const lowItems = await itemsInHoldingAndLocation.filter(item => {
-		const total:number = calculateItemInstanceTotal(item);
-		if(item.holdingItems && item.holdingItems.length){
-			const min = item.holdingItems[0].requiredMinCount ?? 0;
-			if(total < min){
-				return item
-			}
-		}
-	})
+	const lowItems = await LowStockItemsService.getHoldingLowStockItems(holding.id);
 
 
 	if(!lowItems.length){

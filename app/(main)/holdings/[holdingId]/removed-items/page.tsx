@@ -7,8 +7,24 @@ import FindHoldingStockItem from '../../_components/FindHoldingStockItem';
 import RemovedItems from '../../_components/RemovedItems';
 
 
-const HoldingRemovedItemPage = async ({ params }: HoldingPageProps) => {
+
+export interface RemovedItemsQuery {
+	offset: string;
+	page: string;
+}
+
+
+
+interface Props extends HoldingPageProps {
+	searchParams: RemovedItemsQuery;
+}
+
+const HoldingRemovedItemPage = async ({ params, searchParams }:Props) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
+
+	const dayOffsetCount = searchParams.offset
+		? parseInt(searchParams.offset)
+		: 30;
 
 	if(!holding)
 		notFound();
@@ -29,6 +45,7 @@ const HoldingRemovedItemPage = async ({ params }: HoldingPageProps) => {
 			<RemovedItems 
 				clientId={holding.clientId} 
 				holdingId={holding.id}
+				offset={dayOffsetCount}
 			/>
 
 		</Flex>

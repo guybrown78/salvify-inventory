@@ -1,57 +1,37 @@
-
-import prisma from '@/prisma/client'
-import { Flex } from '@radix-ui/themes'
-import RemovedItemsToolbar from './RemovedItemsToolbar'
-import RemovedItemsTable from './RemovedItemsTable'
-import { RemoveInstanceWithItemLocationUser } from '@/app/_types/types'
+import { RemoveInstanceWithItemLocationUser } from "@/app/_types/types";
+import RemovedItemsService from "@/app/_utils/RemovedItemsService";
+import { Flex } from "@radix-ui/themes";
+import RemovedItemsTable from "./RemovedItemsTable";
+import RemovedItemsToolbar from "./RemovedItemsToolbar";
 
 interface Props {
-	clientId: number
-	holdingId: number
+	clientId: number;
+	holdingId: number;
+	offset: number;
 }
 
+const RemovedItems = async ({ clientId, holdingId, offset = 30 }: Props) => {
+	const removedInstances = await RemovedItemsService.getHoldingRemovedItems(
+		holdingId,
+		offset
+	);
 
-const RemovedItems = async ({ clientId, holdingId }: Props) => {
-
-	const removedInstances = await prisma.removeInstance.findMany({
-    where: {
-      holdingId: holdingId,
-      clientId: clientId,
-    },
-    include: {
-      instance: {
-        include: {
-          item: true, // Include related item data
-        },
-      },
-      location: true,  
-      removedBy: true,
-    },
-  });
-
-  if (!removedInstances) {
-    return null;
-  }
-
+	if (!removedInstances) {
+		return null;
+	}
 
 	return (
 		<Flex direction="column" gap="3">
-			<RemovedItemsToolbar />
-			<RemovedItemsTable 
-				removedInstances={removedInstances as RemoveInstanceWithItemLocationUser[]}
+			<RemovedItemsToolbar
+				removedInstancesCount={removedInstances.length ?? 0}
 			/>
-			
+			<RemovedItemsTable
+				removedInstances={
+					removedInstances as RemoveInstanceWithItemLocationUser[]
+				}
+			/>
 		</Flex>
-		// <div>
-    //   {removedInstances.map((instance) => (
-    //     <div key={instance.id}>
-    //       <p>ID: {instance.id}</p>
-    //       <p>Reason: {instance.reason}</p>
-    //       {/* Add more fields as needed */}
-    //     </div>
-    //   ))}
-    // </div>
-	)
-}
+	);
+};
 
-export default RemovedItems
+export default RemovedItems;

@@ -6,8 +6,25 @@ import prisma from '@/prisma/client'
 import FindHoldingStockItem from '../../_components/FindHoldingStockItem';
 import RemovedItems from '../../_components/RemovedItems';
 
-const HoldingStockItemUsagePage = async ({ params }: HoldingPageProps) => {
+
+export interface RemovedItemsQuery {
+	offset: string;
+	page: string;
+}
+
+
+interface Props extends HoldingPageProps {
+	searchParams: RemovedItemsQuery;
+}
+
+
+
+const HoldingStockItemUsagePage = async ({ params, searchParams }:Props) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
+
+	const dayOffsetCount = searchParams.offset
+		? parseInt(searchParams.offset)
+		: 30;
 
 	if(!holding)
 		notFound();
@@ -34,6 +51,7 @@ const HoldingStockItemUsagePage = async ({ params }: HoldingPageProps) => {
 			<RemovedItems 
 				clientId={holding.clientId} 
 				holdingId={holding.id}
+				offset={dayOffsetCount}
 			/>
 
 		</Flex>
