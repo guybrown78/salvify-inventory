@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
-import HoldingHeader from "../HoldingHeader";
 import { HoldingPageProps, fetchHolding } from "../holdingQuery";
 
+import { ItemWithInstancesHoldingItems } from "@/app/_types/types";
+import prisma from "@/prisma/client";
+import { Issue, Location } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
 import StockLocationTabs from "./StockLocationTabs";
 import StockTable from "./StockTable";
-import { Issue, Location } from "@prisma/client";
-import prisma from "@/prisma/client";
-import { ItemWithInstancesHoldingItems } from "@/app/_types/types";
 
 export interface StockQuery {
 	location: string;

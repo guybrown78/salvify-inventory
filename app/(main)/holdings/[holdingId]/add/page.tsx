@@ -1,11 +1,9 @@
 
-import { notFound } from 'next/navigation';
-import HoldingHeader from '../HoldingHeader';
-import { HoldingPageProps, fetchHolding } from '../holdingQuery';
 import { NoDataMessage } from '@/app/_components';
-import { Heading, Text, Box, Flex } from '@radix-ui/themes';
-import AddInstanceForm from './AddInstanceForm';
-import prisma from '@/prisma/client'
+import prisma from '@/prisma/client';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { notFound } from 'next/navigation';
+import { HoldingPageProps, fetchHolding } from '../holdingQuery';
 import InstanceItems from './InstanceItems';
 
 const HoldingsAddItemsPage= async ({ params }: HoldingPageProps) => {

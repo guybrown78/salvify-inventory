@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import HoldingHeader from '../HoldingHeader';
+import HoldingHeader from '../../_components/HoldingHeader';
 import { HoldingPageProps, fetchHolding } from '../holdingQuery';
 import { Button, Flex } from '@radix-ui/themes'
 import { NoDataMessage } from '@/app/_components';

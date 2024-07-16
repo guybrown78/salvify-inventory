@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { HoldingPageProps, fetchHolding } from './holdingQuery';
-import HoldingHeader from './HoldingHeader';
+import HoldingHeader from '../_components/HoldingHeader';
 
 const HoldingPage = async ({ params }: HoldingPageProps) => {
 

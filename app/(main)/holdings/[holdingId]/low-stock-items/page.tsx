@@ -1,12 +1,8 @@
-import { notFound } from 'next/navigation';
-import HoldingHeader from '../HoldingHeader';
-import { HoldingPageProps, fetchHolding } from '../holdingQuery';
-import { calculateItemInstanceTotal } from '@/app/_utils/itemInstanceTotalCount';
-import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
-import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import LowItem from './LowItem';
-import prisma from "@/prisma/client";
 import LowStockItemsService from '@/app/_utils/LowStockItemsService';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { notFound } from 'next/navigation';
+import { HoldingPageProps, fetchHolding } from '../holdingQuery';
+import LowItem from './LowItem';
 const HoldingLowStockItemsPage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId))
 

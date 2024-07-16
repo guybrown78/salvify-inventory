@@ -1,12 +1,11 @@
 import HoldingSummary from "@/app/_components/dashboard/HoldingSummary";
-import prisma from "@/prisma/client";
-import { Flex, Grid, Text } from "@radix-ui/themes";
-import { notFound } from "next/navigation";
-import HoldingHeader from "../HoldingHeader";
-import { HoldingPageProps, fetchHolding } from "../holdingQuery";
 import ExpiringItemsService from '@/app/_utils/ExpiringItemsService';
 import LowStockItemsService from "@/app/_utils/LowStockItemsService";
 import RemovedItemsService from "@/app/_utils/RemovedItemsService";
+import { Flex, Grid, Text } from "@radix-ui/themes";
+import { notFound } from "next/navigation";
+import HoldingHeader from "../../_components/HoldingHeader";
+import { HoldingPageProps, fetchHolding } from "../holdingQuery";
 
 const HoldingDashboardPage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId));
