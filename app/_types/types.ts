@@ -1,4 +1,4 @@
-import { Instance, Item, Location, Holding, UserRole, HoldingItem, Order, OrderItem, RemoveInstance, User } from '@prisma/client';
+import { Instance, Item, Location, Holding, UserRole, HoldingItem, Order, OrderItem, RemoveInstance, User, HoldingType } from '@prisma/client';
 
 export interface InstancesWithLocation extends Instance{
 	location:Location
@@ -44,4 +44,13 @@ export interface RemoveInstanceWithItemLocationUser extends RemoveInstance{
 	instance:InstancesWithLocationAndItem,
 	location:Location,
 	removedBy:User
+}
+
+export interface HoldingSummaryType {
+	title:string,
+	id:number,
+	type: HoldingType
+	removed: number;
+	low: number;
+	expiring: number;
 }
