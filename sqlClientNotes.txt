@@ -1,0 +1,30 @@
+
+
+INSERT INTO Client (name)
+VALUES 
+		('02 City Hall Newcaslte'),
+    ('Medical Support Group');
+   
+	 
+	--  ('Western Medical Services');
+    
+
+
+
+
+INSERT INTO User (id, firstname, surname, name, email, role, clientId, hashedPassword)
+VALUES 
+	('clyxdsbog000008l42bcmh868', 'CraigMSG', 'Rabbetts', 'CraigMSG Rabbetts', 'craigmsg@salvify.co.uk', 'ADMIN', 5, '$2a$10$epzk53vulBeoCRRmroOLPezS3aaL3I/VW6bTWB1VlMChPOMLMfmfG'),
+	('clyxdszb1000208l47g7j1cvy', 'Craig', 'Rabbetts', 'Craig Rabbetts', 'sales@cromasmedical.co.uk', 'ADMIN', 4, '$2a$10$epzk53vulBeoCRRmroOLPezS3aaL3I/VW6bTWB1VlMChPOMLMfmfG');
+
+		-- ('clyxdspsa000108l4dh5d63n7', 'CraigWMS', 'Rabbetts', 'CraigWMS Rabbetts', 'craigwms@salvify.co.uk', 'ADMIN', 6, '$2a$10$epzk53vulBeoCRRmroOLPezS3aaL3I/VW6bTWB1VlMChPOMLMfmfG');
+
+
+
+
+email: craigmsg@salvify.co.uk
+password: Ign1t32024!
+
+
+email: sales@cromasmedical.co.uk
+password: Ign1t32024!

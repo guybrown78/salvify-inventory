@@ -44,3 +44,33 @@ export async function POST(request: NextRequest) {
 
 	return NextResponse.json(newItem, { status: 201 });
 }
+
+export async function GET(request: NextRequest){
+	const session = await getServerSession(authOptions);
+	if(!session){
+		return NextResponse.json({}, {status: 401});
+	}
+	const sessionUser = await getSessionUser();
+	if(!sessionUser){
+		return NextResponse.json("Cannot find session user", {status: 400});
+	}
+	if(!sessionUser.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
+	}
+
+
+	const url = new URL(request.url);
+  const search = url.searchParams.get('search')?.toLowerCase() || '';
+
+	const items = await prisma.item?.findMany({
+    where:{
+			clientId: sessionUser!.clientId!,
+			title: {
+        contains: search
+      },
+		}
+  });
+
+	return NextResponse.json(items)
+
+}
