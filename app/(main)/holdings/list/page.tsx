@@ -40,7 +40,7 @@ const HoldingListPage = async ({ searchParams }: Props) => {
 	};
 
 	const page = parseInt(searchParams.page) || 1;
-	const pageSize = 10;
+	const pageSize = 20;
 
 	const holdings = await prisma.holding?.findMany({ 
 		where, 

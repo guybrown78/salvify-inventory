@@ -38,7 +38,7 @@ const OrdersPage = async ({ searchParams }: Props) => {
 		: { orderNumber: "desc" as Prisma.SortOrder };
 
 	const page = parseInt(searchParams.page) || 1;
-	const pageSize = 10;
+	const pageSize = 20;
 
 	const orders = await prisma.order?.findMany({
 		where,
@@ -54,7 +54,7 @@ const OrdersPage = async ({ searchParams }: Props) => {
 		},
 	});
 
-	const orderCount = await prisma.order.count({ where });
+	const orderCount = await prisma.order?.count({ where });
 
 	if (!orders || !orders.length)
 		return (

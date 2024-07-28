@@ -1,3 +1,4 @@
+
 import { NoDataMessage, Pagination } from '@/app/_components'
 import prisma from '@/prisma/client'
 import { Flex } from '@radix-ui/themes'
@@ -7,7 +8,7 @@ import axios from 'axios';
 
 import { getSessionUser } from '@/app/_utils/getSessionUser'
 import { Prisma } from '@prisma/client'
-
+// import { useState } from 'react'
 interface Props {
 	searchParams: ItemQuery;
 }
@@ -16,7 +17,6 @@ interface Props {
 const StockItemsPage = async ({ searchParams }: Props) => {
 
 	const sessionUser = await getSessionUser();
-
 	// Check if sessionUser is null or undefined
   if (!sessionUser) {
     // Handle the case where sessionUser is not available
@@ -36,14 +36,21 @@ const StockItemsPage = async ({ searchParams }: Props) => {
 		? { [searchParams.orderBy]: "asc" as Prisma.SortOrder }
 		: { title: "asc" as Prisma.SortOrder };
 
+
+	const page = parseInt(searchParams.page) || 1;
+	const pageSize = 20;
 	// const items = await prisma.item?.findMany({ orderBy: { title: 'asc'} })
   const items = await prisma.item?.findMany({
     where, 
-    orderBy
+    orderBy,
+		skip: (page - 1) * pageSize,
+		take: pageSize
   });
 
-	const page = parseInt(searchParams.page) || 1;
-	const pageSize = 10;
+
+	const setPageSize = (pageSize:number) => {
+		console.log("page size", pageSize)
+	}
 
 	if(!items || !items.length)
 		return (
@@ -65,6 +72,7 @@ const StockItemsPage = async ({ searchParams }: Props) => {
 				itemCount={itemsCount}
 				pageSize={pageSize}
 				currentPage={page}
+				// setPageSize={(num) => console.log(num)}
 			/>
 		</Flex>
 	)

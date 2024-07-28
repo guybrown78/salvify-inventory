@@ -7,6 +7,7 @@ import { Issue, Location } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
 import StockLocationTabs from "./StockLocationTabs";
 import StockTable from "./StockTable";
+import { Pagination } from "@/app/_components";
 
 export interface StockQuery {
 	location: string;
@@ -85,6 +86,9 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 		});
 	}
 
+	const page = parseInt(searchParams.page) || 1;
+	const pageSize = 20;
+
 	const itemsInHoldingAndLocation = await prisma.item.findMany({
 		where: whereClause,
 		include: {
@@ -106,8 +110,11 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 				},
 			},
 		},
+		skip: (page - 1) * pageSize,
+		take: pageSize
 	});
 
+	const itemsCount = await prisma.item?.count({ where: whereClause })
 
 	return (
 		<Flex direction="column" gap="3">
@@ -115,6 +122,11 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 			<StockTable
 				items={itemsInHoldingAndLocation as ItemWithInstancesHoldingItems[]}
 				holdingId={holding.id}
+			/>
+			<Pagination 
+				itemCount={itemsCount}
+				pageSize={pageSize}
+				currentPage={page}
 			/>
 		</Flex>
 	);
