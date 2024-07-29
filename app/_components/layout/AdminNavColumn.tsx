@@ -9,8 +9,8 @@ import AdminNavTitle from './AdminNavTitle';
 
 
 const adminNavigation = [
-  { name: 'Clients', href: '/admin/clients', rootHref:'admin/clients' },
-	{ name: 'Users', href: '/admin/users', rootHref:'/admin/users' }]
+  { name: 'Clients', href: '/admin/clients/list', rootHref:'admin/clients' },
+	{ name: 'Users', href: '/admin/users/list', rootHref:'/admin/users' }]
 
 const AdminNavColumn = () => {
 
