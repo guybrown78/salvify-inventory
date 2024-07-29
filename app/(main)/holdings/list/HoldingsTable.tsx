@@ -19,6 +19,7 @@ export interface HoldingQuery {
 	type: HoldingType;
 	orderBy: keyof HoldingWithLocations;
 	page: string;
+	pageSize: string;
 }
 
 interface Props {

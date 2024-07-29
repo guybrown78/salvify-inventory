@@ -38,7 +38,7 @@ const StockItemsPage = async ({ searchParams }: Props) => {
 
 
 	const page = parseInt(searchParams.page) || 1;
-	const pageSize = 20;
+	const pageSize = parseInt(searchParams.pageSize) || 20;
 	// const items = await prisma.item?.findMany({ orderBy: { title: 'asc'} })
   const items = await prisma.item?.findMany({
     where, 

@@ -13,6 +13,7 @@ export interface StockQuery {
 	location: string;
 	orderBy: keyof Issue;
 	page: string;
+	pageSize: string;
 }
 
 interface Props extends HoldingPageProps {
@@ -87,7 +88,7 @@ const HoldingStockPage = async ({ params, searchParams }: Props) => {
 	}
 
 	const page = parseInt(searchParams.page) || 1;
-	const pageSize = 20;
+	const pageSize = parseInt(searchParams.pageSize) || 20;
 
 	const itemsInHoldingAndLocation = await prisma.item.findMany({
 		where: whereClause,

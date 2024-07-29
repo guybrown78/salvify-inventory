@@ -8,6 +8,7 @@ export interface IssueQuery {
 	status: IssueStatus;
 	orderBy: keyof Issue;
 	page: string;
+	pageSize: string;
 }
 interface Props {
 	searchParams: IssueQuery,

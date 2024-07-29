@@ -10,6 +10,7 @@ export interface OrderQuery {
 	status: OrderStatus;
 	orderBy: keyof Order;
 	page: string;
+	pageSize: string;
 }
 interface Props {
 	searchParams: OrderQuery;

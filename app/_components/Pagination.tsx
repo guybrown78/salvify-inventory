@@ -10,10 +10,10 @@ interface Props {
 	itemCount: number;
 	pageSize: number;
 	currentPage: number;
-	setPageSize?: (n:number) => void
+
 }
 
-const Pagination = ({ itemCount, pageSize, currentPage, setPageSize }: Props) => {
+const Pagination = ({ itemCount, pageSize, currentPage}: Props) => {
 
 	const [totalPages, setTotalPages] = useState<number>(Math.ceil(itemCount/pageSize));
 
@@ -33,7 +33,11 @@ const Pagination = ({ itemCount, pageSize, currentPage, setPageSize }: Props) =>
 		params.set('page', page.toString());
 		router.push('?' + params.toString());
 	}
-
+	const changePageSize = (pageSize: number) => {
+		const params = new URLSearchParams(searchParams);
+		params.set('pageSize', pageSize.toString());
+		router.push('?' + params.toString());
+	}
 	
 
 	return (
@@ -45,7 +49,7 @@ const Pagination = ({ itemCount, pageSize, currentPage, setPageSize }: Props) =>
 				</p>
 			</Box>
 
-{/* 
+
 			<div className='hidden md:flex'>
 				<label htmlFor="showPerPage" className="block text-sm font-medium text-gray-700 sr-only">
 					Show number of items per page
@@ -57,7 +61,7 @@ const Pagination = ({ itemCount, pageSize, currentPage, setPageSize }: Props) =>
 
 						value={pageSize}
 						onChange={e => {
-							setPageSize(Number(e.target.value))
+							changePageSize(Number(e.target.value))
 						}}
 					>
 						{[10, 20, 50, 75, 100].map(pageSize => (
@@ -66,7 +70,7 @@ const Pagination = ({ itemCount, pageSize, currentPage, setPageSize }: Props) =>
 							</option>
 						))}
 					</select>
-			</div> */}
+			</div>
 
 			<Flex align="center" gap="2">
 				<Text size="2">Page {currentPage} of {pageCount}</Text>

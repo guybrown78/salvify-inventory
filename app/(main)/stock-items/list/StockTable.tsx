@@ -8,6 +8,7 @@ import NextLink from 'next/link';
 export interface ItemQuery {
 	orderBy: keyof Item;
 	page: string;
+	pageSize: string;
 }
 
 interface Props {
