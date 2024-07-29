@@ -42,12 +42,12 @@ const Pagination = ({ itemCount, pageSize, currentPage}: Props) => {
 
 	return (
 		<Flex justify="between">
-			<Box>
+			<Flex align="center">
 				<p className="text-sm">
 					Showing <span className="font-medium">{(pageSize * (currentPage - 1 )) + 1}</span> to <span className="font-medium">{ (currentPage - 1) + 1 === totalPages ? itemCount : (pageSize * (currentPage - 1)) + pageSize }</span> of{' '}
 					<span className="font-medium">{ itemCount }</span> results
 				</p>
-			</Box>
+			</Flex>
 
 
 			<div className='hidden md:flex'>
@@ -57,7 +57,7 @@ const Pagination = ({ itemCount, pageSize, currentPage}: Props) => {
 					<select
 						id="showPerPage"
 						name="showPerPage"
-						className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+						className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-5 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
 
 						value={pageSize}
 						onChange={e => {
