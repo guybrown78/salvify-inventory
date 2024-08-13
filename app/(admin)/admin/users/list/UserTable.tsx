@@ -3,6 +3,7 @@ import React from 'react'
 import { Table, TableCell, TableColumnHeaderCell } from '@radix-ui/themes';
 import NextLink from 'next/link';
 import { User } from '@prisma/client';
+import Link from 'next/link';
 
 interface Props {
 	users: User[]
@@ -27,7 +28,9 @@ const UserTable = ({ users }:Props ) => {
 			<Table.Body>
 				{users.map(user => (
 					<Table.Row key={user.id}>
-						<TableCell>{user.name}</TableCell>
+						<TableCell>
+							<Link href={`/admin/users/${user.id}`}>{user.name}</Link>
+						</TableCell>
 						<TableCell className='hidden md:table-cell'>
 							{user.email}
 						</TableCell>
