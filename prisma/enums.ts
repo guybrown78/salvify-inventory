@@ -1,4 +1,4 @@
-import { HoldingType, ItemCategory, ItemGrouping, ItemTypes, OrderStatus, RemoveInstanceReason } from "@prisma/client"
+import { HoldingType, ItemCategory, ItemGrouping, ItemTypes, OrderStatus, RemoveInstanceReason, UserRole } from "@prisma/client"
 
 export interface SelectMapType {
 	label:string, 
@@ -139,11 +139,25 @@ const holdingTypeList:{label:string, value:string}[] = convertMapToList(holdingT
 const holdingTypeValues:[string, ...string[]] = convertEnumValuesToArray(holdingTypeMap);
 
 
+
+const userRoleMap: Record<
+	UserRole, 
+	SelectMapType
+	> = {
+		USER: { label: 'User' },
+		ADMIN: { label: 'Admin' },
+		SUPERADMIN: { label: 'SuperAdmin' },
+	}
+const userRoleList:{label:string, value:string}[] = convertMapToList(userRoleMap);
+const userRoleValues:[string, ...string[]] = convertEnumValuesToArray(userRoleMap);
+
+
 export { 
 	itemTypesValues, itemTypesMap, itemTypeList,
 	itemCategoryValues, itemCategoryMap, itemCategoryList,
 	itemGroupingValues, itemGroupingMap, itemGroupingList,
 	removeInstanceReasonValues, removeInstanceReasonMap, removeInstanceReasonList,
 	orderStatusValues, orderStatusMap, orderStatusList,
-	holdingTypeValues, holdingTypeMap, holdingTypeList
+	holdingTypeValues, holdingTypeMap, holdingTypeList,
+	userRoleValues, userRoleMap, userRoleList
 }

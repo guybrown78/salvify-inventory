@@ -2,15 +2,16 @@
 
 import { FieldErrorMessage, Spinner } from "@/app/_components";
 import { UserWithClients } from "@/app/_types/userTypes";
-import {} from "@/app/validationSchema";
+import { userSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Client } from "@prisma/client";
-import { Button, Callout, Select, TextField } from "@radix-ui/themes";
+import { Box, Button, Callout, Flex, Select, TextField } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from 'zod';
 
-type UserFormData = {}; //z.infer<typeof issueSchema>
+type UserFormData = z.infer<typeof userSchema>
 
 interface Props {
 	clients: Client[];
@@ -25,7 +26,7 @@ const UserForm = ({ clients, user }: Props) => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<UserFormData>({
-		resolver: zodResolver(),
+		resolver: zodResolver(userSchema),
 	});
 	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,33 +41,64 @@ const UserForm = ({ clients, user }: Props) => {
 				</Callout.Root>
 			)}
 			<form className="space-y-3" onSubmit={onSubmit}>
-				<TextField.Root>
-					<TextField.Input
-						defaultValue={user?.name}
-						placeholder="Name"
-						{...register("name")}
-					/>
-				</TextField.Root>
-				<FieldErrorMessage>{errors.name?.message}</FieldErrorMessage>
+				<Flex direction='column' gap="5">
 
-				<Select.Root>
-					<Select.Trigger />
-					<Select.Content>
-						<Select.Group>
-							<Select.Label>Client</Select.Label>
-							{clients.map((client) => (
-								<Select.Item key={client.id} value={client.id}>
-									{client.name}
-								</Select.Item>
-							))}
-						</Select.Group>
-					</Select.Content>
-				</Select.Root>
+					<Box>
+						<TextField.Root>
+							<TextField.Input
+								defaultValue={user?.firstname || ""}
+								placeholder="Firstname"
+								{...register("firstname")}
+							/>
+						</TextField.Root>
+						<FieldErrorMessage>{errors.firstname?.message}</FieldErrorMessage>
+					</Box>
 
-				<Button disabled={isSubmitting}>
-					{user ? "Update User" : "Create New User"}{" "}
-					{isSubmitting && <Spinner />}
-				</Button>
+					<Box>
+						<TextField.Root>
+							<TextField.Input
+								defaultValue={user?.surname || ""}
+								placeholder="Surname"
+								{...register("surname")}
+							/>
+						</TextField.Root>
+						<FieldErrorMessage>{errors.surname?.message}</FieldErrorMessage>
+					</Box>
+
+					<Box>
+						<TextField.Root>
+							<TextField.Input
+								type="email"
+								defaultValue={user?.email || ""}
+								placeholder="Email"
+								{...register("email")}
+							/>
+						</TextField.Root>
+						<FieldErrorMessage>{errors.email?.message}</FieldErrorMessage>
+					</Box>
+
+					<Select.Root>
+						<Select.Trigger />
+						<Select.Content>
+							<Select.Group>
+								<Select.Label>Client</Select.Label>
+								{clients.map((client) => (
+									<Select.Item key={client.id} value={String(client.id)}>
+										{client.name}
+									</Select.Item>
+								))}
+							</Select.Group>
+						</Select.Content>
+					</Select.Root>
+
+					<Button disabled={isSubmitting}>
+						{user ? "Update User" : "Create New User"}{" "}
+						{isSubmitting && <Spinner />}
+					</Button>
+
+				</Flex>
+			
+				
 			</form>
 		</div>
 	);

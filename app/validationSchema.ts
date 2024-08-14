@@ -258,3 +258,19 @@ export const patchOrderItemSchema = z.object({
 		.min(1, { message: "Quantity must be at least 1" })
 		.refine((val) => !isNaN(val), { message: "Quantity must be a number" }),
 })
+
+
+export const userSchema = z.object({
+	firstname: z
+		.string()
+		.min(1, 'Firstname is required.')
+		.max(255),
+	surname: z
+		.string()
+		.min(1, 'Surname is required.')
+		.max(255),
+	email: z
+		.string()
+		.min(1, 'Email is required.')
+		.max(255)
+});
