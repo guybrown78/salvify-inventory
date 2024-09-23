@@ -127,7 +127,7 @@ const AddInstanceForm = ({ items, locations, onSelectItem, onInstanceAdded }: Pr
 			
 					<Button type="submit" disabled={isSubmitting}>
 						
-						{ isSubmitting ? 'Adding Incident' : 'Add Incident' }{' '}
+						{ isSubmitting ? 'Adding Instance' : 'Add Instance' }{' '}
 						{isSubmitting && <Spinner />}
 					</Button>
 				</div>	

@@ -39,7 +39,7 @@ const StockItemEMCButton = ({ emcId, title }:Props) => {
 							The PDF above shows the Patient Leaflet (PIL). To see this on the emc website visit <a className="underline text-green-600" href={`https://www.medicines.org.uk/emc/files/pil.${emcId}.pdf`} target="_blank">https://www.medicines.org.uk/emc/files/pil.{emcId}.pdf</a>
 						</Text>
 						<Text size="2" color="gray">
-							Further information for {title} can be found on <a className="underline text-green-600" href={`https://www.medicines.org.uk/emc/product/${emcId}/smpc`} target="_blank">Healthcar professionals (SmPC)</a>
+							Further information for {title} can be found on <a className="underline text-green-600" href={`https://www.medicines.org.uk/emc/product/${emcId}/smpc`} target="_blank">Healthcare professionals (SmPC)</a>
 						</Text>
 					</Flex>
 				</Flex>

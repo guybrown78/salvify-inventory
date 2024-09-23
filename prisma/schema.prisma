@@ -347,6 +347,7 @@ enum RemoveInstanceReason {
   OTHER
 }
 
+// Add MEDIC user
 enum UserRole {
   USER
   ADMIN

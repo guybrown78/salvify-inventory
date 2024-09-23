@@ -95,7 +95,7 @@ const HoldingForm = ({ holding }: Props) => {
 
 				<Flex gap="2" align="center">
 					<Text size="2">
-						Allow Stock Incidents to be added direct into this Holding?
+						Allow Stock Instances to be added direct into this Holding?
 					</Text>
 					<Switch
 						radius="full"

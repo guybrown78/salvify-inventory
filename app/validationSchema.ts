@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues, orderStatusValues, holdingTypeValues } from '@/prisma/enums'
+import { itemTypesValues, itemCategoryValues, itemGroupingValues, removeInstanceReasonValues, orderStatusValues, holdingTypeValues, userRoleValues } from '@/prisma/enums'
 import { z } from "zod";
 
 export const issueSchema = z.object({
@@ -260,17 +260,42 @@ export const patchOrderItemSchema = z.object({
 })
 
 
+const UserRoles = z.enum(userRoleValues)
+
 export const userSchema = z.object({
-	firstname: z
-		.string()
-		.min(1, 'Firstname is required.')
-		.max(255),
-	surname: z
-		.string()
-		.min(1, 'Surname is required.')
-		.max(255),
-	email: z
-		.string()
-		.min(1, 'Email is required.')
-		.max(255)
+  firstname: z
+    .string()
+    .min(1, { message: 'Firstname is required.' })
+    .max(255),
+  surname: z
+    .string()
+    .min(1, { message: 'Surname is required.' })
+    .max(255),
+  email: z
+    .string()
+    .min(1, { message: 'Email is required.' })
+    .max(255)
+    .email({ message: 'Invalid email address.' }),
+  client: z
+    .string()
+    .min(1, { message: 'Client is required.' }),
+  password: z
+    .string()
+    .min(8, { message: 'Password must be at least 8 characters long.' })
+    .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter.' })
+    .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter.' })
+    .regex(/\d/, { message: 'Password must contain at least one number.' })
+    .regex(/[\W_]/, { message: 'Password must contain at least one special character.' }),
+  confirmPassword: z
+    .string()
+    .min(1, { message: 'Please confirm your password.' }),
+	role: UserRoles,
+})
+.refine((data) => data.password === data.confirmPassword, {
+	path: ['confirmPassword'],
+	message: 'Passwords do not match.',
+})
+.refine((data) => data.role !== 'SUPERADMIN', {
+	path: ['role'],
+	message: 'You are not allowed to assign the SUPERADMIN role.',
 });
