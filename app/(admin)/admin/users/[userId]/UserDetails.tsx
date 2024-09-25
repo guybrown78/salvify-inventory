@@ -13,9 +13,9 @@ const UserDetails = ({ user }:{ user:UserWithClients}) => {
 				<LabelValueColumn label='Role'>
 					<Text>{user.role}</Text>
 				</LabelValueColumn>
-				{/* <LabelValueColumn label='Email'> */}
-					<Text size="4">{user.email}</Text>
-				{/* </LabelValueColumn> */}
+				<LabelValueColumn label='Email'>
+					<Text size="3">{user.email}</Text>
+				</LabelValueColumn>
 				
 			</Flex>
 			<Card className='max-w-full' mt="4">

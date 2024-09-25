@@ -299,3 +299,28 @@ export const userSchema = z.object({
 	path: ['role'],
 	message: 'You are not allowed to assign the SUPERADMIN role.',
 });
+
+export const patchUserSchema = z.object({
+  firstname: z
+    .string()
+    .min(1, { message: "Firstname is required." })
+    .max(255, { message: "Firstname cannot exceed 255 characters." }),
+  surname: z
+    .string()
+    .min(1, { message: "Surname is required." })
+    .max(255, { message: "Surname cannot exceed 255 characters." }),
+  optionalClients: z
+    .array(z.number().int({ message: "Client ID must be an integer." }))
+    .optional(),
+  role: UserRoles,
+}).refine((data) => data.role !== 'SUPERADMIN', {
+  path: ['role'],
+  message: 'Cannot assign SUPERADMIN role.',
+});
+
+export const clientSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Client name is required." })
+    .max(255, { message: "Client name cannot exceed 255 characters." }),
+});

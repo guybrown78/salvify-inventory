@@ -109,43 +109,48 @@ const UserForm = ({ clients, user }: Props) => {
 						<FieldErrorMessage>{errors.surname?.message}</FieldErrorMessage>
 					</Box>
 
-					<Box>
-						<TextField.Root>
-							<TextField.Input
-								type="email"
-								defaultValue={user?.email || ""}
-								placeholder="Email"
-								{...register("email")}
-							/>
-						</TextField.Root>
-						<FieldErrorMessage>{errors.email?.message}</FieldErrorMessage>
-					</Box>
+					{
+						!user && (
+							<>
+							<Box>
+								<TextField.Root>
+									<TextField.Input
+										type="email"
+										defaultValue=""
+										placeholder="Email"
+										{...register("email")}
+									/>
+								</TextField.Root>
+								<FieldErrorMessage>{errors.email?.message}</FieldErrorMessage>
+							</Box>
 
-					{/* Password Field */}
-					<Box>
-						<TextField.Root>
-							<TextField.Input
-								type="password"
-								placeholder="Password"
-								{...register("password")}
-							/>
-						</TextField.Root>
-						<FieldErrorMessage>{errors.password?.message}</FieldErrorMessage>
-					</Box>
+							<Box>
+								<TextField.Root>
+									<TextField.Input
+										type="password"
+										placeholder="Password"
+										{...register("password")}
+									/>
+								</TextField.Root>
+								<FieldErrorMessage>{errors.password?.message}</FieldErrorMessage>
+							</Box>
 
-					{/* Confirm Password Field */}
-					<Box>
-						<TextField.Root>
-							<TextField.Input
-								type="password"
-								placeholder="Confirm Password"
-								{...register("confirmPassword")}
-							/>
-						</TextField.Root>
-						<FieldErrorMessage>
-							{errors.confirmPassword?.message}
-						</FieldErrorMessage>
-					</Box>
+							<Box>
+								<TextField.Root>
+									<TextField.Input
+										type="password"
+										placeholder="Confirm Password"
+										{...register("confirmPassword")}
+									/>
+								</TextField.Root>
+								<FieldErrorMessage>
+									{errors.confirmPassword?.message}
+								</FieldErrorMessage>
+							</Box>
+							</>
+						)
+					}
+					
 
 					<Flex direction='column'>
 						<Text size='1'>
@@ -154,7 +159,7 @@ const UserForm = ({ clients, user }: Props) => {
 						<Controller
 							control={control}
 							name="client"
-							defaultValue=""
+							defaultValue={user ? String(user.clientId) : ""}
 							disabled={isSubmitting}
 							render={({ field: { onChange, value } }) => (
 								<Select.Root

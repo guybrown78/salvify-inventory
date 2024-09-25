@@ -26,7 +26,6 @@ const fetchUser = cache((userId: string) => prisma.user.findUnique({
 const AdminUserPage = async ({ params }: Props) => {
 
 	const session = await getServerSession(authOptions)
-	console.log(params.userId)
 	const user:UserWithClients = await fetchUser(params.userId) as UserWithClients;
 
 	if(!user)
