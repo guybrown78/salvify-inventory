@@ -11,7 +11,10 @@ export async function getSessionUser():Promise<SessionUser | null> {
 		}
 		const user = await prisma.user.findUnique({
 			where: { email: session?.user.email },
-			include: { selectedClient: true }
+			include: { 
+				selectedClient: true,
+				optionalClients: true,
+			}
 		});
 		if(!user){
 			return null;
@@ -26,7 +29,14 @@ export async function getSessionUser():Promise<SessionUser | null> {
 			role: user.role!,
 			clientId: user.clientId!,
 			clientName: user.selectedClient!.name,
+			optionalClients: user.optionalClients
 		}
+		console.log(" >>> ")
+		console.log(user.optionalClients)
+		// if(user.optionalClients.length){
+		// 	sessionUser.optionalClients = 
+		// }
+		console.log(sessionUser)
 		return sessionUser
 	} catch (err) {
 		if (err instanceof Error) {

@@ -29,7 +29,7 @@ const AuthDropdown = () => {
 	}
 
 	// console.log(session!)
-	// console.log(sessionUser)
+	console.log(sessionUser)
 	
 	return (
 		<Box>

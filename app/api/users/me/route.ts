@@ -17,7 +17,10 @@ export async function GET(request: NextRequest){
 	
 	const user = await prisma.user.findUnique({
 		where: { email: userEmail },
-		include: { selectedClient: true }
+		include: { 
+			selectedClient: true,
+			optionalClients: true,
+		}
 	});
 	if (!user) {
 		return NextResponse.json({ error: 'Invalid User' }, { status: 404 })
@@ -32,6 +35,7 @@ export async function GET(request: NextRequest){
 		role: user.role!,
 		clientId: user.clientId!,
 		clientName: user.selectedClient!.name,
+		optionalClients: user.optionalClients
 	}
 	return NextResponse.json(sessionUser);
 

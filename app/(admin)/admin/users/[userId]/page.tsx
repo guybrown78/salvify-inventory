@@ -28,13 +28,15 @@ const AdminUserPage = async ({ params }: Props) => {
 	const session = await getServerSession(authOptions)
 	const user:UserWithClients = await fetchUser(params.userId) as UserWithClients;
 
+	
+
 	if(!user)
 		notFound();
 
 	return (
 		<AdminMain>
-			<Grid columns={{ initial: "1", sm: "5"}} gap="5" >
-				<Box className='md:col-span-4'>
+			<Grid columns={{ initial: "1", sm: "6"}} gap="5" >
+				<Box className='md:col-span-5'>
 					<UserDetails user={user} />
 				</Box>	
 				{session && (<Box>
