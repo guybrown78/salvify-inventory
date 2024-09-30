@@ -262,7 +262,7 @@ export const patchOrderItemSchema = z.object({
 
 const UserRoles = z.enum(userRoleValues)
 
-export const userSchema = z.object({
+export const adminUserSchema = z.object({
   firstname: z
     .string()
     .min(1, { message: 'Firstname is required.' })
@@ -300,7 +300,7 @@ export const userSchema = z.object({
 	message: 'You are not allowed to assign the SUPERADMIN role.',
 });
 
-export const patchUserSchema = z.object({
+export const patchAdminUserSchema = z.object({
   firstname: z
     .string()
     .min(1, { message: "Firstname is required." })
@@ -317,6 +317,23 @@ export const patchUserSchema = z.object({
   path: ['role'],
   message: 'Cannot assign SUPERADMIN role.',
 });
+
+export const patchUserSchema = z.object({
+  firstname: z
+    .string()
+    .min(1, { message: "Firstname is required." })
+    .max(255, { message: "Firstname cannot exceed 255 characters." }),
+  surname: z
+    .string()
+    .min(1, { message: "Surname is required." })
+    .max(255, { message: "Surname cannot exceed 255 characters." }),
+	email: z
+    .string()
+    .min(1, { message: 'Email is required.' })
+    .max(255)
+    .email({ message: 'Invalid email address.' }),
+})
+
 
 export const clientSchema = z.object({
   name: z

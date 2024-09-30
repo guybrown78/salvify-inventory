@@ -27,9 +27,6 @@ const AuthDropdown = () => {
 	if(status === 'unauthenticated'){
 		return (<Link className="nav-link" href="/api/auth/signin">Login</Link>)
 	}
-
-	// console.log(session!)
-	console.log(sessionUser)
 	
 	return (
 		<Box>

@@ -7,10 +7,12 @@ import { SessionUser } from '../_types/types';
 
 type SessionUserContextType = {
 	sessionUser:SessionUser | null,
+	updateSessionUser:(sessionUser:SessionUser) => void,
 };
 
 const SessionUserContextDefaultValues: SessionUserContextType = {
 	sessionUser: null,
+	updateSessionUser:(sessionUser:SessionUser) => {},
 };
 
 // Create a context
@@ -30,6 +32,12 @@ export function SessionUserProvider({ children }: Props) {
   const [sessionUser, setSessionUser] = useState<SessionUser | null>(null);
 
 
+	const updateSessionUser = (sessionUser:SessionUser) => {
+		console.log(sessionUser.clientId, sessionUser.clientName)
+		setSessionUser(sessionUser)
+	};
+
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -45,7 +53,8 @@ export function SessionUserProvider({ children }: Props) {
   }, []);
 
 	const value = {
-		sessionUser
+		sessionUser,
+		updateSessionUser
 	}
   return (
     <SessionUserContext.Provider value={value}>

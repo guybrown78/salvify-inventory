@@ -11,8 +11,8 @@ export async function PATCH(
 	{ params }: { params: { userId: string }}) {
 
 		const sessionUser = await getSessionUser();
-		if (!sessionUser || sessionUser.id !== params.userId) {
-			return NextResponse.json("You don't have the access rights to update", { status: 403 });
+		if (!sessionUser || sessionUser.role !== UserRole.SUPERADMIN) {
+			return NextResponse.json("You don't have the access rights to create users", { status: 403 });
 		}
 
 		const body = await request.json();

@@ -45,7 +45,7 @@ const UserOptionalClientsForm = ({ clients, userOptionalClients, userId }: Props
 		setIsSubmitting(true)
 		try{
 			console.log("SEND")
-			await axios.patch(`/api/users/${userId}/clients`, {
+			await axios.patch(`/api/admin/users/${userId}/clients`, {
         clientIds: data.selectedClients,  
       });
       router.refresh();  

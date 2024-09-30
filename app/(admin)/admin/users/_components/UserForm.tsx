@@ -3,7 +3,7 @@
 import { FieldErrorMessage, Spinner } from "@/app/_components";
 import EnumItemSelect from "@/app/_components/select/EnumItemSelect";
 import { UserWithClients } from "@/app/_types/userTypes";
-import { userSchema } from "@/app/validationSchema";
+import { adminUserSchema } from "@/app/validationSchema";
 import { userRoleList } from "@/prisma/enums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Client, UserRole } from "@prisma/client";
@@ -22,7 +22,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-type UserFormData = z.infer<typeof userSchema>;
+type UserFormData = z.infer<typeof adminUserSchema>;
 
 const filteredUserRoleList = userRoleList.filter(
 	(role) => role.value !== UserRole.SUPERADMIN
@@ -42,7 +42,7 @@ const UserForm = ({ clients, user }: Props) => {
 		formState: { errors },
 		setValue,
 	} = useForm<UserFormData>({
-		resolver: zodResolver(userSchema),
+		resolver: zodResolver(adminUserSchema),
 	});
 
 	//
@@ -54,9 +54,9 @@ const UserForm = ({ clients, user }: Props) => {
 		try {
 			setIsSubmitting(true);
 			if (user) {
-				await axios.patch("/api/users/" + user.id, data);
+				await axios.patch("/api/admin/users/" + user.id, data);
 			} else {
-				await axios.post("/api/users", data);
+				await axios.post("/api/admin/users", data);
 			}
 			router.push("/admin/users/list");
 			router.refresh();

@@ -11,28 +11,28 @@ export async function PATCH(
 	{ params }: { params: { userId: string }}) {
 
 		const sessionUser = await getSessionUser();
-		if (!sessionUser || sessionUser.id !== params.userId) {
-			return NextResponse.json("You don't have the access rights to update", { status: 403 });
+		if (!sessionUser || sessionUser.role !== UserRole.SUPERADMIN) {
+			return NextResponse.json("You don't have the access rights to create users", { status: 403 });
 		}
 
 		const body = await request.json();
+		const validation = patchAdminUserSchema.safeParse(body)
+		if(!validation.success){
+			return NextResponse.json(validation.error.format(), {status: 400});
+		}
 
-		// Need to add validation to set the current selected client for the user
-
-		// const validation = patchAdminUserSchema.safeParse(body)
-		// if(!validation.success){
-		// 	return NextResponse.json(validation.error.format(), {status: 400});
-		// }
-
-		const { clientIds } = body;
+		const { firstname, surname, role } = body;
 
 		// Proceed with updating the user in Prisma
 		const updatedUser = await prisma.user.update({
 			where: { id: params.userId },
 			data: {
-				optionalClients: {
-					set: clientIds.map((clientId: number[]) => ({ id: clientId })),
-				},
+				firstname,
+				surname,
+				role,
+				// optionalClients: {
+				// 	set: optionalClients.map(clientId => ({ id: clientId })),
+				// },
 			},
 		});
 	

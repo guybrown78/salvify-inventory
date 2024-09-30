@@ -37,9 +37,9 @@ const ClientForm = ({ client }: Props) => {
     try {
 			setIsSubmitting(true);
       if (client) {
-        await axios.patch(`/api/clients/${client.id}`, data);
+        await axios.patch(`/api/admin/clients/${client.id}`, data);
       } else {
-        await axios.post("/api/clients", data);
+        await axios.post("/api/admin/clients", data);
       }
       router.push("/admin/clients/list");
 			router.refresh();

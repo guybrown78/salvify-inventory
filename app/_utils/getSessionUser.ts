@@ -31,12 +31,12 @@ export async function getSessionUser():Promise<SessionUser | null> {
 			clientName: user.selectedClient!.name,
 			optionalClients: user.optionalClients
 		}
-		console.log(" >>> ")
-		console.log(user.optionalClients)
+		// console.log(" >>> ")
+		// console.log(user.optionalClients)
 		// if(user.optionalClients.length){
 		// 	sessionUser.optionalClients = 
 		// }
-		console.log(sessionUser)
+		// console.log(sessionUser)
 		return sessionUser
 	} catch (err) {
 		if (err instanceof Error) {
