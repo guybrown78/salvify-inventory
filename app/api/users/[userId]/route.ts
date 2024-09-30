@@ -1,4 +1,4 @@
-import { patchAdminUserSchema } from "@/app/validationSchema";
+import { patchUserSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
 import { getSessionUser } from "@/app/_utils/getSessionUser";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,7 +16,7 @@ export async function PATCH(
 		}
 
 		const body = await request.json();
-		const validation = patchAdminUserSchema.safeParse(body)
+		const validation = patchUserSchema.safeParse(body)
 		if(!validation.success){
 			return NextResponse.json(validation.error.format(), {status: 400});
 		}
@@ -29,6 +29,7 @@ export async function PATCH(
 			data: {
 				firstname,
 				surname,
+				name: `${firstname} ${surname}`,
 				email,
 			},
 		});

@@ -28,6 +28,10 @@ const AuthDropdown = () => {
 		return (<Link className="nav-link" href="/api/auth/signin">Login</Link>)
 	}
 	
+	if(!sessionUser){
+		return <Skeleton width="3rem" />
+	}
+
 	return (
 		<Box>
 			<DropdownMenu.Root>
@@ -42,7 +46,7 @@ const AuthDropdown = () => {
 					/>  */}
 					{/* <button>Click Me</button> */}
 					<Text size="2" className="cursor-pointer flex items-center">
-						{session!.user!.name} 
+						{sessionUser!.firstname} {sessionUser!.surname} 
 						<span className="ml-2"><ChevronDownIcon /></span>
 					</Text>
 				</DropdownMenu.Trigger>

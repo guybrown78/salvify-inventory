@@ -262,6 +262,16 @@ export const patchOrderItemSchema = z.object({
 
 const UserRoles = z.enum(userRoleValues)
 
+const passwordValidation = z
+  .string()
+  .min(8, { message: "Password must be at least 8 characters long." })
+  .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
+  .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+  .regex(/\d/, { message: "Password must contain at least one number." })
+  .regex(/[\W_]/, { message: "Password must contain at least one special character." });
+
+	
+
 export const adminUserSchema = z.object({
   firstname: z
     .string()
@@ -279,13 +289,7 @@ export const adminUserSchema = z.object({
   client: z
     .string()
     .min(1, { message: 'Client is required.' }),
-  password: z
-    .string()
-    .min(8, { message: 'Password must be at least 8 characters long.' })
-    .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter.' })
-    .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter.' })
-    .regex(/\d/, { message: 'Password must contain at least one number.' })
-    .regex(/[\W_]/, { message: 'Password must contain at least one special character.' }),
+  password: passwordValidation,
   confirmPassword: z
     .string()
     .min(1, { message: 'Please confirm your password.' }),
@@ -341,3 +345,21 @@ export const clientSchema = z.object({
     .min(1, { message: "Client name is required." })
     .max(255, { message: "Client name cannot exceed 255 characters." }),
 });
+
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(1, { message: "Current password is required." }),
+    newPassword: passwordValidation,
+    confirmNewPassword: z
+      .string()
+      .min(1, { message: "Please confirm your new password." }),
+  })
+  // Custom validation to ensure newPassword and confirmNewPassword match
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    path: ["confirmNewPassword"],
+    message: "Passwords do not match.",
+  });
+
