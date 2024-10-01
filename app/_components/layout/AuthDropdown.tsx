@@ -5,6 +5,7 @@ import { useSessionUserContext  } from "@/app/_providers/SessionUserProvider";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import {
 	Box,
+	Button,
 	DropdownMenu,
 	Text
 } from "@radix-ui/themes";
@@ -65,8 +66,13 @@ const AuthDropdown = () => {
 					)}
 			
 					<DropdownMenu.Item>
-						<Link href="/api/auth/signout">Log out</Link>
+						<Link href="/settings/profile">Profile Settings</Link>
 					</DropdownMenu.Item>
+					<Link href="/api/auth/signout" className="mt-2">
+						<Button variant="outline" className="w-full">
+							Log out
+						</Button> 
+					</Link>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</Box>

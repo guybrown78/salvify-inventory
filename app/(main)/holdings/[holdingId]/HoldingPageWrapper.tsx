@@ -7,6 +7,7 @@ import { Holding } from '@prisma/client'
 import HoldingsMain from '@/app/_components/layout/HoldingsMain'
 import { getSessionUser } from '@/app/_utils/getSessionUser'
 import { useSessionUserContext } from '@/app/_providers/SessionUserProvider'
+import { NoDataMessage, Skeleton } from '@/app/_components'
 
 export interface Props {
 	children: ReactNode
@@ -29,9 +30,12 @@ const HoldingPageWrapper = ({ children, holdingId, holding }: Props) => {
 
 	if(sessionUser?.clientId !== currentHolding?.clientId){
 		return (
-			<>
-				<p>Nop</p>
-			</>
+			<HoldingsMain>
+				{/* <NoDataMessage>You do not have access to this holding.</NoDataMessage> */}
+				<Skeleton className='mb-6' height="4rem"/>
+				<Skeleton className='mb-2' width="50%"/>
+				<Skeleton className='mb-2' width="33%" height="2rem"/>
+			</HoldingsMain>
 		)
 	}
 	return (

@@ -1,0 +1,27 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/violet.css';
+
+.dialog-content {
+  width: 500px; /* Set width to the dialog */
+  max-height: 80vh; /* Ensure the dialog doesn't exceed 80% of the viewport height */
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+	/* border: solid 1px red; */
+}
+
+.scrollable-content {
+  max-height: 60vh; /* Set a max height to limit scrolling within the dialog */
+  overflow-y: auto; /* Allow vertical scrolling */
+  margin-bottom: 16px; /* Add some space before the close button */
+	--scrollbar-size: 10px;
+	border: solid 1px #f1f1f1;
+	padding: 10px;
+}
+
+/* Customize the close button to stick at the bottom */
+.dialog-content button {
+  align-self: flex-end;
+}
