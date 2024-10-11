@@ -40,7 +40,7 @@ export async function POST(
 
 		// Check if the new client ID is part of the user's optional clients
 		const canSwitch = user.optionalClients.some(
-			(client) => client.id === Number(newClientId)
+			(client) => client.clientId === Number(newClientId)
 		);
 
 		if (!canSwitch) {

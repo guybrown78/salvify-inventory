@@ -13,6 +13,9 @@ const StockOverview = async ({ item, holdingId }:Props) => {
 
 	const where = {
 		itemId: item.id,
+		quantity: {
+			gt: 0,
+		},
 		location: {
 			holdingId: holdingId,
 		},

@@ -16,6 +16,7 @@ export async function getSessionUser():Promise<SessionUser | null> {
 				optionalClients: true,
 			}
 		});
+		console.log(user)
 		if(!user){
 			return null;
 		}

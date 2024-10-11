@@ -1,4 +1,4 @@
-import { Client, User } from "@prisma/client";
+import { Client, OptionalClient, User } from "@prisma/client";
 
 export interface UserWithClient extends User
 {
@@ -6,5 +6,5 @@ export interface UserWithClient extends User
 }
 
 export interface UserWithClients extends UserWithClient{
-	optionalClients:Client[]
+	optionalClients:OptionalClient[]
 }

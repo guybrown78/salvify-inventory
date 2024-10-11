@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Client } from "@prisma/client";
+import { Client, OptionalClient } from "@prisma/client";
 
 
 interface Props {
 	clients: Client[];
-	userOptionalClients: Client[]
+	userOptionalClients: OptionalClient[]
 	userId: string
 }
 
@@ -29,7 +29,7 @@ const UserOptionalClientsForm = ({ clients, userOptionalClients, userId }: Props
 		setValue,
 	} = useForm<{ selectedClients: number[] }>({
 		defaultValues:{
-			selectedClients: userOptionalClients.map(client => client.id)
+			selectedClients: userOptionalClients.map(client => client.clientId)
 		}
 	});
 	//
@@ -38,7 +38,7 @@ const UserOptionalClientsForm = ({ clients, userOptionalClients, userId }: Props
 
 	const selectedClients = watch("selectedClients");
 
-	const hasChanges = JSON.stringify(selectedClients.sort()) !== JSON.stringify(userOptionalClients.map(c => c.id).sort());
+	const hasChanges = JSON.stringify(selectedClients.sort()) !== JSON.stringify(userOptionalClients.map(c => c.clientId).sort());
 
 	const onSubmit = handleSubmit(async (data) => {
 		console.log("Submit", data)

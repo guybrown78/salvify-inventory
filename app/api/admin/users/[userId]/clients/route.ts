@@ -31,7 +31,12 @@ export async function PATCH(
 			where: { id: params.userId },
 			data: {
 				optionalClients: {
-					set: clientIds.map((clientId: number[]) => ({ id: clientId })),
+					deleteMany: {}, // Clear all existing connections
+					create: clientIds.map((clientId: number) => ({
+						client: {
+							connect: { id: clientId },
+						},
+					})),
 				},
 			},
 		});

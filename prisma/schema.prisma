@@ -70,7 +70,8 @@ model User {
   instancesAdded  Instance[]       @relation(name: "UserToInstance")
   assignedOrders  Order[]          @relation(name: "OrderToUser")
   selectedClient  Client?          @relation(name: "SelectedClient", fields: [clientId], references: [id])
-  optionalClients Client[]         @relation(name: "OptionalClients")
+  // optionalClients Client[]         @relation(name: "OptionalClients")
+  optionalClients OptionalClient[]
   orderedItems    OrderItem[]      @relation(name: "UserToOrderItem")
   clientId        Int? // ID of the selected client
 
@@ -78,17 +79,18 @@ model User {
 }
 
 model Client {
-  id               Int              @id @default(autoincrement())
-  name             String
-  users            User[]           @relation(name: "SelectedClient")
-  optionalForUsers User[]           @relation(name: "OptionalClients")
-  holdings         Holding[]        @relation(name: "HoldingToClient")
-  items            Item[]           @relation(name: "ItemToClient")
-  instances        Instance[]       @relation(name: "InstanceToClient")
-  locations        Location[]       @relation(name: "LocationToClient")
-  removeInstances  RemoveInstance[] @relation(name: "RemoveInstanceToClient")
-  holdingItems     HoldingItem[]    @relation(name: "HoldingItemToClient")
-  orders           Order[]          @relation(name: "OrderToClient")
+  id              Int              @id @default(autoincrement())
+  name            String
+  users           User[]           @relation(name: "SelectedClient")
+  // optionalForUsers User[]           @relation(name: "OptionalClients")
+  holdings        Holding[]        @relation(name: "HoldingToClient")
+  items           Item[]           @relation(name: "ItemToClient")
+  instances       Instance[]       @relation(name: "InstanceToClient")
+  locations       Location[]       @relation(name: "LocationToClient")
+  removeInstances RemoveInstance[] @relation(name: "RemoveInstanceToClient")
+  holdingItems    HoldingItem[]    @relation(name: "HoldingItemToClient")
+  orders          Order[]          @relation(name: "OrderToClient")
+  optionalClients OptionalClient[]
 }
 
 model VerificationToken {
@@ -258,6 +260,16 @@ model OrderItem {
   @@index([addedById])
 }
 
+model OptionalClient {
+  userId   String @db.VarChar(255)
+  clientId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  client Client @relation(fields: [clientId], references: [id])
+
+  @@id([userId, clientId])
+}
+
 enum IssueStatus {
   OPEN
   IN_PROGRESS
@@ -292,6 +304,8 @@ enum ItemTypes {
   DROPS
   PESSARY
   INHALER
+  GAS
+  SUSPENSION
 }
 
 enum ItemCategory {

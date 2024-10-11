@@ -11,6 +11,7 @@ import { z } from "zod";
 import ProfileWrapper from "./ProfileWrapper";
 import { useSessionUserContext } from "@/app/_providers/SessionUserProvider"
 import { useRouter } from "next/navigation";
+import { Client } from "@prisma/client";
 
 const switchClientSchema = z.object({
 	clientId: z.string().min(1, "Please select a client."),
@@ -18,9 +19,10 @@ const switchClientSchema = z.object({
 
 interface Props {
 	sessionUser: SessionUser;
+	clients: Client[]
 }
 
-const SwitchClient = ({ sessionUser }: Props) => {
+const SwitchClient = ({ sessionUser, clients }: Props) => {
 
 	const router = useRouter();
 
@@ -95,8 +97,8 @@ const SwitchClient = ({ sessionUser }: Props) => {
 										<Select.Group>
 											<Select.Label>Client</Select.Label>
 											{sessionUser?.optionalClients?.map((client) => (
-												<Select.Item key={client.id} value={String(client.id)}>
-													{client.name}
+												<Select.Item key={client.clientId} value={String(client.clientId)}>
+													{clients.filter(c => c.id === client.clientId)[0].name || ""}
 												</Select.Item>
 											))}
 										</Select.Group>

@@ -10,9 +10,13 @@ import { notFound } from "next/navigation";
 const SettingsProfilePage = async () => {
 
 	const sessionUser = await getSessionUser();
+	
 
 	if(!sessionUser)
 			notFound()
+
+	const clients = sessionUser.optionalClients?.length ? await prisma.client.findMany() : []
+
 
 	return (
 		<Flex direction="column" gap="3">
@@ -20,7 +24,7 @@ const SettingsProfilePage = async () => {
 			<div className="divide-y divide-white/5">
 				<UpdateDetails sessionUser={sessionUser} />
 				<ChangePassword sessionUser={sessionUser} />
-				<SwitchClient sessionUser={sessionUser} />
+				<SwitchClient sessionUser={sessionUser} clients={clients} />
 				<Logout />
 			</div>
 		</Flex>

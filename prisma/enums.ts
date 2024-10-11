@@ -27,7 +27,7 @@ const itemTypesMap: Record<
 		TABLET: { label: 'Tablet', color: 'yellow' },
 		INJECTION: { label: 'Injection', color: 'tomato' },
 		SPRAY: { label: 'Spray', color: 'pink' },
-		LIQUID: { label: 'Luquid', color: 'purple' },
+		LIQUID: { label: 'Liquid', color: 'purple' },
 		SUPPOSITORY: { label: 'Suppository', color: 'indigo' },
 		CAPSULE: { label: 'Capsule', color: 'cyan' },
 		AMPOULE: { label: 'Ampoule', color: 'jade' },
@@ -41,6 +41,8 @@ const itemTypesMap: Record<
 		DROPS: { label: 'Drops', color: 'teal' },
 		PESSARY: { label: 'Pessary', color: 'green' },
 		INHALER: { label: 'Inhaler', color: 'mint' },
+		GAS: { label: 'Gas', color: 'iris' },
+		SUSPENSION: { label: 'Suspension', color: 'bronze' },
 	}
 
 const itemCategoryMap: Record<

@@ -30,9 +30,11 @@ interface Props{
 	onFormComplete: () => void;
 	instance:InstancesWithLocation,
 	itemId:number,
-	holdingId:number
+	holdingId:number,
+	defaultReason?:RemoveInstanceReason
+	defaultQuantity?:number
 }
-const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId }:Props) => {
+const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId, defaultReason, defaultQuantity }:Props) => {
 	const router = useRouter();
 	const { register, control, watch, handleSubmit, formState: {errors} } = useForm<RemoveInstanceData>({
 		resolver: zodResolver(removeInstanceSchema)
@@ -77,6 +79,7 @@ const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId }:Prop
 
 	useEffect(() => {
 		setAdditionalErrors({})
+		console.log(reasonValue)
 	}, [reasonValue])
 
 	const onSubmit = handleSubmit(async (data) => {
@@ -122,6 +125,7 @@ const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId }:Prop
 						<Controller 
 							control={control}
 							name="reason"
+							defaultValue={defaultReason ? defaultReason : ""}
 							render={({ field }) => {
 								return (
 									<Select.Root
@@ -163,7 +167,13 @@ const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId }:Prop
 					<Flex direction='column' gap="1">
 						<Text>Amount of stock to be deducted (Max {instance.quantity})</Text>
 						<TextField.Root>
-							<TextField.Input type='number' min={1} max={instance.quantity} defaultValue={1} {...register('quantity', { valueAsNumber: true })}/>
+							<TextField.Input 
+								type='number' 
+								min={1} 
+								max={instance.quantity} 
+								defaultValue={defaultQuantity ? defaultQuantity : 1} 
+								{...register('quantity', { valueAsNumber: true })}
+							/>
 						</TextField.Root>
 						<FieldErrorMessage>{errors.quantity?.message}</FieldErrorMessage>
 					</Flex>

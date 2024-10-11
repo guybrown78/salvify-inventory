@@ -6,6 +6,7 @@ import { Flex, Grid, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import HoldingHeader from "../../_components/HoldingHeader";
 import { HoldingPageProps, fetchHolding } from "../holdingQuery";
+import ExpiredItems from "@/app/_components/dashboard/expired/ExpiredItems";
 
 const HoldingDashboardPage = async ({ params }: HoldingPageProps) => {
 	const holding = await fetchHolding(parseInt(params.holdingId));
@@ -25,6 +26,7 @@ const HoldingDashboardPage = async ({ params }: HoldingPageProps) => {
 			
 			<Grid columns={{ initial: "1", md: "1" }} gap="2" mt="8">
 				<Text weight='bold'>Your Dashboard</Text>
+				<ExpiredItems clientId={holding.clientId} holdings={[holding]} />
 				<HoldingSummary
 					removed={removedItems.length}
 					low={lowItems.length}
