@@ -1,21 +1,29 @@
-'use client'
+"use client";
 
-import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { AlertDialog, Button, Flex } from '@radix-ui/themes';
+import ButtonGroupItem from "@/app/_components/ui/buttons/ButtonGroupItem";
+import { HiOutlineDocumentText } from "react-icons/hi2";
 
 interface Props {
-	title: string
-	instructionsURL: string | null
+	title: string;
+	instructionsURL: string | null;
+	rounding?: "left" | "right" | "both" | "none";
 }
-const StockItemInstructionsButton = ({ instructionsURL, title }:Props) => {
-	if(!instructionsURL || instructionsURL === "" || instructionsURL === " "){
-		return null
+const StockItemInstructionsButton = ({
+	instructionsURL,
+	title,
+	rounding,
+}: Props) => {
+	if (!instructionsURL || instructionsURL === "" || instructionsURL === " ") {
+		return null;
 	}
 	return (
-		<Button size="1" asChild={true}>
-			<a href={instructionsURL} target='_blank'>Show Item Instructions</a>
-		</Button>
-	)
-}
+		<ButtonGroupItem
+			title="Instructions"
+			icon={<HiOutlineDocumentText />}
+			href={instructionsURL}
+			rounding={rounding}
+		/>
+	);
+};
 
-export default StockItemInstructionsButton
+export default StockItemInstructionsButton;

@@ -26,6 +26,11 @@ const fetchItem = cache((itemId: number, clientId: number) => prisma.item.findUn
 				clientId: clientId,
 			},
 		},
+		instances: {
+      include: {
+        location: true,
+      },
+    },
 	},
 }));
 
@@ -46,7 +51,7 @@ const StockItemPage = async ({ params }: Props) => {
     );
   }
 
-	const item:ItemWithInstancesHoldingItems | null = await fetchItem(parseInt(params.id), sessionUser!.clientId!);
+	const item:ItemWithInstancesHoldingItems | null = await fetchItem(parseInt(params.id), sessionUser!.clientId!) as ItemWithInstancesHoldingItems | null;
 
 	if(!item)
 		notFound();

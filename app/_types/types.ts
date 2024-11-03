@@ -45,6 +45,10 @@ export interface OrderWithItems extends Order{
 	orderItems:OrderItemWithItem[]
 }
 
+export interface OrderWithOrderItems extends Order{
+	orderItems:OrderItem[]
+}
+
 export interface RemoveInstanceWithItemLocationUser extends RemoveInstance{
 	instance:InstancesWithLocationAndItem,
 	location:Location,

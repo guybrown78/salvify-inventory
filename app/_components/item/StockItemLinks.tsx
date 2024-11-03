@@ -1,22 +1,42 @@
-import { Item } from '@prisma/client'
-import { Flex } from '@radix-ui/themes'
-import StockItemEMCButton from './StockItemEMCButton'
-import StockItemInstructionsButton from './StockItemInstructionsButton'
+import ButtonGroup from "@/app/_components/ui/buttons/ButtonGroup";
+import { Item } from "@prisma/client";
+import StockItemEMCButton from "./StockItemEMCButton";
+import StockItemInformationButton from "./StockItemInformationButton";
+import StockItemInstructionsButton from "./StockItemInstructionsButton";
 
-const StockItemLinks = ({ item }: { item:Item }) => {
+
+const StockItemLinks = ({ item }: { item: Item }) => {
+	const infoRounding = item.instructionsURL || item.emcId ? "left" : "both";
+	const instructionsRounding =
+		item.information && item.emcId
+			? "none"
+			: !item.information && item.emcId
+			? "left"
+			: item.information && !item.emcId
+			? "right"
+			: "both";
+	const emcRounding =
+		item.instructionsURL || item.information ? "right" : "both";
 
 	return (
-		<Flex py="2" gap="3" align="end" justify="end">
-			<StockItemEMCButton 
+		<ButtonGroup>
+			<StockItemInformationButton
+				information={item.information}
 				title={item.title}
-				emcId={item.emcId}
+				rounding={infoRounding}
 			/>
-			<StockItemInstructionsButton 
+			<StockItemInstructionsButton
 				title={item.title}
 				instructionsURL={item.instructionsURL}
+				rounding={instructionsRounding}
 			/>
-		</Flex>
-	)
-}
+			<StockItemEMCButton
+				title={item.title}
+				emcId={item.emcId}
+				rounding={emcRounding}
+			/>
+		</ButtonGroup>
+	);
+};
 
-export default StockItemLinks
+export default StockItemLinks;

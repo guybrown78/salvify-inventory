@@ -3,7 +3,7 @@ import moment from 'moment'
 import React from 'react'
 
 interface Props {
-	expiryDate: string | null
+	expiryDate: string | Date | null
 	showCountdown?: boolean
 	size?: 'sm' | 'md' | 'lg'
 	asBadge?: boolean
@@ -12,9 +12,18 @@ const InstanceExpiryDate = ({ expiryDate, showCountdown, size, asBadge }: Props)
 	if(!expiryDate){
 		return null
 	}
+
+	const expDate = moment(
+		expiryDate instanceof Date ? expiryDate.toISOString() : expiryDate
+	);
+	if (!expDate.isValid()) {
+		return null; // Invalid date handling
+	}
+
 	const dateFormat = "MM-DD-YYYY";
-	const date = new Date(expiryDate)
-	const expDate = moment(date);
+	// const date = new Date(expiryDate)
+	// const expDate = moment(date);
+
 	if(asBadge){
 		const now = moment()
 		const days:number = expDate.endOf('day').diff(now, 'days');

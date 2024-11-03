@@ -22,7 +22,7 @@ const ExpiredItemCards = ({
 	expiredHoldingItems,
 }: Props) => {
 	const [isOpen, setIsOpen] = useState(true);
-
+	// console.log(JSON.stringify(expiredHoldingItems))
 	return (
 		<Collapsible.Root
 			className="CollapsibleRoot"

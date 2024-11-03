@@ -26,7 +26,7 @@ const ExpiredItemInstance = ({ instance, item }: Props) => {
 							Expired on:
 						</Text>
 						<InstanceExpiryDate
-							expiryDate={instance.expiryDate ? String(instance.expiryDate) : null }
+							expiryDate={instance.expiryDate}
 							showCountdown
 							asBadge
 						/>

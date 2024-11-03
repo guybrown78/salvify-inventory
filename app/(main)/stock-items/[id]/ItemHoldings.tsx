@@ -40,19 +40,25 @@ const ItemHoldings = async ({ item }:Props) => {
 		<Flex direction="column" gap="5">
 			<Heading as="h3" size="3" >Holdings</Heading>
 			<Flex gap="4" direction="column">
-				<Flex className='bg-green-50 rounded-xl' p="3">
-					<Text color='green' size="2">Here you can include the Item ({item.title}) within a holding. Once the Item is attached to a holding it makes the item a must have within the holding. Setting a minimum stock count add extra checks to ensure there enough Instances of {item.title} available in the holding.</Text>
+				<Flex className='bg-yellow-50 rounded-xl' p="3">
+					<Text color='yellow' size="2">Here you can include the Item ({item.title}) within a holding. Once the Item is attached to a holding it makes the item a must have within the holding. Setting a minimum stock count add extra checks to ensure there enough Instances of {item.title} available in the holding.</Text>
 				</Flex>
 				<ul className='w-full'>
 					{
-						holdings.map(holding => (
-							<li key={holding.id} className='mb-5'>
-								<ItemHolding 
-									holding={holding} 
-									item={item}
-								/>
-							</li>
-						))
+						holdings.map(holding => {
+							const locationIds = holding.locations.map(location => location.id);
+							const holdingInstances = item.instances ? item.instances.filter(
+									(instance) => locationIds.includes(instance.locationId)
+							) : [];
+							return (
+								<li key={holding.id} className='mb-5'>
+									<ItemHolding 
+										holding={holding} 
+										item={item}
+										holdingInstances={holdingInstances}
+									/>
+								</li>
+						)})
 					}
 				</ul>
 			</Flex>

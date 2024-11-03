@@ -44,7 +44,7 @@ const InstancesTable = ({ instances }: Props) => {
 										<Flex align="center" gap="3">
 											<Text><em>Expiring:</em></Text>
 											<InstanceExpiryDate 
-												expiryDate={instance.expiryDate ? String(instance.expiryDate) : null} 
+												expiryDate={instance.expiryDate} 
 												showCountdown
 											/>
 										</Flex>
@@ -61,7 +61,7 @@ const InstancesTable = ({ instances }: Props) => {
 							</TableCell>
 							<TableCell className='hidden md:table-cell'>
 								<InstanceExpiryDate 
-									expiryDate={instance.expiryDate ? String(instance.expiryDate) : null} 
+									expiryDate={instance.expiryDate} 
 									showCountdown
 								/>
 							</TableCell>

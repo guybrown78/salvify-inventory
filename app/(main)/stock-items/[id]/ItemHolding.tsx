@@ -22,6 +22,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 interface Props {
 	holding: HoldingWithLocations
 	item:ItemWithInstancesHoldingItems
+	holdingInstances: Array<{ quantity: number }>
 }
 
 enum CallType {
@@ -29,7 +30,7 @@ enum CallType {
 	PATCH,
 	DELETE
 }
-const ItemHolding = ({ holding, item }:Props) => {
+const ItemHolding = ({ holding, item, holdingInstances }:Props) => {
 	
 	const getCallType = ():CallType => {
 		if(!holdingItem){
@@ -189,7 +190,7 @@ const ItemHolding = ({ holding, item }:Props) => {
 									Item Instance count:
 								</Text>
 								<Text size="2">
-									0
+									{holdingInstances.reduce((total, instance) => total + (instance.quantity || 0), 0)}
 								</Text>
 								<Text size="2"></Text>
 							</Flex>

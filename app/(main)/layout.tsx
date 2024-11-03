@@ -40,8 +40,8 @@ export default function RootLayout({
 }: LayoutProps) {
 
   return (
-    <html lang="en" className="h-fill">
-      <body className={classNames('h-full', inter.variable)}>
+    <html lang="en" className="light h-fill">
+      <body className={classNames('light h-full', inter.variable)}>
 				<QueryClientProvider>
 					<AuthProvider>
 						<Theme accentColor="grass">

@@ -1,18 +1,34 @@
-import { PlusCircledIcon } from '@radix-ui/react-icons';
-import { Button } from '@radix-ui/themes';
+"use client";
+
+import { Button } from "@radix-ui/themes";
+import { useState } from "react";
+import { HiOutlinePlusCircle } from "react-icons/hi2";
+
+import StockItemAddToOrderDialog from "./StockItemAddToOrderDialog";
 
 interface Props {
-	title: string
-	itemId: number
+	title: string;
+	itemId: number;
 }
 
+const StockItemAddToOrderButton = ({ itemId, title }: Props) => {
+	let [isOrderOpen, setIsOrderOpen] = useState(false);
 
-const StockItemAddToOrderButton = ({ itemId, title }:Props) => {
 	return (
-		<Button variant='outline' disabled>
-			<PlusCircledIcon /> Add to Order
-		</Button>
-	)
-}
+		<>
+			<Button onClick={() => setIsOrderOpen(true)}>
+				<HiOutlinePlusCircle className="text-xl md:text-lg" />{" "}
+				<span className="hidden md:inline-block">Add to Order</span>
+			</Button>
 
-export default StockItemAddToOrderButton
+			<StockItemAddToOrderDialog
+				title={title}
+				itemId={itemId}
+				isOpenExternal={isOrderOpen}
+				onCloseExternal={() => setIsOrderOpen(false)}
+			/>
+		</>
+	);
+};
+
+export default StockItemAddToOrderButton;

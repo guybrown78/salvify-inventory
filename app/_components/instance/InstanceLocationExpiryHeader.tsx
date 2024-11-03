@@ -3,7 +3,7 @@ import InstanceExpiryDate from '../InstanceExpiryDate';
 
 interface Props{
 	locationTitle: string
-	expiryDate: string
+	expiryDate: string | Date | null
 	locationPreTitle?: string
 }
 const InstanceLocationExpiryHeader = ({ locationTitle, expiryDate, locationPreTitle = "Location:" }:Props) => {

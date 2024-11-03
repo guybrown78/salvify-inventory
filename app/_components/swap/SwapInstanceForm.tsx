@@ -102,7 +102,7 @@ const SwapInstanceForm = ({ onFormComplete, instance, item, currentHolding }:Pro
 					<InstanceLocationExpiryHeader 
 						locationPreTitle="Current Location:"
 						locationTitle={instance.location.title}
-						expiryDate={String(instance.expiryDate)} 
+						expiryDate={instance.expiryDate} 
 					/>
 
 					<SwapHoldings 

@@ -70,7 +70,7 @@ const RemovedItemsTable = ({ removedInstances }: Props) => {
 									<Flex gap="5" justify="between">
 										<LabelValueColumn label="Removed date">
 											<InstanceExpiryDate
-												expiryDate={instance.removedAt ? String(instance.removedAt) : null}
+												expiryDate={instance.removedAt}
 												showCountdown={false}
 											/>
 										</LabelValueColumn>
@@ -98,7 +98,7 @@ const RemovedItemsTable = ({ removedInstances }: Props) => {
 						</TableCell>
 						<TableCell className="hidden md:table-cell">
 							<InstanceExpiryDate
-								expiryDate={instance.removedAt ? String(instance.removedAt) : null}
+								expiryDate={instance.removedAt}
 								showCountdown={false}
 							/>
 						</TableCell>

@@ -29,6 +29,9 @@ const ExpiredItems = async ({ clientId, holdings }: Props) => {
 		return null;
 	}
 
+	// console.log(" ")
+	// console.log(" --- ")
+	// console.log(expiredHoldingItems)
 	return (
 		<div className="mt-2">
 			<ExpiredItemCards

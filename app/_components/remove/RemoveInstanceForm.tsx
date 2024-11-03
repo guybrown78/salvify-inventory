@@ -117,7 +117,7 @@ const RemoveInstanceForm = ({ onFormComplete, instance, itemId, holdingId, defau
 
 					<InstanceLocationExpiryHeader 
 						locationTitle={instance.location.title}
-						expiryDate={String(instance.expiryDate)} 
+						expiryDate={instance.expiryDate} 
 					/>
 					
 					<Flex direction='column' gap="1">

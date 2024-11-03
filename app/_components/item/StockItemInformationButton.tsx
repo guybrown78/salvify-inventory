@@ -1,49 +1,54 @@
-'use client'
+"use client";
 
-import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { AlertDialog, Button, Flex, Box } from '@radix-ui/themes';
-import ReactMarkdown from 'react-markdown';
-import * as ScrollArea from "@radix-ui/react-scroll-area";
-import './dialog-information-scroll.css';
+import ButtonGroupItem from "@/app/_components/ui/buttons/ButtonGroupItem";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { AlertDialog, Box, Button, Flex } from "@radix-ui/themes";
+import ReactMarkdown from "react-markdown";
+import "./dialog-information-scroll.css";
 interface Props {
-	title: string
-	information: string | null
+	title: string;
+	information: string | null;
+	rounding?: "left" | "right" | "both" | "none";
 }
 
-const StockItemInformationButton = ({ information, title }:Props) => {
-	// 
+const StockItemInformationButton = ({
+	information,
+	title,
+	rounding,
+}: Props) => {
+	//
 	if (!information || information.trim() === "") {
-    return null;
-  }
-	// 
+		return null;
+	}
+	//
 	return (
 		<AlertDialog.Root>
 			<AlertDialog.Trigger>
-				<Button variant='surface'>
-					<InfoCircledIcon /> Information
-				</Button>
+				<ButtonGroupItem
+					title="Information"
+					icon={<InfoCircledIcon />}
+					rounding={rounding}
+				/>
 			</AlertDialog.Trigger>
 			<AlertDialog.Content>
-				<AlertDialog.Title>
-					{title}
-				</AlertDialog.Title>
+				<AlertDialog.Title>{title}</AlertDialog.Title>
 
 				<AlertDialog.Description>
-					<Box className='scrollable-content prose max-w-full'>
-						<ReactMarkdown>
-							{information}
-						</ReactMarkdown>
+					<Box className="scrollable-content prose max-w-full">
+						<ReactMarkdown>{information}</ReactMarkdown>
 					</Box>
 				</AlertDialog.Description>
 
-				<Flex className='mt-4' gap="3" justify="end">
+				<Flex className="mt-4" gap="3" justify="end">
 					<AlertDialog.Cancel>
-						<Button color="gray" variant='soft'>Close</Button>
+						<Button color="gray" variant="soft">
+							Close
+						</Button>
 					</AlertDialog.Cancel>
 				</Flex>
 			</AlertDialog.Content>
 		</AlertDialog.Root>
-	)
-}
+	);
+};
 
-export default StockItemInformationButton
+export default StockItemInformationButton;
