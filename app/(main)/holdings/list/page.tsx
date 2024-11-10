@@ -45,7 +45,9 @@ const HoldingListPage = async ({ searchParams }: Props) => {
 	const holdings = await prisma.holding?.findMany({ 
 		where, 
 		orderBy: { title: 'asc'},
-		include: { locations: true } 
+		include: { locations: true },
+		skip: (page - 1) * pageSize,
+		take: pageSize
 	});
 
 	const holdingCount = await prisma.holding.count({ where });
@@ -58,6 +60,11 @@ const HoldingListPage = async ({ searchParams }: Props) => {
 					<NoDataMessage>
 						There are currently no holdings for { sessionUser!.clientName! }{ searchParams.type ? ` with type ${searchParams.type}` : "" }.
 					</NoDataMessage>
+					<Pagination
+						itemCount={holdingCount}
+						pageSize={pageSize}
+						currentPage={page}
+					/>
 				</Flex>
 			</Main>
 	);

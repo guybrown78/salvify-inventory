@@ -52,6 +52,8 @@ const StockItemsPage = async ({ searchParams }: Props) => {
 		console.log("page size", pageSize)
 	}
 
+	const itemsCount = await prisma.item?.count({ where })
+
 	if(!items || !items.length)
 		return (
 			<Flex direction="column" gap="3">
@@ -59,10 +61,15 @@ const StockItemsPage = async ({ searchParams }: Props) => {
 				<NoDataMessage>
 					There are currently no stock items in the system
 				</NoDataMessage>
+				<Pagination
+					itemCount={itemsCount}
+					pageSize={pageSize}
+					currentPage={page}
+					// setPageSize={(num) => console.log(num)}
+				/>
 			</Flex>
 		);
 
-	const itemsCount = await prisma.item?.count({ where })
 
 	return (
 		<Flex direction="column" gap="3">

@@ -63,6 +63,11 @@ const OrdersPage = async ({ searchParams }: Props) => {
 				<NoDataMessage>
 					There are currently no orders in the system { searchParams.status ? ` with status ${searchParams.status}` : "" }.
 				</NoDataMessage>
+				<Pagination
+					itemCount={orderCount}
+					pageSize={pageSize}
+					currentPage={page}
+				/>
 			</Flex>
 		);
 
