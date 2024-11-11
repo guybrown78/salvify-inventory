@@ -68,6 +68,11 @@ const RemovedItemsTable = ({ removedInstances }: Props) => {
 										</LabelValueColumn>
 									</Flex>
 									<Flex gap="5" justify="between">
+
+										<LabelValueColumn label="PRF">
+											{instance.prf ? String(instance.prf) : "-"}
+										</LabelValueColumn>
+
 										<LabelValueColumn label="Removed date">
 											<InstanceExpiryDate
 												expiryDate={instance.removedAt}
@@ -96,6 +101,11 @@ const RemovedItemsTable = ({ removedInstances }: Props) => {
 								)[0].label
 							}
 						</TableCell>
+
+						<TableCell className="hidden md:table-cell">
+							{instance.prf ? String(instance.prf) : "-"}
+						</TableCell>
+
 						<TableCell className="hidden md:table-cell">
 							<InstanceExpiryDate
 								expiryDate={instance.removedAt}
@@ -121,6 +131,7 @@ const columns: {
 	{ label: "Quantity", value: "quantity", className: "hidden md:table-cell" },
 	{ label: "Location", value: "location", className: "hidden md:table-cell" },
 	{ label: "Reason", value: "reason", className: "hidden md:table-cell" },
+	{ label: "PRF", value: "prf", className: "hidden md:table-cell" },
 	{ label: "Removed date", value: "date", className: "hidden md:table-cell" },
 	{ label: "Removed by", value: "user", className: "hidden md:table-cell" },
 ];

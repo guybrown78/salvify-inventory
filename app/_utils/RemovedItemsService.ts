@@ -24,6 +24,9 @@ class RemovedItemsService {
         location: true,
         removedBy: true,
       },
+			orderBy: {
+        removedAt: "desc",
+      },
     });
     return removedItems as RemoveInstanceWithItemLocationUser[];
   }
