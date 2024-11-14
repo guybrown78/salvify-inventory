@@ -103,7 +103,7 @@ const removeInstanceReasonMap: Record<
 		USED: { label: 'Item(s) used for treatment' },
 		DAMAGED: { label: 'Item(s) are damaged' },
 		LOST: { label: 'Item(s) have been lost' },
-		STOLEN: { label: 'Item(s) have been stollen' },
+		STOLEN: { label: 'Item(s) have been stolen' },
 		EXPIRED: { label: 'Item(s) have expired' },
 		RECALLED: { label: 'Item(s) have been recalled by the manufacturer' },
 		REMOVED: { label: 'Item(s) have been removed/recalled by admin' },
