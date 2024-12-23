@@ -8,10 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordSchema } from "@/app/validationSchema";
 import { FieldErrorMessage, Spinner } from "@/app/_components";
 import axios, { AxiosError } from "axios";
-import { SessionUser } from "@/app/_types/types";
+import { Session } from "next-auth";
 
 interface Props {
-	sessionUser:SessionUser
+	sessionUser: Session["user"]
 }
 
 

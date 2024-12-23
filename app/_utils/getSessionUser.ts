@@ -6,7 +6,7 @@ import prisma from '@/prisma/client';
 export async function getSessionUser():Promise<SessionUser | null> {
 	try {
 		const session = await getServerSession(authOptions)
-		if(!session){
+		if(!session || !session.user.email){
 			return null;
 		}
 		const user = await prisma.user.findUnique({
@@ -16,7 +16,6 @@ export async function getSessionUser():Promise<SessionUser | null> {
 				optionalClients: true,
 			}
 		});
-		console.log(user)
 		if(!user){
 			return null;
 		}

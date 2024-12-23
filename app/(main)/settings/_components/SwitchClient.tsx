@@ -1,7 +1,7 @@
 "use client";
 
 import { FieldErrorMessage, Spinner } from "@/app/_components";
-import { SessionUser } from "@/app/_types/types";
+// import { SessionUser } from "@/app/_types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Select, Text } from "@radix-ui/themes";
 import { useState } from "react";
@@ -9,16 +9,17 @@ import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import ProfileWrapper from "./ProfileWrapper";
-import { useSessionUserContext } from "@/app/_providers/SessionUserProvider"
+// import { useSessionUserContext } from "@/app/_providers/SessionUserProvider"
 import { useRouter } from "next/navigation";
 import { Client } from "@prisma/client";
+import { Session } from "next-auth";
 
 const switchClientSchema = z.object({
 	clientId: z.string().min(1, "Please select a client."),
 });
 
 interface Props {
-	sessionUser: SessionUser;
+	sessionUser: Session["user"]
 	clients: Client[]
 }
 
@@ -29,7 +30,7 @@ const SwitchClient = ({ sessionUser, clients }: Props) => {
 	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const { updateSessionUser } = useSessionUserContext();
+	// const { updateSessionUser } = useSessionUserContext();
 
 	const {
 		handleSubmit,
@@ -57,7 +58,9 @@ const SwitchClient = ({ sessionUser, clients }: Props) => {
 				newClientId: data.clientId,
 			});
 			const updatedSessionUser = await axios.get('/api/users/me')
-			updateSessionUser(updatedSessionUser.data);
+			// updateSessionUser(updatedSessionUser.data);
+			// Update the Token and Session:
+			// /api/auth/update-session
 			router.refresh();  
 
 		} catch (error) {

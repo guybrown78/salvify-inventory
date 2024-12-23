@@ -10,10 +10,10 @@ import { FieldErrorMessage, Spinner } from "@/app/_components";
 import axios from "axios";
 import { useSessionUserContext } from "@/app/_providers/SessionUserProvider";
 import { useRouter } from "next/navigation";
-import { SessionUser } from "@/app/_types/types";
+import { Session } from "next-auth";
 
 interface Props {
-  sessionUser: SessionUser;
+	sessionUser: Session["user"]
 }
 
 const UpdateDetails = ({ sessionUser }: Props) => {
