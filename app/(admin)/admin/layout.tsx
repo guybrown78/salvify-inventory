@@ -1,60 +1,48 @@
+import "@radix-ui/themes/styles.css";
+import "../../globals.css";
+import "../../theme-config.css";
 
+import { Theme } from "@radix-ui/themes";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
-import '../../globals.css'
-import '@radix-ui/themes/styles.css';
-import '../../theme-config.css'
+import QueryClientProvider from "@/app/_providers/QueryClientProvider";
+import classNames from "classnames";
+import AuthProvider from "../../auth/Provider";
 
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { Container, Theme, ThemePanel } from '@radix-ui/themes'
-
-import AuthProvider from '../../auth/Provider';
-import QueryClientProvider from '@/app/_providers/QueryClientProvider';
-import classNames from 'classnames';
-
-import { LayoutProvider } from '@/app/_providers/LayoutProvider'
-import { ReactNode } from 'react';
-import { SessionUserProvider } from '@/app/_providers/SessionUserProvider';
+import { LayoutProvider } from "@/app/_providers/LayoutProvider";
+import { ReactNode } from "react";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
+	subsets: ["latin"],
+	display: "swap",
+	variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: 'Salvify Medical Inventory',
-	description: 'Manage your medical inventory pain',
+	title: "Salvify Medical Inventory",
+	description: "Manage your medical inventory pain",
 	icons: {
-    icon: '/icon.png',
-  },
-}
+		icon: "/icon.png",
+	},
+};
 
 interface LayoutProps {
-	children: ReactNode,
+	children: ReactNode;
 }
 
-export default function RootLayout({
-  children,
-}: LayoutProps) {
-
-  return (
-    <html lang="en" className="h-fill">
-      <body className={classNames('h-full', inter.variable)}>
+export default function RootLayout({ children }: LayoutProps) {
+	return (
+		<html lang="en" className="h-fill">
+			<body className={classNames("h-full", inter.variable)}>
 				<QueryClientProvider>
 					<AuthProvider>
 						<Theme accentColor="grass">
-							<SessionUserProvider>
-							<LayoutProvider>
-	
-								{children}
-
-							</LayoutProvider>
-							</SessionUserProvider>
+							<LayoutProvider>{children}</LayoutProvider>
 						</Theme>
 					</AuthProvider>
 				</QueryClientProvider>
 			</body>
-    </html>
-  )
+		</html>
+	);
 }

@@ -1,48 +1,59 @@
-'use client' 
+"use client";
 
-import { useHoldingContext } from '@/app/_providers/HoldingProvider'
-import { ReactNode, useEffect } from 'react'
-import { HoldingWithLocations } from './holdingQuery'
-import { Holding } from '@prisma/client'
-import HoldingsMain from '@/app/_components/layout/HoldingsMain'
-import { getSessionUser } from '@/app/_utils/getSessionUser'
-import { useSessionUserContext } from '@/app/_providers/SessionUserProvider'
-import { NoDataMessage, Skeleton } from '@/app/_components'
+import HoldingsMain from "@/app/_components/layout/HoldingsMain";
+import { useHoldingContext } from "@/app/_providers/HoldingProvider";
+import { Holding } from "@prisma/client";
+import { ReactNode, useEffect } from "react";
+import { HoldingWithLocations } from "./holdingQuery";
+
+import { Skeleton } from "@/app/_components";
+import { useSession } from "next-auth/react";
 
 export interface Props {
-	children: ReactNode
-	holdingId: number
-	holding: HoldingWithLocations
+	children: ReactNode;
+	holdingId: number;
+	holding: HoldingWithLocations;
 }
 
 const HoldingPageWrapper = ({ children, holdingId, holding }: Props) => {
+	const {
+		isHoldingSelected,
+		currentHolding,
+		updateIsHoldingSelected,
+		updateCurrentHolding,
+	} = useHoldingContext();
 
-	const { isHoldingSelected, currentHolding, updateIsHoldingSelected, updateCurrentHolding } = useHoldingContext()
+	const { data: session } = useSession();
 
 	useEffect(() => {
-		if(!currentHolding || holdingId !== currentHolding.id){
+		if (!currentHolding || holdingId !== currentHolding.id) {
 			updateCurrentHolding(holding as Holding);
 		}
-	}, [holdingId])
+	}, [holdingId]);
 
 	// Check Current Holding and clientId!
-	const { sessionUser } = useSessionUserContext()
 
-	if(sessionUser?.clientId !== currentHolding?.clientId){
+	if (!session?.user) {
+		return (
+			<HoldingsMain>
+				<Skeleton className="mb-6" height="4rem" />
+				<Skeleton className="mb-2" width="50%" />
+				<Skeleton className="mb-2" width="33%" height="2rem" />
+			</HoldingsMain>
+		);
+	}
+
+	if (session.user.clientId! !== currentHolding?.clientId) {
 		return (
 			<HoldingsMain>
 				{/* <NoDataMessage>You do not have access to this holding.</NoDataMessage> */}
-				<Skeleton className='mb-6' height="4rem"/>
-				<Skeleton className='mb-2' width="50%"/>
-				<Skeleton className='mb-2' width="33%" height="2rem"/>
+				<Skeleton className="mb-6" height="4rem" />
+				<Skeleton className="mb-2" width="50%" />
+				<Skeleton className="mb-2" width="33%" height="2rem" />
 			</HoldingsMain>
-		)
+		);
 	}
-	return (
-		<>
-			{children}
-		</>
-	)
-}
+	return <>{children}</>;
+};
 
-export default HoldingPageWrapper
+export default HoldingPageWrapper;

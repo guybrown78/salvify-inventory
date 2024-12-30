@@ -8,17 +8,31 @@ import Main from "../_components/layout/Main";
 import ExpiringItemsService from "@/app/_utils/ExpiringItemsService";
 import LowStockItemsService from "@/app/_utils/LowStockItemsService";
 import RemovedItemsService from "@/app/_utils/RemovedItemsService";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+
+import { getServerSession } from "next-auth";
+import { NoDataMessage } from "../_components";
 import ExpiredItems from "../_components/dashboard/expired/ExpiredItems";
 import { HoldingSummaryType } from "../_types/types";
+import authOptions from "../auth/authOptions";
 
 export default async function Home() {
-	// const session = await getServerSession(authOptions);
-	const sessionUser = await getSessionUser();
+	
+	const session = await getServerSession(authOptions);
+
+	if (!session || !session.user) {
+		// Handle the case where session.user is not available
+		return (
+			<Main>
+				<Flex direction="column" gap="3">
+					<NoDataMessage>Session user data is not available</NoDataMessage>
+				</Flex>
+			</Main>
+		);
+	}
 
 	const holdings = await prisma.holding?.findMany({
 		where: {
-			clientId: sessionUser!.clientId!,
+			clientId: session.user.clientId!,
 		},
 		orderBy: { title: "asc" },
 	});
@@ -64,7 +78,7 @@ export default async function Home() {
 				<ClientHeader holdingsCount={holdings.length} />
 				<Grid columns={{ initial: "1", md: "1" }} gap="2" mt="8">
 					<Text weight="bold">Your Dashboard</Text>
-					<ExpiredItems clientId={sessionUser!.clientId!} holdings={holdings} />
+					<ExpiredItems clientId={session.user.clientId!} holdings={holdings} />
 					<HoldingSummary
 						removed={removedItemsCount}
 						low={lowItemsCount}

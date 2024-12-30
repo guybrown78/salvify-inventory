@@ -4,20 +4,17 @@ import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { convertDateToISO8601 } from '@/app/_utils/date';
-import { getSessionUser } from "@/app/_utils/getSessionUser";
 
 
 export async function POST(request: NextRequest) {
 
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
+
+	if(!session.user.clientId){
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
@@ -54,8 +51,8 @@ export async function POST(request: NextRequest) {
 		quantity: parseInt(body.quantity),
 		expiryDate: prismaDateTime,
 		batch: body.batch,
-		clientId: sessionUser!.clientId!,
-		addedById: sessionUser!.id,
+		clientId: session.user.clientId!,
+		addedById: session.user.id,
 	}})
 
 

@@ -1,4 +1,4 @@
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+
 import authOptions from "@/app/auth/authOptions";
 import { patchHoldingSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
@@ -10,8 +10,13 @@ export async function PATCH(
 	{ params }: { params: { holdingId: string } }
 ) {
 	const session = await getServerSession(authOptions);
-	if (!session) {
-		return NextResponse.json({}, { status: 401 });
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+	}
+
+	if(!session.user.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
 	const body = await request.json();
@@ -46,21 +51,22 @@ export async function DELETE(
 	request: NextRequest,
 	{ params }: { params: { holdingId: string } }
 ) {
-	const sessionUser = await getSessionUser();
-	if (!sessionUser) {
-		return NextResponse.json("Cannot find session user", { status: 400 });
+
+	const session = await getServerSession(authOptions);
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	if (!sessionUser.clientId) {
-		return NextResponse.json("Cannot find session user client", {
-			status: 400,
-		});
+
+	if(!session.user.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
 	const holdingId = parseInt(params.holdingId);
 	const holding = await prisma.holding.findUnique({
 		where: {
 			id: holdingId,
-			clientId: sessionUser!.clientId,
+			clientId: session.user.clientId!,
 		},
 	});
 	if (!holding) {

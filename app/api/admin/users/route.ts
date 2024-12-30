@@ -1,22 +1,23 @@
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+import authOptions from "@/app/auth/authOptions";
 import { adminUserSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-
 export async function POST(request: NextRequest) {
-	const sessionUser = await getSessionUser();
-	if (!sessionUser) {
-		return NextResponse.json("Cannot find session user", { status: 400 });
+	const session = await getServerSession(authOptions);
+	
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	if (sessionUser.role !== UserRole.SUPERADMIN) {
-		return NextResponse.json(
-			"You don't have the access rights to create users",
-			{ status: 403 }
-		);
-	}
+  if (session.user.role !== UserRole.SUPERADMIN) {
+    return NextResponse.json(
+      "You don't have the access rights to create users",
+      { status: 403 }
+    );
+  }
 
 	// Parse and validate the incoming data using Zod schema
 	const body = await request.json();

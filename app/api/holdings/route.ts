@@ -1,5 +1,4 @@
 import authOptions from "@/app/auth/authOptions";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
 import { holdingSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
 import { HoldingType } from "@prisma/client";
@@ -9,14 +8,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
 
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
+
+	if(!session.user.clientId){
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
@@ -38,7 +35,7 @@ export async function POST(request: NextRequest) {
 		field: body.field,
 		canAddIncidents: body.canAddIncidents,
 		type: body.type,
-		clientId:sessionUser!.clientId!
+		clientId:session.user.clientId!
 	}
 
 	if(body.isMainHolding){
@@ -55,19 +52,17 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest){
 
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
+
+	if(!session.user.clientId){
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
 	const holdings = await prisma.holding?.findMany({ 
-		where: { clientId: sessionUser!.clientId! }, 
+		where: { clientId: session.user.clientId! }, 
 		orderBy: { title: 'asc'},
 		include: { locations: true },
 	});

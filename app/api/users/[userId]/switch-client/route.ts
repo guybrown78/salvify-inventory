@@ -1,16 +1,21 @@
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+import authOptions from "@/app/auth/authOptions";
 import prisma from "@/prisma/client";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: { userId: string } }
 ) {
+	const session = await getServerSession(authOptions);
 
-	const sessionUser = await getSessionUser();
-	if (!sessionUser?.id) {
-		return NextResponse.json("Unauthorized", { status: 401 });
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
+
+	// if(!session.user.clientId){
+	// 	return NextResponse.json("Cannot find session user client", {status: 400});
+	// }
 
 	const { userId } = params;
 	const { newClientId } = await req.json();
@@ -20,7 +25,7 @@ export async function POST(
 	}
 
 	// Ensure the user making the request is the one trying to switch the client
-	if (sessionUser.id !== userId) {
+	if (session.user.id !== userId) {
 		return NextResponse.json(
 			"Forbidden: Cannot switch client for another user.",
 			{ status: 403 }

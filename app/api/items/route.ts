@@ -1,4 +1,3 @@
-import { getSessionUser } from "@/app/_utils/getSessionUser";
 import authOptions from "@/app/auth/authOptions";
 import { itemSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
@@ -9,14 +8,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
 
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
+
+	if(!session.user.clientId){
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 	
@@ -38,7 +35,7 @@ export async function POST(request: NextRequest) {
 			instructionsURL: body.instructionsURL || null,
 			bnfSlug: body.bnfSlug || null,
   		emcId: body.emcId || null,
-			clientId:sessionUser!.clientId!
+			clientId:session.user.clientId!
 		}
 	})
 
@@ -46,25 +43,23 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest){
+
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
-	}
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
-		return NextResponse.json("Cannot find session user client", {status: 400});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
 
+	if(!session.user.clientId){
+		return NextResponse.json("Cannot find session user client", {status: 400});
+	}
 
 	const url = new URL(request.url);
   const search = url.searchParams.get('search')?.toLowerCase() || '';
 
 	const items = await prisma.item?.findMany({
     where:{
-			clientId: sessionUser!.clientId!,
+			clientId: session.user.clientId!,
 			title: {
         contains: search
       },

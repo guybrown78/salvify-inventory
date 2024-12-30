@@ -1,66 +1,62 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/prisma/client";
-import { orderSchema } from '@/app/validationSchema';
-import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+import { orderSchema } from "@/app/validationSchema";
+import prisma from "@/prisma/client";
 import { OrderStatus } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
 
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
-		return NextResponse.json("Cannot find session user client", {status: 400});
+	if (!session.user.clientId) {
+		return NextResponse.json("Cannot find session user client", {
+			status: 400,
+		});
 	}
 
-	const clientId = sessionUser!.clientId!
+	const clientId = session.user.clientId!;
 
 	const latestOrder = await prisma.order.findFirst({
-    where: { clientId },
-    orderBy: { orderNumber: 'desc' },
-  });
+		where: { clientId },
+		orderBy: { orderNumber: "desc" },
+	});
 
 	// Calculate the next orderNumber
-  const nextOrderNumber = latestOrder ? latestOrder.orderNumber + 1 : 1;
+	const nextOrderNumber = latestOrder ? latestOrder.orderNumber + 1 : 1;
 
 	const body = await request.json();
 	const validation = orderSchema.safeParse(body);
-	if(!validation.success){
-		return NextResponse.json(validation.error.format(), {status: 400});
+	if (!validation.success) {
+		return NextResponse.json(validation.error.format(), { status: 400 });
 	}
 
 	const newOrder = await prisma.order.create({
 		data: {
-			title: body.title, 
+			title: body.title,
 			notes: body.notes,
 			orderNumber: nextOrderNumber,
-			assignedToUserId: sessionUser!.id,
+			assignedToUserId: session.user.id,
 			clientId: clientId,
-		}
-	})
+		},
+	});
 	return NextResponse.json(newOrder, { status: 201 });
 }
 
 export async function GET(request: NextRequest) {
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
 
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
-		return NextResponse.json("Cannot find session user client", {status: 400});
+	if (!session.user.clientId) {
+		return NextResponse.json("Cannot find session user client", {
+			status: 400,
+		});
 	}
 
 	// Parse URL and get the query parameters for statuses
@@ -83,7 +79,7 @@ export async function GET(request: NextRequest) {
 	// Find all orders with the specified status for the user's client
 	const orders = await prisma.order.findMany({
 		where: {
-			clientId: sessionUser.clientId!,
+			clientId: session.user.clientId!,
 			status: { in: statusFilter },
 		},
 		include: {
