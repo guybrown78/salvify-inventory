@@ -1,36 +1,35 @@
 "use client";
 
 import { FieldErrorMessage, Spinner } from "@/app/_components";
-// import { SessionUser } from "@/app/_types/types";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Select, Text } from "@radix-ui/themes";
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import ProfileWrapper from "./ProfileWrapper";
-// import { useSessionUserContext } from "@/app/_providers/SessionUserProvider"
-import { useRouter } from "next/navigation";
+
 import { Client } from "@prisma/client";
 import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const switchClientSchema = z.object({
 	clientId: z.string().min(1, "Please select a client."),
 });
 
 interface Props {
-	sessionUser: Session["user"]
-	clients: Client[]
+	sessionUser: Session["user"];
+	clients: Client[];
 }
 
 const SwitchClient = ({ sessionUser, clients }: Props) => {
-
+	const { update } = useSession(); // Access update function
 	const router = useRouter();
 
 	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	// const { updateSessionUser } = useSessionUserContext();
 
 	const {
 		handleSubmit,
@@ -47,22 +46,28 @@ const SwitchClient = ({ sessionUser, clients }: Props) => {
 	const selectedClientId = watch("clientId");
 
 	const onSubmit = handleSubmit(async (data) => {
-
 		// if (selectedClientId === String(sessionUser?.clientId)) return;
-		setError('');
+		setError("");
 		setIsSubmitting(true);
-	
-		try {
 
+		try {
 			await axios.post(`/api/users/${sessionUser.id}/switch-client`, {
 				newClientId: data.clientId,
 			});
-			const updatedSessionUser = await axios.get('/api/users/me')
-			// updateSessionUser(updatedSessionUser.data);
-			// Update the Token and Session:
-			// /api/auth/update-session
-			router.refresh();  
 
+			const updateSession = await axios.post("/api/auth/update-session", {
+				clientId: data.clientId,
+				clientName:
+					clients.find((c) => String(c.id) === data.clientId)?.name || "",
+			});
+
+			if (updateSession.status === 200) {
+				// Optionally, you can trigger a page refresh to reflect the changes
+				await update();
+				router.refresh();
+			} else {
+				setError("Failed to update the session");
+			}
 		} catch (error) {
 			setIsSubmitting(false);
 			setError("An unexpected error occurred");
@@ -100,8 +105,12 @@ const SwitchClient = ({ sessionUser, clients }: Props) => {
 										<Select.Group>
 											<Select.Label>Client</Select.Label>
 											{sessionUser?.optionalClients?.map((client) => (
-												<Select.Item key={client.clientId} value={String(client.clientId)}>
-													{clients.filter(c => c.id === client.clientId)[0].name || ""}
+												<Select.Item
+													key={client.clientId}
+													value={String(client.clientId)}
+												>
+													{clients.filter((c) => c.id === client.clientId)[0]
+														.name || ""}
 												</Select.Item>
 											))}
 										</Select.Group>
@@ -114,13 +123,15 @@ const SwitchClient = ({ sessionUser, clients }: Props) => {
 				</div>
 
 				<div className="mt-8 flex">
-				<Button
-            type="submit"
-            disabled={isSubmitting || selectedClientId === String(sessionUser?.clientId)}
-          >
-            {isSubmitting ? "Switching" : "Switch"} Current Client{" "}
-            {isSubmitting && <Spinner />}
-          </Button>
+					<Button
+						type="submit"
+						disabled={
+							isSubmitting || selectedClientId === String(sessionUser?.clientId)
+						}
+					>
+						{isSubmitting ? "Switching" : "Switch"} Current Client{" "}
+						{isSubmitting && <Spinner />}
+					</Button>
 				</div>
 			</form>
 		</ProfileWrapper>

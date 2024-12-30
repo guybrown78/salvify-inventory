@@ -1,60 +1,58 @@
-import authOptions from '@/app/auth/authOptions';
-import { NoDataMessage } from '@/app/_components'
-import { Box, Flex } from '@radix-ui/themes'
-import prisma from '@/prisma/client';
-import { getServerSession } from 'next-auth';
-import { notFound } from 'next/navigation';
-import { cache } from 'react';
-import StockItemHeader from '@/app/_components/item/StockItemHeader';
-import { getSessionUser } from '@/app/_utils/getSessionUser'
-import ItemOverview from './ItemOverview';
-import ItemHoldings from './ItemHoldings';
-import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
+import { NoDataMessage } from "@/app/_components";
+import StockItemHeader from "@/app/_components/item/StockItemHeader";
+import { ItemWithInstancesHoldingItems } from "@/app/_types/types";
+import authOptions from "@/app/auth/authOptions";
+import prisma from "@/prisma/client";
+import { Flex } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
+import { cache } from "react";
+import ItemHoldings from "./ItemHoldings";
+import ItemOverview from "./ItemOverview";
 
 interface Props {
-	params: { id: string }
+	params: { id: string };
 }
 
-const fetchItem = cache((itemId: number, clientId: number) => prisma.item.findUnique({
-	where: { 
-		id: itemId,
-		clientId: clientId 
-	},
-	include: {
-		holdingItems: {
-			where: {
-				clientId: clientId,
+const fetchItem = cache((itemId: number, clientId: number) =>
+	prisma.item.findUnique({
+		where: {
+			id: itemId,
+			clientId: clientId,
+		},
+		include: {
+			holdingItems: {
+				where: {
+					clientId: clientId,
+				},
+			},
+			instances: {
+				include: {
+					location: true,
+				},
 			},
 		},
-		instances: {
-      include: {
-        location: true,
-      },
-    },
-	},
-}));
-
+	})
+);
 
 const StockItemPage = async ({ params }: Props) => {
+	const session = await getServerSession(authOptions);
 
-	// const session = await getServerSession(authOptions)
-	const sessionUser = await getSessionUser();
-	// Check if sessionUser is null or undefined
-  if (!sessionUser) {
-    // Handle the case where sessionUser is not available
-    return (
-      <Flex direction="column" gap="3">
-        <NoDataMessage>
-          Session user data is not available
-        </NoDataMessage>
-      </Flex>
-    );
-  }
+	if (!session || !session.user) {
+		// Handle the case where session.user is not available
+		return (
+			<Flex direction="column" gap="3">
+				<NoDataMessage>Session user data is not available</NoDataMessage>
+			</Flex>
+		);
+	}
 
-	const item:ItemWithInstancesHoldingItems | null = await fetchItem(parseInt(params.id), sessionUser!.clientId!) as ItemWithInstancesHoldingItems | null;
+	const item: ItemWithInstancesHoldingItems | null = (await fetchItem(
+		parseInt(params.id),
+		session.user.clientId!
+	)) as ItemWithInstancesHoldingItems | null;
 
-	if(!item)
-		notFound();
+	if (!item) notFound();
 
 	return (
 		<Flex direction="column" gap="5">
@@ -64,21 +62,22 @@ const StockItemPage = async ({ params }: Props) => {
 				<ItemHoldings item={item} />
 			</Flex>
 		</Flex>
-		
-	)
-}
+	);
+};
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }:Props){
-	const sessionUser = await getSessionUser();
-	const item:ItemWithInstancesHoldingItems | null = await fetchItem(parseInt(params.id), sessionUser!.clientId!);
+export async function generateMetadata({ params }: Props) {
+	const session = await getServerSession(authOptions);
+	const item: ItemWithInstancesHoldingItems | null = await fetchItem(
+		parseInt(params.id),
+		session?.user.clientId!
+	);
 
 	return {
 		title: item?.title || "",
-		description: 'Details of stock item ' + item?.id || "-"
-	}
+		description: "Details of stock item " + item?.id || "-",
+	};
 }
 
-
-export default StockItemPage
+export default StockItemPage;

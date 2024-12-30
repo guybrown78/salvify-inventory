@@ -1,10 +1,11 @@
 import React from 'react'
 import { Box, Card, Flex, Heading, Text } from '@radix-ui/themes';
 import { NoDataMessage } from '@/app/_components';
-import { getSessionUser } from '@/app/_utils/getSessionUser';
 import { ItemWithInstancesHoldingItems } from '@/app/_types/types';
 import prisma from '@/prisma/client';
 import ItemHolding from './ItemHolding';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/app/auth/authOptions';
 
 interface Props {
 	item:ItemWithInstancesHoldingItems
@@ -13,10 +14,16 @@ interface Props {
 
 const ItemHoldings = async ({ item }:Props) => {
 
-	const sessionUser = await getSessionUser();
+	const session = await getServerSession(authOptions);
+
+	if (!session || !session.user) {
+		return null;
+	}
+
+
 	const holdings = await prisma.holding.findMany({
 		where:{
-			clientId: sessionUser!.clientId!
+			clientId: session.user.clientId!
 		},
 		include:{
 			locations: true
@@ -29,7 +36,7 @@ const ItemHoldings = async ({ item }:Props) => {
 				<Heading as="h3" size="3" >Holdings</Heading>
 				<Flex gap="4">
 					<NoDataMessage>
-						There are currently no holdings for { sessionUser!.clientName! }.
+						There are currently no holdings for { session.user.clientName! }.
 					</NoDataMessage>
 				</Flex>
 			</Flex>

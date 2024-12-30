@@ -1,4 +1,4 @@
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+
 import authOptions from "@/app/auth/authOptions";
 import { holdingItemSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
@@ -15,14 +15,12 @@ export async function POST(
 ) {
 
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
+
+	if(!session.user.clientId){
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 	
@@ -39,7 +37,7 @@ export async function POST(
 	const holding = await prisma.holding.findUnique({ 
 		where: { 
 			id: holdingId,
-			clientId: sessionUser!.clientId!
+			clientId: session.user.clientId!
 		},
 	});
 	if (!holding) {
@@ -51,7 +49,7 @@ export async function POST(
 	const item = await prisma.item.findUnique({ 
 		where: { 
 			id: itemId,
-			clientId: sessionUser!.clientId!
+			clientId: session.user.clientId!
 		},
 	});
 	if (!item) {
@@ -65,7 +63,7 @@ export async function POST(
 			itemId:itemId,
 			holdingId:holdingId,
 			requiredMinCount:body.requiredMinCount,
-			clientId:sessionUser!.clientId!
+			clientId:session.user.clientId!
 		}
 	})
 

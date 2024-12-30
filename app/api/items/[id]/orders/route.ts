@@ -1,22 +1,23 @@
-import prisma from "@/prisma/client";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
 import authOptions from "@/app/auth/authOptions";
+import prisma from "@/prisma/client";
+import { OrderStatus } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { OrderStatus } from "@prisma/client";
 
 export async function GET(
 	request: NextRequest,
 	{ params }: { params: { id: string } }
 ) {
 	const session = await getServerSession(authOptions);
-	if (!session) {
-		return NextResponse.json({}, { status: 401 });
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
 
-	const sessionUser = await getSessionUser();
-	if (!sessionUser) {
-		return NextResponse.json("Cannot find session user", { status: 400 });
+	if (!session.user.clientId) {
+		return NextResponse.json("Cannot find session user client", {
+			status: 400,
+		});
 	}
 
 	// Extract itemId from params and parse it
@@ -45,7 +46,7 @@ export async function GET(
 	// Find orders with the specified status for the current user's client that contain the specified item
 	const orders = await prisma.order.findMany({
 		where: {
-			clientId: sessionUser.clientId!,
+			clientId: session.user.clientId!,
 			status: { in: statusFilter },
 			orderItems: {
 				some: {

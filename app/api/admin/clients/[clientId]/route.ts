@@ -1,22 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/prisma/client";
+import authOptions from "@/app/auth/authOptions";
 import { clientSchema } from "@/app/validationSchema";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+import prisma from "@/prisma/client";
 import { UserRole } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest, 
   { params }: { params: { clientId: string } }
 ) {
-  const sessionUser = await getSessionUser();
+  const session = await getServerSession(authOptions);
 
-  // Check if there is a session user and if they are a SUPERADMIN
-  if (!sessionUser) {
-    return NextResponse.json({ message: "Cannot find session user" }, { status: 400 });
-  }
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+	}
 
-  if (sessionUser.role !== UserRole.SUPERADMIN) {
-    return NextResponse.json({ message: "You don't have the access rights to update clients" }, { status: 403 });
+  if (session.user.role !== UserRole.SUPERADMIN) {
+    return NextResponse.json(
+      "You don't have the access rights to update clients",
+      { status: 403 }
+    );
   }
 
   const body = await request.json();

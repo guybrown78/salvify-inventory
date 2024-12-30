@@ -24,19 +24,6 @@ export interface LocationWithHolding extends Location
  {
   holding: Holding;
 }
-export interface SessionUser
-{
-	id: string,
-	firstname: string | null
-	surname: string | null
-	name: string
-	email: string
-	image?: string | null
-	role: UserRole
-	clientId: number
-	clientName?: string | null
-	optionalClients?: OptionalClient[]
-}
 
 export interface OrderItemWithItem extends OrderItem{
 	item:Item

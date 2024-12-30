@@ -1,15 +1,15 @@
 import LabelValueRow from "@/app/_components/LabelValueRow";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+import prisma from "@/prisma/client";
+import { OrderStatus } from "@prisma/client";
 import { Button, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import moment from "moment";
 import Link from "next/link";
-import {
-	HiOutlineShoppingCart
-} from "react-icons/hi2";
+import { HiOutlineShoppingCart } from "react-icons/hi2";
 import NoDataMessage from "../NoDataMessage";
 import PageHeaderBannerWrapper from "../PageHeaderBannerWrapper";
-import prisma from "@/prisma/client";
-import { OrderStatus } from "@prisma/client";
+import authOptions from "@/app/auth/authOptions";
+import { getServerSession } from "next-auth";
+
 const greeting = () => {
 	const currentHour = Number(moment().format("HH"));
 	if (currentHour >= 3 && currentHour < 12) {
@@ -26,16 +26,13 @@ const greeting = () => {
 };
 
 interface Props {
-	holdingsCount:number
+	holdingsCount: number;
 }
 
+const ClientHeader = async ({ holdingsCount }: Props) => {
+	const session = await getServerSession(authOptions);
 
-const ClientHeader = async ({ holdingsCount }:Props) => {
-	const sessionUser = await getSessionUser();
-
-	// Check if sessionUser is null or undefined
-	if (!sessionUser) {
-		// Handle the case where sessionUser is not available
+	if (!session || !session.user) {
 		return (
 			<PageHeaderBannerWrapper>
 				<Flex justify="between" py="6">
@@ -46,17 +43,17 @@ const ClientHeader = async ({ holdingsCount }:Props) => {
 	}
 
 	const items = await prisma.item?.findMany({
-    where:{
-			clientId: sessionUser!.clientId!
-		}
-  });
+		where: {
+			clientId: session.user.clientId!,
+		},
+	});
 
 	const openOrders = await prisma.order?.findMany({
-		where:{
+		where: {
 			status: OrderStatus.OPEN,
-			clientId: sessionUser!.clientId!
-		}
-	})
+			clientId: session.user.clientId!,
+		},
+	});
 
 	const greetingMsg = greeting();
 
@@ -69,24 +66,19 @@ const ClientHeader = async ({ holdingsCount }:Props) => {
 			>
 				<Flex direction="column">
 					<Heading as="h1" size="5" weight="bold">
-						{greetingMsg}, {sessionUser!.firstname}
+						{greetingMsg}, {session.user.firstname}
 					</Heading>
 					<Text size="2" color="gray">
-						{sessionUser!.clientName!}
+						{session.user.clientName!}
 					</Text>
 
 					<Flex py="2" gap="3">
-						<LabelValueRow label="Holdings:">
-							{ holdingsCount }
-						</LabelValueRow>
-						<LabelValueRow label="Stock Items">
-							{ items.length }
-						</LabelValueRow>
+						<LabelValueRow label="Holdings:">{holdingsCount}</LabelValueRow>
+						<LabelValueRow label="Stock Items">{items.length}</LabelValueRow>
 						{/* <LabelValueRow label="Stock Instances:">
 							-
 						</LabelValueRow> */}
 					</Flex>
-
 				</Flex>
 
 				<Flex
@@ -95,32 +87,24 @@ const ClientHeader = async ({ holdingsCount }:Props) => {
 					align={{ initial: "start", md: "end" }}
 				>
 					<Flex gap="3" align="center" justify="end">
+						{openOrders.length >= 1 && (
+							<Link href="/orders/list?status=OPEN">
+								<Button variant="outline">
+									<HiOutlineShoppingCart /> Open Orders ({openOrders.length})
+								</Button>
+							</Link>
+						)}
 
-						{
-							openOrders.length >= 1 && (
-								<Link href="/orders/list?status=OPEN">
-									<Button variant="outline">
-										<HiOutlineShoppingCart /> Open Orders ({ openOrders.length })
-									</Button>
-								</Link>		
-							)
-						}
-
-						{
-							!openOrders.length && (
-								<Link href="/orders/new">
-									<Button variant="solid">
-										<HiOutlineShoppingCart /> Start a new order
-									</Button>
-								</Link>		
-							)
-						}
-						
+						{!openOrders.length && (
+							<Link href="/orders/new">
+								<Button variant="solid">
+									<HiOutlineShoppingCart /> Start a new order
+								</Button>
+							</Link>
+						)}
 					</Flex>
-					
 				</Flex>
 			</Grid>
-
 		</PageHeaderBannerWrapper>
 	);
 };

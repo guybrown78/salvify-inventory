@@ -1,6 +1,5 @@
 import { patchUserSchema } from "@/app/validationSchema";
 import prisma from "@/prisma/client";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
@@ -10,9 +9,14 @@ export async function PATCH(
 	request: NextRequest, 
 	{ params }: { params: { userId: string }}) {
 
-		const sessionUser = await getSessionUser();
-		if (!sessionUser || sessionUser.id !== params.userId) {
-			return NextResponse.json("You don't have the access rights to update", { status: 403 });
+		const session = await getServerSession(authOptions);
+
+		if (!session || !session.user) {
+			return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+		}
+	
+		if(!session.user.clientId){
+			return NextResponse.json("Cannot find session user client", {status: 400});
 		}
 
 		const body = await request.json();

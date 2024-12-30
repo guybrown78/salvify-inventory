@@ -1,24 +1,24 @@
 "use client";
 
+import { FieldErrorMessage, Spinner } from "@/app/_components";
+import { patchUserSchema } from "@/app/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextField } from "@radix-ui/themes";
-import ProfileWrapper from "./ProfileWrapper";
+import axios from "axios";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { patchUserSchema } from "@/app/validationSchema";
-import { FieldErrorMessage, Spinner } from "@/app/_components";
-import axios from "axios";
-import { useSessionUserContext } from "@/app/_providers/SessionUserProvider";
-import { useRouter } from "next/navigation";
-import { Session } from "next-auth";
+import ProfileWrapper from "./ProfileWrapper";
 
 interface Props {
 	sessionUser: Session["user"]
 }
 
 const UpdateDetails = ({ sessionUser }: Props) => {
+	const { update } = useSession(); // Access update function
   const router = useRouter();
-  const { updateSessionUser } = useSessionUserContext(); 
   const [error, setError] = useState(""); 
   const [isSubmitting, setIsSubmitting] = useState(false); 
 
@@ -43,16 +43,21 @@ const UpdateDetails = ({ sessionUser }: Props) => {
     try {
       // Send API request to update user details
       await axios.patch(`/api/users/${sessionUser.id}`, data);
-      const { data: updatedSessionUser } = await axios.get("/api/users/me");
-      updateSessionUser(updatedSessionUser); 
 
-			reset({
-        firstname: updatedSessionUser.firstname || "",
-        surname: updatedSessionUser.surname || "",
-        email: updatedSessionUser.email || "",
-      });
+			const updateSession = await axios.post("/api/auth/update-session", data);
 
-      router.refresh();
+			if (updateSession.status === 200) {
+				// Optionally, you can trigger a page refresh to reflect the changes
+				
+				reset(data);
+				await update();
+				// router.refresh();
+			} else {
+				setError("Failed to update the session");
+			}
+			
+
+      // router.refresh();
     } catch (error) {
       setError("Failed to update your details. Please try again.");
     } finally {

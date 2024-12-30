@@ -1,23 +1,23 @@
 import { NoDataMessage, Pagination } from "@/app/_components";
-import { getSessionUser } from "@/app/_utils/getSessionUser";
+import authOptions from "@/app/auth/authOptions";
 import prisma from "@/prisma/client";
 import { orderStatusValues } from "@/prisma/enums";
+import { Prisma } from "@prisma/client";
 import { Flex } from "@radix-ui/themes";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import OrderTable, { OrderQuery, columnNames } from "./OrderTable";
 import OrderToolbar from "./OrderToolbar";
-import { Prisma } from "@prisma/client";
-import { Metadata } from "next";
 
 interface Props {
 	searchParams: OrderQuery;
 }
 
 const OrdersPage = async ({ searchParams }: Props) => {
-	const sessionUser = await getSessionUser();
+	const session = await getServerSession(authOptions);
 
-	// Check if sessionUser is null or undefined
-	if (!sessionUser) {
-		// Handle the case where sessionUser is not available
+	if (!session || !session.user) {
+		// Handle the case where session.user is not available
 		return (
 			<Flex direction="column" gap="3">
 				<NoDataMessage>Session user data is not available</NoDataMessage>
@@ -30,10 +30,12 @@ const OrdersPage = async ({ searchParams }: Props) => {
 		: undefined;
 	const where = {
 		status,
-		clientId: sessionUser!.clientId!,
+		clientId: session.user.clientId!,
 	};
 
-	const orderBy: Prisma.OrderOrderByWithRelationInput = columnNames.includes(searchParams.orderBy)
+	const orderBy: Prisma.OrderOrderByWithRelationInput = columnNames.includes(
+		searchParams.orderBy
+	)
 		? { [searchParams.orderBy]: "asc" as Prisma.SortOrder }
 		: { orderNumber: "desc" as Prisma.SortOrder };
 
@@ -61,7 +63,8 @@ const OrdersPage = async ({ searchParams }: Props) => {
 			<Flex direction="column" gap="3">
 				<OrderToolbar />
 				<NoDataMessage>
-					There are currently no orders in the system { searchParams.status ? ` with status ${searchParams.status}` : "" }.
+					There are currently no orders in the system{" "}
+					{searchParams.status ? ` with status ${searchParams.status}` : ""}.
 				</NoDataMessage>
 				<Pagination
 					itemCount={orderCount}

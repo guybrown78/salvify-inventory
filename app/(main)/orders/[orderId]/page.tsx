@@ -3,12 +3,13 @@ import { Box, Card, Flex, Grid, Text } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import EditOrderButton from './EditOrderButton'
-import { getSessionUser } from '@/app/_utils/getSessionUser';
 import { NoDataMessage } from '@/app/_components';
 import DeleteOrderButton from './DeleteOrderButton';
 import AssignUserToOrder from './AssignUserToOrder';
 import OrderDetails from './OrderDetails';
 import ReactMarkdown from 'react-markdown';
+import authOptions from '@/app/auth/authOptions';
+import { getServerSession } from 'next-auth';
 interface Props {
 	params: { orderId: string }
 }
@@ -35,20 +36,18 @@ const fetchOrder = cache((orderId: number, clientId: number) => prisma.order
 
 const OrderDetailPage = async ({ params }:Props) => {
 
-	const sessionUser = await getSessionUser();
+	const session = await getServerSession(authOptions);
 
-	if (!sessionUser) {
-    // Handle the case where sessionUser is not available
-    return (
-      <Flex direction="column" gap="3">
-        <NoDataMessage>
-          Session user data is not available
-        </NoDataMessage>
-      </Flex>
-    );
-  }
+	if (!session || !session.user) {
+		// Handle the case where session.user is not available
+		return (
+			<Flex direction="column" gap="3">
+				<NoDataMessage>Session user data is not available</NoDataMessage>
+			</Flex>
+		);
+	}
 
-	const order = await fetchOrder(parseInt(params.orderId), sessionUser!.clientId!);
+	const order = await fetchOrder(parseInt(params.orderId), session.user.clientId!);
 
 	if(!order)
 		notFound();
@@ -60,7 +59,7 @@ const OrderDetailPage = async ({ params }:Props) => {
 				<OrderDetails order={order} />
 			</Box>	
 
-			{sessionUser && (
+			{session.user && (
 			<Box className='md:col-span-3'>
 				<Flex direction='column' gap="3">
 					<Flex direction="column" gap="1">

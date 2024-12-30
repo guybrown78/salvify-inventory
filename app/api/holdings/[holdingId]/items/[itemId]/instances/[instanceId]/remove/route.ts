@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import authOptions from "@/app/auth/authOptions";
 import { useSearchParams } from 'next/navigation'
 import { convertDateToISO8601 } from '@/app/_utils/date';
-import { getSessionUser } from "@/app/_utils/getSessionUser";
 
 
 export async function POST(
@@ -18,26 +17,12 @@ export async function POST(
 ) {
 
 	const session = await getServerSession(authOptions);
-	if(!session){
-		return NextResponse.json({}, {status: 401});
+
+	if (!session || !session.user) {
+		return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 	}
 
-	// Check User
-	// const userEmail = session?.user?.email; 
-	// if (!userEmail) {
-	// 	return NextResponse.json({ error: 'User email not found' }, { status: 404 });
-	// }
-	// const user = await prisma.user.findUnique({
-	// 	where: { email: userEmail }
-	// });
-	// if(!user){
-	// 	return NextResponse.json({ error: 'Invalid User' }, {status: 404})
-	// }
-	const sessionUser = await getSessionUser();
-	if(!sessionUser){
-		return NextResponse.json("Cannot find session user", {status: 400});
-	}
-	if(!sessionUser.clientId){
+	if(!session.user.clientId){
 		return NextResponse.json("Cannot find session user client", {status: 400});
 	}
 
@@ -137,10 +122,10 @@ export async function POST(
 				connect: { id:location.id }
 			},
 			removedBy:{
-				connect: { id:sessionUser!.id }
+				connect: { id:session.user.id }
 			},
 			client:{
-				connect: { id:sessionUser!.clientId}
+				connect: { id:session.user.clientId! }
 			},
 			quantity: body.quantity,
 			reason: body.reason, 

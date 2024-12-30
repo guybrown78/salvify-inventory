@@ -24,8 +24,6 @@ const AuthDropdown = () => {
 		return <Skeleton width="3rem" />;
 	}
 
-	console.log(" -- session!.user -- ");
-	console.log(session!.user);
 
 	return (
 		<Box>

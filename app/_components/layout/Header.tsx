@@ -4,16 +4,16 @@ import HeaderSearch from "../search/HeaderSearch";
 import AuthDropdown from "./AuthDropdown";
 import ClientHeader from "./ClientHeader";
 import UserNotification from "./UserNotification";
-
+import { useSession } from "next-auth/react";
 import { useLayoutContext } from "@/app/_providers/LayoutProvider";
-import { useSessionUserContext } from "@/app/_providers/SessionUserProvider";
+
 import classNames from "classnames";
 import { HiBars3 } from "react-icons/hi2";
 const Header = () => {
 	const { updateIsSidebarOpen } = useLayoutContext();
-	const { sessionUser } = useSessionUserContext();
+	const { data: session } = useSession();
 
-	const canSelectClient = sessionUser && sessionUser?.optionalClients ? sessionUser?.optionalClients?.length > 0 : false;
+	const canSelectClient = session?.user && session.user.optionalClients ? session.user.optionalClients?.length > 0 : false;
 
 	return (
 		<div className="sticky top-0 z-40 ">
