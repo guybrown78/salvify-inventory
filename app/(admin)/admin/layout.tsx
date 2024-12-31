@@ -12,6 +12,7 @@ import AuthProvider from "../../auth/Provider";
 
 import { LayoutProvider } from "@/app/_providers/LayoutProvider";
 import { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -38,7 +39,10 @@ export default function RootLayout({ children }: LayoutProps) {
 				<QueryClientProvider>
 					<AuthProvider>
 						<Theme accentColor="grass">
-							<LayoutProvider>{children}</LayoutProvider>
+							<LayoutProvider>
+								{children}
+								<SpeedInsights />
+							</LayoutProvider>
 						</Theme>
 					</AuthProvider>
 				</QueryClientProvider>
